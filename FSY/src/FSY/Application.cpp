@@ -119,7 +119,7 @@ namespace FSY {
 		ImGui::StyleColorsDark();
 		ImGui_ImplGlfw_InitForOpenGL(m_win, true);
 		ImGui_ImplOpenGL3_Init("#version 330");
-		io.FontDefault = io.Fonts->AddFontFromFileTTF("./src/Assets/Fonts/Poppins/Poppins-Medium.ttf", 16.0f);
+		//io.FontDefault = io.Fonts->AddFontFromFileTTF("./src/Assets/Fonts/Poppins/Poppins-Medium.ttf", 16.0f);
 
 		vao->Generate();
 		vao->Bind();

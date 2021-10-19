@@ -401,7 +401,7 @@
     <IncludePath>D:\VS_Projects\FSY\FSY\src\vendor\OpenGL\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LinkIncremental>false</LinkIncremental>
+    <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)bin\$(Configuration)-$(Platform)\$(ProjectName)</OutDir>
     <IntDir>$(SolutionDir)bin-int\$(Configuration)-$(Platform)\$(ProjectName)</IntDir>
     <LibraryPath>D:\VS_Projects\FSY\FSY\src\vendor\OpenGL\src;$(LibraryPath)</LibraryPath>

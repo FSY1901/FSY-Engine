@@ -3,7 +3,7 @@
 #include <string>
 
 using namespace FSY;
-#define DEBUG 1
+#define DEBUG 0
 
 class Control : public FSY::Component {
 public:
@@ -73,11 +73,16 @@ public:
 #if DEBUG == 1
 		s = { "./src/Shaders/textured.vert", "./src/Shaders/textured.frag" };
 		t = { "./src/Textures/Red.png" };
-#else
-		s = { "../App/Shaders/textured.vert", "../App/Shaders/textured.frag" };
-		t = { "../App/Textures/dirt.png" };
-#endif
 		colored = { "./src/Shaders/colored.vert", "./src/Shaders/colored.frag" };
+		_s = new Sound("./src/Audio/song.mp3");
+		s1 = new Sound("./src/Audio/breakout.mp3");
+#else
+		s = { "Data/Shaders/textured.vert", "Data/Shaders/textured.frag" };
+		t = { "Data/Textures/Dirt.png" };
+		colored = { "../App/Data/Shaders/colored.vert", "Data/Shaders/colored.frag" };
+		_s = new Sound("Data/Audio/song.mp3");
+		s1 = new Sound("Data/Audio/breakout.mp3");
+#endif
 		m = {Mesh::s_verticesForCube, Mesh::s_cubeMeshSize, &s};
 		m.isTransparent = true;
 		m.renderMode = RenderModes::RENDER_FRONT;
@@ -101,8 +106,6 @@ public:
 		}
 		scene.AddInstanceMesh(&m);*/
 		ChangeScene(&scene);
-		_s = new Sound("./src/Audio/song.mp3");
-		s1 = new Sound("./src/Audio/breakout.mp3");
 	}
 
 	void OnUpdate() override {
