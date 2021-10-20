@@ -34,6 +34,8 @@ namespace FSY {
 			music->setMinDistance(minDistance);
 		}
 		
+		music->setPosition(irrklang::vec3df(position.x, position.y, position.z));
+
 		if (Vector3f::Distance(listenerPos, position) > maxDistance) {
 			music->setVolume(0);
 		}

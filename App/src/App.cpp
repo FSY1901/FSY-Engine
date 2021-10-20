@@ -3,7 +3,7 @@
 #include <string>
 
 using namespace FSY;
-#define DEBUG 0
+#define DEBUG 1
 
 class Control : public FSY::Component {
 public:
@@ -11,7 +11,7 @@ public:
 	float speed = 10.0f;
 
 	void Start() override {
-
+		
 	}
 
 	void Update() override {
@@ -44,6 +44,7 @@ class App : public FSY::Application {
 public:
 	GameObject myObject;
 	GameObject g2;
+	GameObject g;
 	Scene scene;
 	Shader s;
 	Shader colored;
@@ -59,7 +60,8 @@ public:
 	}
 
 	App(int width, int height, const char* title) : FSY::Application(width, height, title) {
-		
+		//Settings::fullscreen = true;
+		Settings::editorFontPath = "./src/Assets/Fonts/Poppins/Poppins-SemiBold.ttf";
 	}
 
 	~App() override{
@@ -67,9 +69,13 @@ public:
 	}
 
 	void OnStart() override {
+		//Settings
 		inEditor = true;
+		//Objects
 		myObject = { Vector3f(0, 0, -5.0f), Vector3f(0, 0, 0), Vector3f(1, 1, 1), "Object" };
 		g2 = { Vector3f(2, 0, -5.0f), Vector3f(30, 40, 0), Vector3f(1, 1, 1), "Object" };
+		g = { Vector3f(5, 0, -5.0f), Vector3f(30, 40, 0), Vector3f(1, 1, 1), "Object" };
+		//Dirs
 #if DEBUG == 1
 		s = { "./src/Shaders/textured.vert", "./src/Shaders/textured.frag" };
 		t = { "./src/Textures/Red.png" };
@@ -79,10 +85,11 @@ public:
 #else
 		s = { "Data/Shaders/textured.vert", "Data/Shaders/textured.frag" };
 		t = { "Data/Textures/Dirt.png" };
-		colored = { "../App/Data/Shaders/colored.vert", "Data/Shaders/colored.frag" };
+		colored = { "Data/Shaders/colored.vert", "Data/Shaders/colored.frag" };
 		_s = new Sound("Data/Audio/song.mp3");
 		s1 = new Sound("Data/Audio/breakout.mp3");
 #endif
+		//Meshes & Scene
 		m = {Mesh::s_verticesForCube, Mesh::s_cubeMeshSize, &s};
 		m.isTransparent = true;
 		m.renderMode = RenderModes::RENDER_FRONT;
@@ -91,9 +98,11 @@ public:
 		m1.isTransparent = true;
 		m1.SetTexture(&t);
 		g2.AddChild(&myObject);
+		myObject.AddChild(&g);
 		g2.AddComponent<Control>();
 		m1.AddGameObject(&g2);
 		m1.AddGameObject(&myObject);
+		m1.AddGameObject(&g);
 		scene.AddInstanceMesh(&m1);
 		/*objs = new GameObject[100];
 		int iter = 0;
@@ -117,8 +126,8 @@ public:
 
 	void OnEditorUpdate() override{
 		colored.setColorValues4("Color", 0.2f, 0.9f, 0.2f, 0.2f);
-		_s->Play(Vector3f(0,0,0),5, 20);
-		s1->Play(Vector3f(0, 0, -20.0f),5, 20);
+		//_s->Play(Vector3f(0,0,0),5, 20);
+		s1->Play(Vector3f(Camera::GetMain()->position.x, Camera::GetMain()->position.y, Camera::GetMain()->position.z),5, 20);
 		if (Input::GetKey(Keys::Key_ESCAPE)) {
 			Close();
 		}

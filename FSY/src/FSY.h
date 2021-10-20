@@ -11,3 +11,4 @@
 #include "FSY/Headers/Console.h"
 #include "FSY/Headers/EditorUI.h"
 #include "FSY/Headers/Sound.h"
+#include "FSY/Headers/Settings.h"

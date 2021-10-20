@@ -23,6 +23,7 @@
     <ClInclude Include="src\FSY\Headers\Light.h" />
     <ClInclude Include="src\FSY\Headers\Mesh.h" />
     <ClInclude Include="src\FSY\Headers\FSY_Time.h" />
+    <ClInclude Include="src\FSY\Headers\Settings.h" />
     <ClInclude Include="src\FSY\Headers\Sound.h" />
     <ClInclude Include="src\FSY\Headers\VAO.h" />
     <ClInclude Include="src\FSY\Headers\VBO.h" />
@@ -202,6 +203,7 @@
     <ClCompile Include="src\FSY\Maths\Maths.cpp" />
     <ClCompile Include="src\FSY\Mesh.cpp" />
     <ClCompile Include="src\FSY\Scene.cpp" />
+    <ClCompile Include="src\FSY\Settings.cpp" />
     <ClCompile Include="src\FSY\Shader.cpp" />
     <ClCompile Include="src\FSY\Sound.cpp" />
     <ClCompile Include="src\FSY\Texture.cpp" />

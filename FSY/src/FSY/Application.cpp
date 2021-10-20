@@ -2,6 +2,7 @@
 #include "SceneCameraController.h"
 #include "Console.h"
 #include "Sound.h"
+#include "Settings.h"
 #include "../vendor/stb_image/stb_image.h"
 
 #include <../imgui/imgui.h>
@@ -73,7 +74,17 @@ namespace FSY {
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-		m_win = glfwCreateWindow(m_width, m_height, m_title, NULL, NULL);
+		if (Settings::fullscreen) {
+			GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+			const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+			m_width = mode->width;
+			m_height = mode->height;
+			m_win = glfwCreateWindow(m_width, m_height, m_title, monitor, NULL);
+		}
+		else {
+			m_win = glfwCreateWindow(m_width, m_height, m_title, NULL, NULL);
+		}
+
 		if (m_win == NULL)
 		{
 			std::cout << "Failed to create GLFW window" << std::endl;
@@ -119,7 +130,8 @@ namespace FSY {
 		ImGui::StyleColorsDark();
 		ImGui_ImplGlfw_InitForOpenGL(m_win, true);
 		ImGui_ImplOpenGL3_Init("#version 330");
-		//io.FontDefault = io.Fonts->AddFontFromFileTTF("./src/Assets/Fonts/Poppins/Poppins-Medium.ttf", 16.0f);
+		if(Settings::editorFontPath != "")
+			io.FontDefault = io.Fonts->AddFontFromFileTTF(Settings::editorFontPath.c_str(), 16.0f);
 
 		vao->Generate();
 		vao->Bind();
@@ -340,7 +352,7 @@ namespace FSY {
 				std::string s = selectedObject->name;
 				ImGui::InputText("Name", &s);
 				if (selectedObject->name != s)
-					selectedObject->name = m_activeScene->__CheckName(s, 0);
+					selectedObject->name = m_activeScene->__CheckName(s);
 				if (ImGui::TreeNodeEx("Transform", ImGuiTreeNodeFlags_SpanAvailWidth)) {
 					if (ImGui::TreeNodeEx("Position", ImGuiTreeNodeFlags_SpanAvailWidth)) {
 						ImGui::AlignTextToFramePadding();
@@ -467,13 +479,16 @@ namespace FSY {
 	}
 
 	void Application::RenderChildren(GameObject* g) {
-		for (auto g1 : g->GetChildren()) {
-			bool node = ImGui::TreeNodeEx(g1->name.c_str(), ImGuiTreeNodeFlags_OpenOnArrow);
-			if (ImGui::IsItemClicked()) {
-				selectedObject = g1;
-			}
-			if (node) {
-				ImGui::TreePop();
+		if (g->GetChildren().size() > 0) {
+			for (auto g1 : g->GetChildren()) {
+				bool node = ImGui::TreeNodeEx(g1->name.c_str(), ImGuiTreeNodeFlags_OpenOnArrow);
+				if (ImGui::IsItemClicked()) {
+					selectedObject = g1;
+				}
+				if (node) {
+					RenderChildren(g1);
+					ImGui::TreePop();
+				}
 			}
 		}
 	}

@@ -18,7 +18,7 @@ namespace FSY {
 		void AddInstanceMesh(Mesh* m);
 
 		//Engine only to check if an object with the name already exists in the Scene
-		std::string __CheckName(std::string& name, int iter);
+		std::string __CheckName(std::string& name);
 
 		GameObject* GetCamera();
 		Light* GetLight();
