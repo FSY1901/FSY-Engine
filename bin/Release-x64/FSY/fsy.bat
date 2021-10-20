@@ -1,0 +1,1 @@
+copy D:\VS_Projects\FSY\bin\Release-x64\FSY\FSY.dll D:\VS_Projects\FSY\bin\Release-x64\App

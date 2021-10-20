@@ -422,7 +422,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;irrKlang.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)FSY\src\vendor\irrKlang;$(SolutionDir)FSY\src\vendor\imgui;$(SolutionDir)FSY\src\vendor\stb_image;$(SolutionDir)FSY\vendor\OpenGL\src;$(SolutionDir)FSY\vendor\OpenGL\include;$(SolutionDir)FSY\vendor\OpenGL;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)FSY\src\vendor\irrKlang;$(SolutionDir)FSY\src\vendor\imgui;$(SolutionDir)FSY\src\vendor\stb_image;$(SolutionDir)FSY\vendor\OpenGL\src;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>Rpcrt4.lib %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
@@ -443,7 +443,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;irrKlang.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)FSY\src\vendor\irrKlang;$(SolutionDir)FSY\src\vendor\imgui;$(SolutionDir)FSY\src\vendor\stb_image;$(SolutionDir)FSY\vendor\OpenGL\src;$(SolutionDir)FSY\vendor\OpenGL\include;$(SolutionDir)FSY\vendor\OpenGL;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)FSY\src\vendor\irrKlang;$(SolutionDir)FSY\src\vendor\imgui;$(SolutionDir)FSY\src\vendor\stb_image;$(SolutionDir)FSY\vendor\OpenGL\src;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>Rpcrt4.lib %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
