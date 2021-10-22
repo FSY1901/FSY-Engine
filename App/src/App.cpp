@@ -61,7 +61,7 @@ public:
 
 	App(int width, int height, const char* title) : FSY::Application(width, height, title) {
 		//Settings::fullscreen = true;
-		Settings::editorFontPath = "./src/Assets/Fonts/Poppins/Poppins-SemiBold.ttf";
+		Settings::editorFontPath = "./src/Data/Assets/Fonts/Poppins/Poppins-SemiBold.ttf";
 	}
 
 	~App() override{
@@ -77,11 +77,11 @@ public:
 		g = { Vector3f(5, 0, -5.0f), Vector3f(30, 40, 0), Vector3f(1, 1, 1), "Object" };
 		//Dirs
 #if DEBUG == 1
-		s = { "./src/Shaders/textured.vert", "./src/Shaders/textured.frag" };
-		t = { "./src/Textures/Red.png" };
-		colored = { "./src/Shaders/colored.vert", "./src/Shaders/colored.frag" };
-		_s = new Sound("./src/Audio/song.mp3");
-		s1 = new Sound("./src/Audio/breakout.mp3");
+		s = { "./src/Data/Shaders/textured.vert", "./src/Data/Shaders/textured.frag" };
+		t = { "./src/Data/Textures/Red.png" };
+		colored = { "./src/Data/Shaders/colored.vert", "./src/Data/Shaders/colored.frag" };
+		_s = new Sound("./src/Data/Audio/song.mp3");
+		s1 = new Sound("./src/Data/Audio/breakout.mp3");
 #else
 		s = { "Data/Shaders/textured.vert", "Data/Shaders/textured.frag" };
 		t = { "Data/Textures/Dirt.png" };
@@ -97,7 +97,7 @@ public:
 		m1 = { Mesh::s_verticesForCube, Mesh::s_cubeMeshSize, &colored };
 		m1.isTransparent = true;
 		m1.SetTexture(&t);
-		g2.AddChild(&myObject);
+		//g2.AddChild(&myObject);
 		myObject.AddChild(&g);
 		g2.AddComponent<Control>();
 		m1.AddGameObject(&g2);

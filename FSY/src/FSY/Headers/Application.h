@@ -8,6 +8,7 @@
 #include "VAO.h"
 #include "Input.h"
 #include "FSY_Time.h"
+#include "ContentBrowser.h"
 
 #include <iostream>
 
@@ -78,6 +79,7 @@ namespace FSY {
         void RenderUI();
         void RenderChildren(GameObject* g);
         GameObject* selectedObject = nullptr;
+        ContentBrowser cb;
 #pragma endregion
 
 #pragma region Audio

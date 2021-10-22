@@ -15,6 +15,7 @@
     <ClInclude Include="src\FSY\Headers\Application.h" />
     <ClInclude Include="src\FSY\Headers\Camera.h" />
     <ClInclude Include="src\FSY\Headers\Console.h" />
+    <ClInclude Include="src\FSY\Headers\ContentBrowser.h" />
     <ClInclude Include="src\FSY\Headers\Core.h" />
     <ClInclude Include="src\FSY\Headers\EditorUI.h" />
     <ClInclude Include="src\FSY\Headers\EntryPoint.h" />
@@ -195,6 +196,7 @@
     <ClCompile Include="src\FSY\Application.cpp" />
     <ClCompile Include="src\FSY\Camera.cpp" />
     <ClCompile Include="src\FSY\Console.cpp" />
+    <ClCompile Include="src\FSY\ContentBrowser.cpp" />
     <ClCompile Include="src\FSY\EditorUI.cpp" />
     <ClCompile Include="src\FSY\GameObject.cpp" />
     <ClCompile Include="src\FSY\Headers\SceneCameraController.h" />

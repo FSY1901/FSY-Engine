@@ -1,5 +1,4 @@
 d:\vs_projects\fsy\bin-int\release-x64\fsy\vc142.pdb
-d:\vs_projects\fsy\bin-int\release-x64\fsy\dummy.obj
 d:\vs_projects\fsy\bin-int\release-x64\fsy\vbo.obj
 d:\vs_projects\fsy\bin-int\release-x64\fsy\vao.obj
 d:\vs_projects\fsy\bin-int\release-x64\fsy\fsy_time.obj
@@ -16,6 +15,7 @@ d:\vs_projects\fsy\bin-int\release-x64\fsy\input.obj
 d:\vs_projects\fsy\bin-int\release-x64\fsy\scenecameracontroller.obj
 d:\vs_projects\fsy\bin-int\release-x64\fsy\gameobject.obj
 d:\vs_projects\fsy\bin-int\release-x64\fsy\editorui.obj
+d:\vs_projects\fsy\bin-int\release-x64\fsy\contentbrowser.obj
 d:\vs_projects\fsy\bin-int\release-x64\fsy\console.obj
 d:\vs_projects\fsy\bin-int\release-x64\fsy\camera.obj
 d:\vs_projects\fsy\bin-int\release-x64\fsy\application.obj
@@ -28,6 +28,7 @@ d:\vs_projects\fsy\bin-int\release-x64\fsy\imgui_draw.obj
 d:\vs_projects\fsy\bin-int\release-x64\fsy\imgui_demo.obj
 d:\vs_projects\fsy\bin-int\release-x64\fsy\imgui.obj
 d:\vs_projects\fsy\bin-int\release-x64\fsy\glm.obj
+d:\vs_projects\fsy\bin-int\release-x64\fsy\dummy.obj
 d:\vs_projects\fsy\bin-int\release-x64\fsy\glad.obj
 d:\vs_projects\fsy\bin\release-x64\fsy\fsy.lib
 d:\vs_projects\fsy\bin\release-x64\fsy\fsy.exp

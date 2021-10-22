@@ -552,6 +552,9 @@
     <ClInclude Include="src\FSY\Headers\Settings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\FSY\Headers\ContentBrowser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FSY\Application.cpp">
@@ -642,6 +645,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\FSY\Settings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FSY\ContentBrowser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

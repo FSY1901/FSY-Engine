@@ -21,11 +21,13 @@ D:\VS_Projects\FSY\FSY\src\FSY\Headers\Input.h(133,3): warning C4091: '__declspe
 D:\VS_Projects\FSY\FSY\src\FSY\Headers\Input.h(148,3): warning C4091: '__declspec(dllexport)': ignored on left of 'FSY::Buttons' when no variable is declared
 D:\VS_Projects\FSY\FSY\src\FSY\Headers\Input.h(153,3): warning C4091: '__declspec(dllexport)': ignored on left of 'FSY::CursorMode' when no variable is declared
 D:\VS_Projects\FSY\FSY\src\FSY\Headers\FSY_Time.h(8,26): warning C4091: 'extern ': ignored on left of 'FSY::Application' when no variable is declared
-D:\VS_Projects\FSY\FSY\src\FSY\Headers\Application.h(16,39): warning C4091: 'extern ': ignored on left of 'FSY::SceneCameraController' when no variable is declared
-D:\VS_Projects\FSY\FSY\src\FSY\Headers\Application.h(67,24): warning C4251: 'FSY::Application::view': struct 'glm::tmat4x4<float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'FSY::Application'
+D:\VS_Projects\FSY\FSY\src\FSY\Headers\Application.h(17,39): warning C4091: 'extern ': ignored on left of 'FSY::SceneCameraController' when no variable is declared
+D:\VS_Projects\FSY\FSY\src\FSY\Headers\Application.h(68,24): warning C4251: 'FSY::Application::view': struct 'glm::tmat4x4<float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'FSY::Application'
 D:\VS_Projects\FSY\FSY\src\vendor\glm\detail\type_mat.hpp(304): message : see declaration of 'glm::tmat4x4<float,glm::packed_highp>'
-D:\VS_Projects\FSY\FSY\src\FSY\Headers\Application.h(68,29): warning C4251: 'FSY::Application::projection': struct 'glm::tmat4x4<float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'FSY::Application'
+D:\VS_Projects\FSY\FSY\src\FSY\Headers\Application.h(69,29): warning C4251: 'FSY::Application::projection': struct 'glm::tmat4x4<float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'FSY::Application'
 D:\VS_Projects\FSY\FSY\src\vendor\glm\detail\type_mat.hpp(304): message : see declaration of 'glm::tmat4x4<float,glm::packed_highp>'
+D:\VS_Projects\FSY\FSY\src\FSY\Headers\Application.h(82,26): warning C4251: 'FSY::Application::cb': class 'FSY::ContentBrowser' needs to have dll-interface to be used by clients of class 'FSY::Application'
+D:\VS_Projects\FSY\FSY\src\FSY\Headers\ContentBrowser.h(8): message : see declaration of 'FSY::ContentBrowser'
 D:\VS_Projects\FSY\FSY\src\FSY\Headers\SceneCameraController.h(108,23): warning C4251: 'FSY::SceneCameraController::cameraPos': struct 'glm::tvec3<float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'FSY::SceneCameraController'
 D:\VS_Projects\FSY\FSY\src\vendor\glm\detail\type_vec.hpp(243): message : see declaration of 'glm::tvec3<float,glm::packed_highp>'
 D:\VS_Projects\FSY\FSY\src\FSY\Headers\SceneCameraController.h(110,25): warning C4251: 'FSY::SceneCameraController::cameraFront': struct 'glm::tvec3<float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'FSY::SceneCameraController'
@@ -54,13 +56,8 @@ D:\VS_Projects\FSY\FSY\src\FSY\Headers\Sound.h(30,21): warning C4251: 'FSY::Soun
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\xstring(4648): message : see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
 D:\VS_Projects\FSY\FSY\src\FSY\Headers\Settings.h(19,36): warning C4251: 'FSY::Settings::editorFontPath': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'FSY::Settings'
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\xstring(4648): message : see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
-D:\VS_Projects\FSY\FSY\src\FSY\Application.cpp(56,41): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
-D:\VS_Projects\FSY\FSY\src\FSY\Application.cpp(57,42): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
-D:\VS_Projects\FSY\FSY\src\FSY\Application.cpp(168,35): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
+D:\VS_Projects\FSY\FSY\src\FSY\Application.cpp(57,41): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application.cpp(58,42): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
 D:\VS_Projects\FSY\FSY\src\FSY\Application.cpp(169,35): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
           with
           [
@@ -71,11 +68,16 @@ D:\VS_Projects\FSY\FSY\src\FSY\Application.cpp(170,35): warning C4244: '=': conv
           [
               T=float
           ]
-D:\VS_Projects\FSY\FSY\src\FSY\Application.cpp(196,19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\VS_Projects\FSY\FSY\src\FSY\Application.cpp(309,23): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\VS_Projects\FSY\FSY\src\FSY\Application.cpp(333,36): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-D:\VS_Projects\FSY\FSY\src\FSY\Application.cpp(504,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-D:\VS_Projects\FSY\FSY\src\FSY\Application.cpp(505,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application.cpp(171,35): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+D:\VS_Projects\FSY\FSY\src\FSY\Application.cpp(197,19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application.cpp(318,23): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application.cpp(342,36): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application.cpp(525,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application.cpp(526,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   Camera.cpp
 D:\VS_Projects\FSY\FSY\src\FSY\Headers\Mesh.h(15,3): warning C4091: '__declspec(dllexport)': ignored on left of 'FSY::RenderModes' when no variable is declared
 D:\VS_Projects\FSY\FSY\src\FSY\Headers\Mesh.h(18,25): warning C4091: 'extern ': ignored on left of 'FSY::GameObject' when no variable is declared
@@ -92,6 +94,7 @@ D:\VS_Projects\FSY\FSY\src\FSY\Headers\Mesh.h(45): message : see declaration of 
   Console.cpp
 D:\VS_Projects\FSY\FSY\src\FSY\Headers\Console.h(20,37): warning C4251: 'FSY::Console::m_latestMessage': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'FSY::Console'
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\xstring(4648): message : see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+  ContentBrowser.cpp
   EditorUI.cpp
   GameObject.cpp
 D:\VS_Projects\FSY\FSY\src\FSY\Headers\Mesh.h(15,3): warning C4091: '__declspec(dllexport)': ignored on left of 'FSY::RenderModes' when no variable is declared
@@ -165,11 +168,13 @@ D:\VS_Projects\FSY\FSY\src\FSY\Headers\Mesh.h(45): message : see declaration of 
 D:\VS_Projects\FSY\FSY\src\FSY\Headers\Scene.h(35,31): warning C4251: 'FSY::Scene::m_meshes': class 'std::vector<FSY::Mesh *,std::allocator<FSY::Mesh *>>' needs to have dll-interface to be used by clients of class 'FSY::Scene'
 D:\VS_Projects\FSY\FSY\src\FSY\Headers\Scene.h(27): message : see declaration of 'std::vector<FSY::Mesh *,std::allocator<FSY::Mesh *>>'
 D:\VS_Projects\FSY\FSY\src\FSY\Headers\FSY_Time.h(8,26): warning C4091: 'extern ': ignored on left of 'FSY::Application' when no variable is declared
-D:\VS_Projects\FSY\FSY\src\FSY\Headers\Application.h(16,39): warning C4091: 'extern ': ignored on left of 'FSY::SceneCameraController' when no variable is declared
-D:\VS_Projects\FSY\FSY\src\FSY\Headers\Application.h(67,24): warning C4251: 'FSY::Application::view': struct 'glm::tmat4x4<float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'FSY::Application'
+D:\VS_Projects\FSY\FSY\src\FSY\Headers\Application.h(17,39): warning C4091: 'extern ': ignored on left of 'FSY::SceneCameraController' when no variable is declared
+D:\VS_Projects\FSY\FSY\src\FSY\Headers\Application.h(68,24): warning C4251: 'FSY::Application::view': struct 'glm::tmat4x4<float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'FSY::Application'
 D:\VS_Projects\FSY\FSY\src\vendor\glm\detail\type_mat.hpp(304): message : see declaration of 'glm::tmat4x4<float,glm::packed_highp>'
-D:\VS_Projects\FSY\FSY\src\FSY\Headers\Application.h(68,29): warning C4251: 'FSY::Application::projection': struct 'glm::tmat4x4<float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'FSY::Application'
+D:\VS_Projects\FSY\FSY\src\FSY\Headers\Application.h(69,29): warning C4251: 'FSY::Application::projection': struct 'glm::tmat4x4<float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'FSY::Application'
 D:\VS_Projects\FSY\FSY\src\vendor\glm\detail\type_mat.hpp(304): message : see declaration of 'glm::tmat4x4<float,glm::packed_highp>'
+D:\VS_Projects\FSY\FSY\src\FSY\Headers\Application.h(82,26): warning C4251: 'FSY::Application::cb': class 'FSY::ContentBrowser' needs to have dll-interface to be used by clients of class 'FSY::Application'
+D:\VS_Projects\FSY\FSY\src\FSY\Headers\ContentBrowser.h(8): message : see declaration of 'FSY::ContentBrowser'
 D:\VS_Projects\FSY\FSY\src\FSY\Input.cpp(74,71): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
 D:\VS_Projects\FSY\FSY\src\FSY\Input.cpp(76,69): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
   Light.cpp
@@ -222,8 +227,8 @@ C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.2
 D:\VS_Projects\FSY\FSY\src\FSY\Headers\FSY_Time.h(8,26): warning C4091: 'extern ': ignored on left of 'FSY::Application' when no variable is declared
   VAO.cpp
   VBO.cpp
-  dummy.cpp
   Compiling...
+  dummy.cpp
   glm.cpp
   imgui.cpp
   imgui_demo.cpp
@@ -242,6 +247,6 @@ LINK : warning LNK4098: defaultlib 'MSVCRTD' conflicts with use of other libs; u
 D:\VS_Projects\FSY\FSY\src\FSY\Maths\Maths.cpp(93): warning C4172: returning address of local variable or temporary: res
 D:\VS_Projects\FSY\FSY\src\FSY\Maths\Maths.cpp(101): warning C4172: returning address of local variable or temporary: res
 D:\VS_Projects\FSY\FSY\src\FSY\Headers\GameObject.h(91): warning C4715: 'FSY::GameObject::GetComponent<FSY::SceneCameraController>': not all control paths return a value
-  All 2514 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  All 3045 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finished generating code
   FSY.vcxproj -> D:\VS_Projects\FSY\bin\Release-x64\FSY\FSY.dll

@@ -1,16 +1,17 @@
-#include "Headers/Application.h"
+#include "Application.h"
 #include "SceneCameraController.h"
 #include "Console.h"
 #include "Sound.h"
 #include "Settings.h"
-#include "../vendor/stb_image/stb_image.h"
 
+#include "../vendor/stb_image/stb_image.h"
 #include <../imgui/imgui.h>
 #include <../imgui/imgui_impl_glfw.h>
 #include <../imgui/imgui_impl_opengl3.h>
 #include <../imgui/imgui_stdlib.h>
 
 #include <map>
+#include <filesystem>
 
 namespace FSY {
 
@@ -223,8 +224,16 @@ namespace FSY {
 							{
 								glm::vec3 pos(mesh->_GetGameObjects()[i]->position.x, mesh->_GetGameObjects()[i]->position.y, mesh->_GetGameObjects()[i]->position.z);
 								float distance = glm::length(cameraPos - pos);
-								sorted[distance] = pos;
-								sorted1[distance] = mesh->_GetGameObjects()[i];
+								if (sorted1[distance] == nullptr) {
+									sorted[distance] = pos;
+									sorted1[distance] = mesh->_GetGameObjects()[i];
+								}
+								else {
+									//This step is required because otherwise Meshes that have the same position won't be rendered
+									distance += 0.00001f;
+									sorted[distance] = pos;
+									sorted1[distance] = mesh->_GetGameObjects()[i];
+								}
 							}
 							for (std::map<float, glm::vec3>::reverse_iterator it = sorted.rbegin(); it != sorted.rend(); ++it)
 							{
@@ -345,6 +354,12 @@ namespace FSY {
 					}
 				}
 			}
+			if(ImGui::BeginPopupContextWindow()){
+				if (ImGui::MenuItem("Click me!")) {
+					std::cout << "CLICK";
+				}
+				ImGui::EndPopup();
+			}
 			ImGui::EndTabItem();
 		}
 		if (ImGui::BeginTabItem("Object")) {
@@ -353,8 +368,8 @@ namespace FSY {
 				ImGui::InputText("Name", &s);
 				if (selectedObject->name != s)
 					selectedObject->name = m_activeScene->__CheckName(s);
-				if (ImGui::TreeNodeEx("Transform", ImGuiTreeNodeFlags_SpanAvailWidth)) {
-					if (ImGui::TreeNodeEx("Position", ImGuiTreeNodeFlags_SpanAvailWidth)) {
+				if (ImGui::TreeNodeEx("Transform", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
+					if (ImGui::TreeNodeEx("Position", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
 						ImGui::AlignTextToFramePadding();
 						ImGui::TextColored(ImVec4(1.0f, 0.2f, 0.2f, 1.0f), "X");
 						ImGui::SameLine();
@@ -381,7 +396,7 @@ namespace FSY {
 						ImGui::PopStyleColor();
 						ImGui::TreePop();
 					}
-					if (ImGui::TreeNodeEx("Rotation", ImGuiTreeNodeFlags_SpanAvailWidth)) {
+					if (ImGui::TreeNodeEx("Rotation", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
 						ImGui::AlignTextToFramePadding();
 						ImGui::TextColored(ImVec4(1.0f, 0.2f, 0.2f, 1.0f), "X");
 						ImGui::SameLine();
@@ -408,7 +423,7 @@ namespace FSY {
 						ImGui::PopStyleColor();
 						ImGui::TreePop();
 					}
-					if (ImGui::TreeNodeEx("Scale", ImGuiTreeNodeFlags_SpanAvailWidth)) {
+					if (ImGui::TreeNodeEx("Scale", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
 						ImGui::AlignTextToFramePadding();
 						ImGui::TextColored(ImVec4(1.0f, 0.2f, 0.2f, 1.0f), "X");
 						ImGui::SameLine();
@@ -437,7 +452,7 @@ namespace FSY {
 					}
 					ImGui::TreePop();
 				}
-				if (ImGui::TreeNodeEx("Components", ImGuiTreeNodeFlags_SpanAvailWidth)) {
+				if (ImGui::TreeNodeEx("Components", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
 					for (auto c : selectedObject->__GetComponents()) {
 						if(ImGui::TreeNodeEx(c->getName(), ImGuiTreeNodeFlags_SpanAvailWidth)){
 							c->DrawUI();
@@ -449,10 +464,16 @@ namespace FSY {
 			}
 			ImGui::EndTabItem();
 		}
+		if (ImGui::BeginTabItem("Content")) {
+
+			cb.Draw();
+
+			ImGui::EndTabItem();
+		}
 		if (ImGui::BeginTabItem("Debug")) {
 			ImGui::TextColored(ImVec4(1.0f, 0.2f, 0.2f, 1.0f), "%.1f FPS (In Editor Mode)", ImGui::GetIO().Framerate);
 			ImGui::TextColored(ImVec4(1.0f, 0.2f, 0.2f, 1.0f), "%.1f ms/frame", 1000.0f / ImGui::GetIO().Framerate);
-			if (ImGui::TreeNodeEx("Settings", ImGuiTreeNodeFlags_SpanAvailWidth)) {
+			if (ImGui::TreeNodeEx("Settings", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
 				ImGui::PushItemWidth(170);
 				ImGui::ColorEdit3("Scene Color", m_clearColor);
 				ImGui::PopItemWidth();
@@ -466,7 +487,7 @@ namespace FSY {
 				m_activeScene->GetLight()->__SetLightColorEngine(col);
 				ImGui::TreePop();
 			}
-			if (ImGui::TreeNodeEx("Console", ImGuiTreeNodeFlags_SpanAvailWidth)) {
+			if (ImGui::TreeNodeEx("Console", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
 				if(Console::_GetLatestMessage() != "")
 					ImGui::Text(Console::_GetLatestMessage().c_str());
 				ImGui::TreePop();
