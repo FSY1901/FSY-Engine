@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <cmath>
-#include "../Headers/Core.h"
+#include "../Core/Core.h"
 #include "../../vendor/glm/glm.hpp"
 #include "../../vendor/glm/gtc/matrix_transform.hpp"
 #include "../../vendor/glm/gtc/type_ptr.hpp"
