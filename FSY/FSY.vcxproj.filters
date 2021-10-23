@@ -555,9 +555,6 @@
     <ClInclude Include="src\FSY\Editor\ContentBrowser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\FSY\Editor\Style\EditorStyle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FSY\Application\Application.cpp">

@@ -13,7 +13,6 @@
   <ItemGroup>
     <ClInclude Include="src\FSY.h" />
     <ClInclude Include="src\FSY\Application\Application.h" />
-    <ClInclude Include="src\FSY\Editor\Style\EditorStyle.h" />
     <ClInclude Include="src\FSY\Rendering\Camera.h" />
     <ClInclude Include="src\FSY\Editor\Console.h" />
     <ClInclude Include="src\FSY\Editor\ContentBrowser.h" />
