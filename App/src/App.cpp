@@ -61,7 +61,7 @@ public:
 
 	App(int width, int height, const char* title) : FSY::Application(width, height, title) {
 		//Settings::fullscreen = true;
-		Settings::editorFontPath = "./src/Data/Assets/Fonts/Poppins/Poppins-SemiBold.ttf";
+		Settings::s_editorFontPath = "./src/Data/Assets/Fonts/Poppins/Poppins-SemiBold.ttf";
 	}
 
 	~App() override{

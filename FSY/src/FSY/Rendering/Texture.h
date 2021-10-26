@@ -12,13 +12,13 @@ namespace FSY {
 
 	public:
 		Texture();
-		Texture(const char* filename);
+		Texture(const char* filename, bool flipped=true);
 		void Bind();
-		void LoadTexture();
+		GLuint GetTexture();
 
 	private:
 		const char* m_filename;
-		GLuint m_ttexture;
+		GLuint m_texture;
 
 	};
 

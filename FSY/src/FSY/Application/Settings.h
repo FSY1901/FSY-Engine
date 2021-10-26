@@ -14,9 +14,12 @@ namespace FSY {
 		///Vars///
 
 		//Specifies if the application runs in Windowed Fullscreen Mode. The Graphics will adjust automatically.
-		static bool fullscreen;
+		static bool s_fullscreen;
 		//The Path where the Font for the Editor can be found.
-		static std::string editorFontPath;
+		static std::string s_editorFontPath;
+		static std::string s_folderIconPath;
+		static std::string s_ttfIcon;
+		static std::string s_pngIcon;
 
 	};
 

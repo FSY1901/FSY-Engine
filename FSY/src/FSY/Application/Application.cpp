@@ -77,7 +77,7 @@ namespace FSY {
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-		if (Settings::fullscreen) {
+		if (Settings::s_fullscreen) {
 			GLFWmonitor* monitor = glfwGetPrimaryMonitor();
 			const GLFWvidmode* mode = glfwGetVideoMode(monitor);
 			m_width = mode->width;
@@ -121,6 +121,8 @@ namespace FSY {
 			glm::vec3(0.0f, 0.0f, 0.0f),
 			glm::vec3(0.0f, 1.0f, 0.0f));
 
+		cb.LoadTextures();
+
 		MainLoop();
 	}
 
@@ -133,8 +135,8 @@ namespace FSY {
 		ImGui::StyleColorsDark();
 		ImGui_ImplGlfw_InitForOpenGL(m_win, true);
 		ImGui_ImplOpenGL3_Init("#version 330");
-		if(Settings::editorFontPath != "")
-			io.FontDefault = io.Fonts->AddFontFromFileTTF(Settings::editorFontPath.c_str(), 16.0f);
+		if(Settings::s_editorFontPath != "")
+			io.FontDefault = io.Fonts->AddFontFromFileTTF(Settings::s_editorFontPath.c_str(), 16.0f);
 
 #pragma region Styling
 		auto colors = ImGui::GetStyle().Colors;

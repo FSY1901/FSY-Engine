@@ -8,10 +8,10 @@ namespace FSY {
 
     }
 
-    Texture::Texture(const char* filename) {
+    Texture::Texture(const char* filename, bool flipped) {
         this->m_filename = filename;
-        glGenTextures(1, &m_ttexture);
-        glBindTexture(GL_TEXTURE_2D, m_ttexture);
+        glGenTextures(1, &m_texture);
+        glBindTexture(GL_TEXTURE_2D, m_texture);
         // set the texture wrapping/filtering options (on the currently bound texture object)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -19,7 +19,7 @@ namespace FSY {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         // load and generate the texture
         int width, height, nrChannels;
-        stbi_set_flip_vertically_on_load(true);
+        stbi_set_flip_vertically_on_load(flipped);
         //for pngs
         unsigned char* data = stbi_load(filename, &width, &height, &nrChannels, STBI_rgb_alpha);
         if (data)
@@ -36,11 +36,11 @@ namespace FSY {
 
     void Texture::Bind() {
         //glActiveTexture(GL_TEXTURE0); // activate the texture unit first before binding texture
-        glBindTexture(GL_TEXTURE_2D, m_ttexture);
+        glBindTexture(GL_TEXTURE_2D, m_texture);
     }
 
-    void Texture::LoadTexture() {
-
+    GLuint Texture::GetTexture() {
+        return m_texture;
     }
 
 }
