@@ -24,6 +24,8 @@ namespace FSY {
 
 		static void InputFloat(const char* label, float* f);
 
+		static void CheckBox(const char* label, bool* b);
+
 	};
 
 }

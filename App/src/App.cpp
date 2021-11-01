@@ -8,6 +8,10 @@ using namespace FSY;
 class Control : public FSY::Component {
 public:
 
+	Control() {
+		
+	}
+
 	float speed = 10.0f;
 
 	void Start() override {
@@ -37,6 +41,7 @@ public:
 		EditorUI::Text("Controller for the Object");
 		EditorUI::SliderFloat("Speed", &speed, 1, 15);
 	}
+
 };
 
 class App : public FSY::Application {
@@ -51,9 +56,8 @@ public:
 	Texture t;
 	Mesh m;
 	Mesh m1;
-
-	Sound* _s;
-	Sound* s1;
+	Sound* sound;
+	Control* control;
 
 	App() {
 		
@@ -75,20 +79,20 @@ public:
 		myObject = { Vector3f(0, 0, -5.0f), Vector3f(0, 0, 0), Vector3f(1, 1, 1), "Object" };
 		g2 = { Vector3f(2, 0, -5.0f), Vector3f(30, 40, 0), Vector3f(1, 1, 1), "Object" };
 		g = { Vector3f(5, 0, -5.0f), Vector3f(30, 40, 0), Vector3f(1, 1, 1), "Object" };
+		sound = scene.GetCamera()->AddComponent<Sound>();
 		//Dirs
 #if DEBUG == 1
 		s = { "./src/Data/Shaders/textured.vert", "./src/Data/Shaders/textured.frag" };
 		t = { "./src/Data/Textures/Red.png" };
 		colored = { "./src/Data/Shaders/colored.vert", "./src/Data/Shaders/colored.frag" };
-		_s = new Sound("./src/Data/Audio/song.mp3");
-		s1 = new Sound("./src/Data/Audio/breakout.mp3");
+		sound->Path("./src/Data/Audio/breakout.mp3");
 #else
 		s = { "Data/Shaders/textured.vert", "Data/Shaders/textured.frag" };
 		t = { "Data/Textures/Dirt.png" };
 		colored = { "Data/Shaders/colored.vert", "Data/Shaders/colored.frag" };
-		_s = new Sound("Data/Audio/song.mp3");
-		s1 = new Sound("Data/Audio/breakout.mp3");
+		sound->Path("Data/Audio/breakout.mp3");
 #endif
+		sound->play = true;
 		//Meshes & Scene
 		m = {Mesh::s_verticesForCube, Mesh::s_cubeMeshSize, &s};
 		m.isTransparent = true;
@@ -97,9 +101,10 @@ public:
 		m1 = { Mesh::s_verticesForCube, Mesh::s_cubeMeshSize, &colored };
 		m1.isTransparent = true;
 		m1.SetTexture(&t);
-		//g2.AddChild(&myObject);
-		myObject.AddChild(&g);
+		g2.AddChild(&myObject);
 		g2.AddComponent<Control>();
+		g2.AddComponent<Control>();
+		myObject.AddChild(&g);
 		m1.AddGameObject(&g2);
 		m1.AddGameObject(&myObject);
 		m1.AddGameObject(&g);
@@ -126,17 +131,20 @@ public:
 
 	void OnEditorUpdate() override{
 		colored.setColorValues4("Color", 0.2f, 0.9f, 0.2f, 0.2f);
-		//_s->Play(Vector3f(0,0,0),5, 20);
-		s1->Play(Vector3f(Camera::GetMain()->position.x, Camera::GetMain()->position.y, Camera::GetMain()->position.z),5, 20);
+		sound->Update();//Testing purposes :)
 		if (Input::GetKey(Keys::Key_ESCAPE)) {
 			Close();
+		}
+		if (Input::GetKey(Keys::Key_SPACE)) {
+			sound->Stop();
+		}
+		if (Input::GetKey(Keys::Key_Q)) {
+			sound->play = true;
 		}
 	}
 
 	void OnClose() override {
-		//delete[] objs;
-		delete _s;
-		delete s1;
+		delete sound;
 	}
 
 };

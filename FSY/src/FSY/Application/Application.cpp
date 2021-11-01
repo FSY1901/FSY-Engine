@@ -123,6 +123,9 @@ namespace FSY {
 
 		cb.LoadTextures();
 
+		//Sound Setup
+		Sound::CreateSoundEngine();
+
 		MainLoop();
 	}
 
@@ -179,7 +182,6 @@ namespace FSY {
 			m_activeScene->GetCamera()->AddComponent<SceneCameraController>();
 			scc = m_activeScene->GetCamera()->GetComponent<SceneCameraController>();
 			scc->Start();
-			//scc->Init();
 		}
 		else {
 			for (GameObject* g : m_activeScene->_GetObjects()) {
@@ -490,7 +492,7 @@ namespace FSY {
 				}
 				if (ImGui::TreeNodeEx("Components", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
 					for (auto c : selectedObject->__GetComponents()) {
-						if(ImGui::TreeNodeEx(c->getName(), ImGuiTreeNodeFlags_SpanAvailWidth)){
+						if(ImGui::TreeNodeEx(c->getName(), ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)){
 							c->DrawUI();
 							ImGui::TreePop();
 						}

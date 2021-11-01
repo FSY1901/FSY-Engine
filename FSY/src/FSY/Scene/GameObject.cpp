@@ -55,21 +55,13 @@ namespace FSY {
 	/////////////////////////
 	//COMPONENT:
 	////////////////////////
-	const char* Component::m_ID = "";
 
 	Component::Component() {
-		if (m_ID == "") {
-			UuidCreate(&m_UID);
-			UuidToStringA(&m_UID, (RPC_CSTR*)&m_ID);
-		}
+		
 	}
 
 	void Component::SetGameObject(GameObject* g) {
 		this->gameObject = g;
-	}
-
-	const char* Component::getID() {
-		return m_ID;
 	}
 
 }

@@ -26,4 +26,8 @@ namespace FSY {
 		ImGui::PopItemWidth();
 	}
 
+	void EditorUI::CheckBox(const char* label, bool* b) {
+		ImGui::Checkbox(label, b);
+	}
+
 }

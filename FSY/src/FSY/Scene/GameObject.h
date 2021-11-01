@@ -52,6 +52,10 @@ namespace FSY {
 		/// <typeparam name="T">The Type of Component to add</typeparam>
 		template<class T> T* AddComponent() {
 			Component* c = new T();
+			if (this->HasComponent<T>()) {
+				std::cout << "GameObject already has Component attached!" << std::endl;
+				return GetComponent<T>();
+			}
 			c->SetGameObject(this);
 			m_components.push_back(c);
 			return (T*)c;
@@ -66,7 +70,7 @@ namespace FSY {
 			Component* c = new T();
 			for (auto& comp : m_components) {
 				int index = 0;
-				if (comp->getID() == c->getID()) {
+				if (comp->getName() == c->getName()) {
 					m_components.erase(m_components.begin() + index);
 					delete c;
 					return;
@@ -81,20 +85,21 @@ namespace FSY {
 		/// </summary>
 		/// <typeparam name="T">The Component to receive.</typeparam>
 		template<class T> T* GetComponent() {
-			for (int i = 0; i < m_components.size(); ++i) {
-				if (typeid(T) == typeid(*m_components[i])) {
-					return (T*)m_components[i];
+			Component* c = new T();
+			for (auto comp : m_components) {
+				if (c->getName() == comp->getName()) {
+					return (T*)comp;
 				}
 			}
 		}
 
 		template<class T> bool HasComponent() {
 			Component* c = new T();
-			const char* ID = c->getID();
+			const char* ID = c->getName();
 			delete c;
 			for (int i = 0; i < m_components.size(); ++i) {
 				c = m_components[i];
-				if (ID == c->getID()) {
+				if (ID == c->getName()) {
 					return true;
 				}
 			}
@@ -131,8 +136,6 @@ namespace FSY {
 		virtual void Update() {}
 
 		void SetGameObject(GameObject* g);
-
-		const char* getID();
 		//Should return the way the Component is displayed in the Inspector.
 		virtual const char* getName() = 0;
 		//Should use ImGui for an easy way to change values
@@ -140,9 +143,6 @@ namespace FSY {
 
 	protected:
 		GameObject* gameObject;
-	private:
-		static const char* m_ID;
-		UUID m_UID;
 
 	};
 
