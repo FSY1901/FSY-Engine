@@ -9,8 +9,6 @@
 #include "../Scene/GameObject.h"
 #include "../Editor/EditorUI.h"
 
-using namespace FSY::MATHS;
-
 extern class Application;
 
 namespace FSY {

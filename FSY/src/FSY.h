@@ -12,3 +12,4 @@
 #include "FSY/Editor/EditorUI.h"
 #include "FSY/Sound/Sound.h"
 #include "FSY/Application/Settings.h"
+#include "FSY/Maths/PerlinNoise.h"

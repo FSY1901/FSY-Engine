@@ -11,11 +11,11 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 
-using namespace FSY::MATHS;
-
 namespace FSY {
 
 	class FSY_API Component;
+
+	extern class Application;
 
 	class FSY_API GameObject {
 
@@ -39,6 +39,8 @@ namespace FSY {
 		bool IsChild();
 
 		std::vector<GameObject*> GetChildren();
+
+		glm::mat4 GetTransformationMatrix();
 
 #pragma region Component Stuff
 
@@ -119,6 +121,11 @@ namespace FSY {
 
 		std::vector<Component*> m_components;
 		std::vector<GameObject*> m_children;
+
+		glm::mat4 transform;
+
+		friend class Mesh;
+		friend class Application;
 
 	};
 

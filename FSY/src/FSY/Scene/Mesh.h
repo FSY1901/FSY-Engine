@@ -47,8 +47,11 @@ namespace FSY {
 #pragma region MESHES
 		static float s_verticesForCube[288];
 		static float s_verticesForPlane[48];
+		static float s_verticesForTriangle[24];
+
 		static int s_cubeMeshSize;
 		static int s_planeMeshSize;
+		static int s_triangleMeshSize;
 #pragma endregion
 
 	private:

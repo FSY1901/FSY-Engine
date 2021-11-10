@@ -13,8 +13,6 @@
 #include <map>
 #include <filesystem>
 
-using namespace FSY::MATHS;
-
 namespace FSY {
 
 	Application* Application::app = nullptr;
@@ -175,8 +173,6 @@ namespace FSY {
 
 		vao->Generate();
 		vao->Bind();
-		VBO vbo;
-		vbo.Bind();
 
 		if (inEditor) {
 			m_activeScene->GetCamera()->AddComponent<SceneCameraController>();
@@ -196,12 +192,13 @@ namespace FSY {
 
 			//Preventing a crash when minimizing
 			if (m_width != 0 && m_height != 0) {
-				ImGui_ImplOpenGL3_NewFrame();
-				ImGui_ImplGlfw_NewFrame();
-				ImGui::NewFrame();
 
-				if(inEditor)
+				if (inEditor) {
+					ImGui_ImplOpenGL3_NewFrame();
+					ImGui_ImplGlfw_NewFrame();
+					ImGui::NewFrame();
 					scc->Update();
+				}
 
 				glm::vec3 direction;
 				direction.x = DegreesToRadians(m_activeScene->GetCamera()->rotation.x);
@@ -232,7 +229,7 @@ namespace FSY {
 
 					Camera* cam = Camera::GetMain();
 					Vector3f vec1 = { cam->position.x, cam->position.y, cam->position.z };
-					float inView = cos(DegreesToRadians(45 * 1.05f));
+					float inView = cos(DegreesToRadians(90 * 0.8));
 					Sound::GetSoundEngine()->setListenerPosition(irrklang::vec3df(vec1.x, vec1.y, vec1.z), irrklang::vec3df(-cameraFront.x, cameraFront.y, -cameraFront.z));
 					Sound::listenerPos = cam->position;
 					for (auto mesh : m_activeScene->_GetMeshes()) {
@@ -240,7 +237,8 @@ namespace FSY {
 							glEnable(GL_CULL_FACE);
 							glCullFace(GL_BACK);
 						}
-
+						VBO vbo;
+						vbo.Bind();
 						vbo.SetData(mesh->GetVertices(), sizeof(float) * mesh->GetVertexSize());
 						vao->Link(&vbo, 0, 1);
 						vbo.Unbind();
@@ -279,7 +277,7 @@ namespace FSY {
 								g->__UpdateChildren();
 								Vector3f vec2 = g->position;
 								Vector3f res = vec2 - vec1;
-								res.Normalize();
+								res = Vector3f::Normalize(res);
 								Vector3f dir = { cameraFront.x, cameraFront.y, cameraFront.z };
 								float f_dp = Vector3f::DotProduct(dir, res);
 								if (f_dp >= inView) {
@@ -291,6 +289,7 @@ namespace FSY {
 									//glm::sin(rot);
 									glm::mat4 scaleMat = glm::scale(transform, glm::vec3(g->scale.x, g->scale.y, g->scale.z));
 									transform = transMat * rotMat * scaleMat;
+									g->transform = transform;
 									glm::mat4 inverse = glm::inverse(transform);
 									glm::mat4 transpose = glm::transpose(inverse);
 									mesh->GetShader()->setMat4("fixedNormal", transpose);
@@ -305,13 +304,14 @@ namespace FSY {
 								}
 							}
 							glDisable(GL_BLEND);
+							vbo.Delete();
 						}
 						else {
 							for (auto g : mesh->_GetGameObjects()) {
 								g->__UpdateChildren();
 								Vector3f vec2 = g->position;
 								Vector3f res = vec2 - vec1;
-								res.Normalize();
+								res = Vector3f::Normalize(res);
 								Vector3f dir = { cameraFront.x, cameraFront.y, cameraFront.z };
 								float f_dp = Vector3f::DotProduct(dir, res);
 								if (f_dp >= inView) {
@@ -323,6 +323,7 @@ namespace FSY {
 									glm::mat4 transMat = glm::translate(transform, glm::vec3(g->position.x, g->position.y, g->position.z));
 									glm::mat4 scaleMat = glm::scale(transform, glm::vec3(g->scale.x, g->scale.y, g->scale.z));
 									transform = transMat * rotMat * scaleMat;
+									g->transform = transform;
 									glm::mat4 inverse = glm::inverse(transform);
 									glm::mat4 transpose = glm::transpose(inverse);
 									mesh->GetShader()->setMat4("fixedNormal", transpose);
@@ -338,15 +339,27 @@ namespace FSY {
 							}
 						}
 						glDisable(GL_CULL_FACE);
+						vbo.Delete();
+					}
+					//update all none mesh objects
+					for (auto g : m_activeScene->_GetObjects()) {
+						if (!g->HasMesh()) {
+							g->__UpdateChildren();
+							if (!inEditor) {
+								for (Component* c : g->__GetComponents()) {
+									c->Update();
+								}
+							}
+						}
 					}
 
 				}
 
-				if(inEditor)
+				if (inEditor) {
 					RenderUI();
-
-				ImGui::Render();
-				ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+					ImGui::Render();
+					ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+				}
 
 			}
 
@@ -358,8 +371,6 @@ namespace FSY {
 			Time::s_lastframe = currentFrame;
 
 		}
-
-		vbo.Delete();
 
 		m_windowOpen = false;
 
@@ -405,7 +416,7 @@ namespace FSY {
 				std::string s = selectedObject->name;
 				ImGui::InputText("Name", &s);
 				if (selectedObject->name != s)
-					selectedObject->name = m_activeScene->__CheckName(s);
+					selectedObject->name = m_activeScene->__CheckName(s, selectedObject);
 				if (ImGui::TreeNodeEx("Transform", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
 					if (ImGui::TreeNodeEx("Position", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
 						ImGui::AlignTextToFramePadding();

@@ -12,9 +12,12 @@ namespace FSY {
 
     void VAO::Link(VBO* VBO, GLuint layout_pos, GLuint layout_tex) {
         VBO->Bind();
+        
+        //position attribute
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
         glEnableVertexAttribArray(0);
 
+        //light attribute
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
         glEnableVertexAttribArray(1);
 

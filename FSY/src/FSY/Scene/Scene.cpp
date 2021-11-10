@@ -11,16 +11,12 @@ namespace FSY {
 
 	void Scene::AddObject(GameObject* obj) {
 		if (m_objects.size() < c_maxObjects) {
-			__CheckName(obj->name);
+			__CheckName(obj->name, obj);
 			m_objects.push_back(obj);
 		}
 	}
 
 	void Scene::AddInstanceMesh(Mesh* m) {
-		for (auto _m : m_meshes) {
-			if (_m == m)
-				return;
-		}
 
 		if (m_meshes.size() < 10000)
 			m_meshes.push_back(m);
@@ -32,11 +28,11 @@ namespace FSY {
 		}
 	}
 
-	std::string Scene::__CheckName(std::string& name) {
-		for (auto g : m_objects) {
-			if (name == g->name) {
+	std::string Scene::__CheckName(std::string& name, GameObject* g) {
+		for (auto g1 : m_objects) {
+			if (name == g1->name && g1 != g) {
 				name += "+";
-				return __CheckName(name);
+				return __CheckName(name, g);
 			}
 		}
 

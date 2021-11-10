@@ -1,4 +1,5 @@
 #include "Mesh.h"
+#include "GameObject.h"
 
 namespace FSY {
 
@@ -47,16 +48,22 @@ namespace FSY {
         -0.5f, 0.5f, 0.5f, 0.0f,  1.0f,  0.0f, 0.0f, 0.0f
     };
     float Mesh::s_verticesForPlane[48] = {
-         -0.5f, 0.0f, -0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 0.0f,
-        0.5f, 0.0f, -0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f,
-        -0.5f, 0.0f, 0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f,
-        -0.5f, 0.0f, 0.5f, 0.0f, -1.0f, 0.0f, 0.0f, 1.0f,
-         0.5f, 0.0f, -0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f,
-         0.5f, 0.0f, 0.5f, 0.0f, -1.0f, 0.0f, 1.0f, 1.0f
+        -0.5f, 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f,
+        0.5f, 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+        -0.5f, 0.0f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+        0.5f, 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+        0.5f, 0.0f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
+        -0.5f, 0.0f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f
+    };
+    float Mesh::s_verticesForTriangle[24] = {
+        -0.5f, 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f,
+        0.5f, 0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+        -0.5f, 0.0f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f
     };
 
     int Mesh::s_cubeMeshSize = 288;
     int Mesh::s_planeMeshSize = 48;
+    int Mesh::s_triangleMeshSize = 24;
 #pragma endregion
 
     Mesh::Mesh() {
@@ -91,6 +98,7 @@ namespace FSY {
     }
 
     void Mesh::AddGameObject(GameObject* g) {
+        g->m_hasMesh = true;
         m_objects.push_back(g);
     }
 
