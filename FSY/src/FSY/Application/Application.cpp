@@ -292,8 +292,9 @@ namespace FSY {
 									g->transform = transform;
 									glm::mat4 inverse = glm::inverse(transform);
 									glm::mat4 transpose = glm::transpose(inverse);
-									mesh->GetShader()->setMat4("fixedNormal", transpose);
-									mesh->GetShader()->setMat4("transform", transform);
+									g->fixedNormal = transpose;
+									mesh->GetShader()->setMat4("fixedNormal", g->fixedNormal);
+									mesh->GetShader()->setMat4("transform", g->transform);
 									glDrawArrays(GL_TRIANGLES, 0, sizeof(float) * mesh->GetVertexSize());
 									vbo.Unbind();
 									if (!inEditor) {
@@ -326,8 +327,9 @@ namespace FSY {
 									g->transform = transform;
 									glm::mat4 inverse = glm::inverse(transform);
 									glm::mat4 transpose = glm::transpose(inverse);
-									mesh->GetShader()->setMat4("fixedNormal", transpose);
-									mesh->GetShader()->setMat4("transform", transform);
+									g->fixedNormal = transpose;
+									mesh->GetShader()->setMat4("fixedNormal", g->fixedNormal);
+									mesh->GetShader()->setMat4("transform", g->transform);
 									glDrawArrays(GL_TRIANGLES, 0, sizeof(float) * mesh->GetVertexSize());
 									vbo.Unbind();
 									if (!inEditor) {
@@ -342,10 +344,10 @@ namespace FSY {
 						vbo.Delete();
 					}
 					//update all none mesh objects
-					for (auto g : m_activeScene->_GetObjects()) {
-						if (!g->HasMesh()) {
-							g->__UpdateChildren();
-							if (!inEditor) {
+					if (!inEditor) {
+						for (auto g : m_activeScene->_GetObjects()) {
+							if (!g->HasMesh()) {
+								g->__UpdateChildren();
 								for (Component* c : g->__GetComponents()) {
 									c->Update();
 								}
@@ -360,7 +362,6 @@ namespace FSY {
 					ImGui::Render();
 					ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 				}
-
 			}
 
 			glfwSwapBuffers(m_win);
@@ -520,7 +521,9 @@ namespace FSY {
 			ImGui::EndTabItem();
 		}
 		if (ImGui::BeginTabItem("Debug")) {
-			ImGui::TextColored(ImVec4(1.0f, 0.2f, 0.2f, 1.0f), "%.1f FPS (In Editor Mode)", ImGui::GetIO().Framerate);
+			ImGui::Text("FPS: ");
+			ImGui::SameLine();
+			ImGui::TextColored(ImVec4(1.0f, 0.2f, 0.2f, 1.0f), "%.1f FPS", ImGui::GetIO().Framerate);
 			ImGui::TextColored(ImVec4(1.0f, 0.2f, 0.2f, 1.0f), "%.1f ms/frame", 1000.0f / ImGui::GetIO().Framerate);
 			if (ImGui::TreeNodeEx("Settings", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
 				ImGui::PushItemWidth(170);

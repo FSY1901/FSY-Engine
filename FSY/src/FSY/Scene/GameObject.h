@@ -36,6 +36,10 @@ namespace FSY {
 		/// Returns true if the GameObject has a Mesh.
 		/// </summary>
 		bool HasMesh();
+		/// <summary>
+		/// Returns true if the GameObject is a Child of another GameObject
+		/// </summary>
+		/// <returns></returns>
 		bool IsChild();
 
 		std::vector<GameObject*> GetChildren();
@@ -123,6 +127,7 @@ namespace FSY {
 		std::vector<GameObject*> m_children;
 
 		glm::mat4 transform;
+		glm::mat4 fixedNormal;
 
 		friend class Mesh;
 		friend class Application;

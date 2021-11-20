@@ -55,6 +55,8 @@ namespace FSY {
 		Vector3& operator*(float& f);
 
 		bool operator!=(Vector3& other);
+
+		bool operator==(Vector3& other);
 #pragma endregion
 
 	};
