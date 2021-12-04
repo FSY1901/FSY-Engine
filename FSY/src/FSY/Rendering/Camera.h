@@ -15,8 +15,16 @@ namespace FSY {
 		static Camera* GetMain();
 		static void SetAsMain(Camera* cam);
 
+		void __SetViewMatrix(glm::mat4 view);
+		glm::mat4 _GetViewMatrix();
+
+		void __SetProjectionMatrix(glm::mat4 projection);
+		glm::mat4 _GetProjectionMatrix();
+
 	private:
 		static Camera* main;
+		glm::mat4 viewMatrix;
+		glm::mat4 projectionMatrix;
 
 	};
 

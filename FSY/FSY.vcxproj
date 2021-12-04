@@ -33,6 +33,15 @@
     <ClInclude Include="src\FSY\Scene\Scene.h" />
     <ClInclude Include="src\FSY\Rendering\Shader.h" />
     <ClInclude Include="src\FSY\Rendering\Texture.h" />
+    <ClInclude Include="src\FSY\Sound\SoundExperimental.h" />
+    <ClInclude Include="src\vendor\Audeo\audeo.hpp" />
+    <ClInclude Include="src\vendor\Audeo\effects.hpp" />
+    <ClInclude Include="src\vendor\Audeo\exception.hpp" />
+    <ClInclude Include="src\vendor\Audeo\export_import.hpp" />
+    <ClInclude Include="src\vendor\Audeo\Sound.hpp" />
+    <ClInclude Include="src\vendor\Audeo\SoundEngine.hpp" />
+    <ClInclude Include="src\vendor\Audeo\SoundSource.hpp" />
+    <ClInclude Include="src\vendor\Audeo\vec3.hpp" />
     <ClInclude Include="src\vendor\glm\common.hpp" />
     <ClInclude Include="src\vendor\glm\detail\func_common.hpp" />
     <ClInclude Include="src\vendor\glm\detail\func_exponential.hpp" />
@@ -211,10 +220,14 @@
     <ClCompile Include="src\FSY\Rendering\Shader.cpp" />
     <ClCompile Include="src\FSY\Sound\Sound.cpp" />
     <ClCompile Include="src\FSY\Rendering\Texture.cpp" />
+    <ClCompile Include="src\FSY\Sound\SoundExperimental.cpp" />
     <ClCompile Include="src\FSY\stb.cpp" />
     <ClCompile Include="src\FSY\Application\FSY_Time.cpp" />
     <ClCompile Include="src\FSY\Rendering\VAO.cpp" />
     <ClCompile Include="src\FSY\Rendering\VBO.cpp" />
+    <ClCompile Include="src\vendor\Audeo\effects.cpp" />
+    <ClCompile Include="src\vendor\Audeo\SoundEngine.cpp" />
+    <ClCompile Include="src\vendor\Audeo\vec3.cpp" />
     <ClCompile Include="src\vendor\glm\detail\dummy.cpp" />
     <ClCompile Include="src\vendor\glm\detail\glm.cpp" />
     <ClCompile Include="src\vendor\imgui\imgui.cpp" />
@@ -419,14 +432,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>FSY_PLATFORM_WINDOWS;FSY_BUILD_DLL;</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)FSY\src\vendor\irrKlang\include;$(SolutionDir)FSY\src\vendor\OpenGL\include;$(SolutionDir)FSY\src\vendor\imgui;$(SolutionDir)FSY\src\FSY\Headers;$(SolutionDir)FSY\src\vendor\glm\gtx;$(SolutionDir)FSY\src\vendor\glm\gtc;$(SolutionDir)FSY\src\vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)FSY\src\vendor\SDL\sdl\include;$(SolutionDir)FSY\src\vendor\SDL\sdl_mixer\include;$(SolutionDir)FSY\src\vendor\irrKlang\include;$(SolutionDir)FSY\src\vendor\OpenGL\include;$(SolutionDir)FSY\src\vendor\imgui;$(SolutionDir)FSY\src\FSY\Headers;$(SolutionDir)FSY\src\vendor\glm\gtx;$(SolutionDir)FSY\src\vendor\glm\gtc;$(SolutionDir)FSY\src\vendor\glm;$(SolutionDir)FSY\src\vendor\Audeo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;irrKlang.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)FSY\src\vendor\irrKlang;$(SolutionDir)FSY\src\vendor\imgui;$(SolutionDir)FSY\src\vendor\stb_image;$(SolutionDir)FSY\vendor\OpenGL\src;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;irrKlang.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)FSY\src\vendor\SDL\sdl_mixer\lib\x64;$(SolutionDir)FSY\src\vendor\SDL\sdl\bin;$(SolutionDir)FSY\src\vendor\irrKlang;$(SolutionDir)FSY\src\vendor\imgui;$(SolutionDir)FSY\src\vendor\stb_image;$(SolutionDir)FSY\vendor\OpenGL\src;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>Rpcrt4.lib %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
@@ -438,7 +451,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>FSY_PLATFORM_WINDOWS;FSY_BUILD_DLL;</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)FSY\src\vendor\irrKlang\include;$(SolutionDir)FSY\src\vendor\OpenGL\include;$(SolutionDir)FSY\src\vendor\imgui;$(SolutionDir)FSY\src\FSY\Headers;$(SolutionDir)FSY\src\vendor\glm\gtx;$(SolutionDir)FSY\src\vendor\glm\gtc;$(SolutionDir)FSY\src\vendor\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)FSY\src\vendor\SDL\sdl\include;$(SolutionDir)FSY\src\vendor\SDL\sdl_mixer\include;$(SolutionDir)FSY\src\vendor\irrKlang\include;$(SolutionDir)FSY\src\vendor\OpenGL\include;$(SolutionDir)FSY\src\vendor\imgui;$(SolutionDir)FSY\src\FSY\Headers;$(SolutionDir)FSY\src\vendor\glm\gtx;$(SolutionDir)FSY\src\vendor\glm\gtc;$(SolutionDir)FSY\src\vendor\glm;$(SolutionDir)FSY\src\vendor\Audeo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -446,8 +459,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;irrKlang.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)FSY\src\vendor\irrKlang;$(SolutionDir)FSY\src\vendor\imgui;$(SolutionDir)FSY\src\vendor\stb_image;$(SolutionDir)FSY\vendor\OpenGL\src;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;irrKlang.lib;SDL2.lib;SDL2main.lib;SDL2test.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)FSY\src\vendor\SDL\sdl_mixer\lib\x64;$(SolutionDir)FSY\src\vendor\SDL\sdl\bin;$(SolutionDir)FSY\src\vendor\irrKlang;$(SolutionDir)FSY\src\vendor\imgui;$(SolutionDir)FSY\src\vendor\stb_image;$(SolutionDir)FSY\vendor\OpenGL\src;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>Rpcrt4.lib %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>

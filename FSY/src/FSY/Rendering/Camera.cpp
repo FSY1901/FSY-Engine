@@ -21,4 +21,16 @@ namespace FSY {
 		main = cam;
 	}
 
+	void Camera::__SetViewMatrix(glm::mat4 view) {
+		viewMatrix = view;
+	}
+
+	glm::mat4 Camera::_GetViewMatrix() { return viewMatrix; }
+
+	void Camera::__SetProjectionMatrix(glm::mat4 projection) {
+		projectionMatrix = projection;
+	}
+
+	glm::mat4 Camera::_GetProjectionMatrix() { return projectionMatrix; }
+
 }

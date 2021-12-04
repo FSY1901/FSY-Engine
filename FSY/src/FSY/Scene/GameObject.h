@@ -119,6 +119,9 @@ namespace FSY {
 	private:
 		bool m_hasMesh = false;
 		bool m_isChild = false;
+
+		bool CompareLast();
+
 		Vector3f m_LastPosition;
 		Vector3f m_lastRotation;
 		Vector3f m_lastScale;

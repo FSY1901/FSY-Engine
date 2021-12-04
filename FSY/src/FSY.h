@@ -13,3 +13,4 @@
 #include "FSY/Sound/Sound.h"
 #include "FSY/Application/Settings.h"
 #include "FSY/Maths/PerlinNoise.h"
+#include "FSY/Sound/SoundExperimental.h"

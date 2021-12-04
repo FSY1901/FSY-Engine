@@ -26,7 +26,8 @@ namespace FSY {
 	void Sound::Stop() {
 		play = false;
 		isPlaying = false;
-		music->stop();
+		if(music != nullptr)
+			music->stop();
 	}
 
 	void Sound::Play(Vector3f position, float minDistance, float maxDistance) {

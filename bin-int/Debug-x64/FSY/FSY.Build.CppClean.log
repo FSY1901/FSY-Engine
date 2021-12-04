@@ -1,8 +1,8 @@
 d:\vs_projects\fsy\bin-int\debug-x64\fsy\vc142.pdb
 d:\vs_projects\fsy\bin-int\debug-x64\fsy\vc142.idb
-d:\vs_projects\fsy\bin-int\debug-x64\fsy\vao.obj
 d:\vs_projects\fsy\bin-int\debug-x64\fsy\fsy_time.obj
 d:\vs_projects\fsy\bin-int\debug-x64\fsy\stb.obj
+d:\vs_projects\fsy\bin-int\debug-x64\fsy\soundexperimental.obj
 d:\vs_projects\fsy\bin-int\debug-x64\fsy\texture.obj
 d:\vs_projects\fsy\bin-int\debug-x64\fsy\sound.obj
 d:\vs_projects\fsy\bin-int\debug-x64\fsy\shader.obj
@@ -30,7 +30,11 @@ d:\vs_projects\fsy\bin-int\debug-x64\fsy\imgui_demo.obj
 d:\vs_projects\fsy\bin-int\debug-x64\fsy\imgui.obj
 d:\vs_projects\fsy\bin-int\debug-x64\fsy\glm.obj
 d:\vs_projects\fsy\bin-int\debug-x64\fsy\dummy.obj
+d:\vs_projects\fsy\bin-int\debug-x64\fsy\vec3.obj
+d:\vs_projects\fsy\bin-int\debug-x64\fsy\soundengine.obj
+d:\vs_projects\fsy\bin-int\debug-x64\fsy\effects.obj
 d:\vs_projects\fsy\bin-int\debug-x64\fsy\vbo.obj
+d:\vs_projects\fsy\bin-int\debug-x64\fsy\vao.obj
 d:\vs_projects\fsy\bin-int\debug-x64\fsy\glad.obj
 d:\vs_projects\fsy\bin\debug-x64\fsy\fsy.lib
 d:\vs_projects\fsy\bin\debug-x64\fsy\fsy.exp

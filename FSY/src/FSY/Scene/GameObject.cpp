@@ -48,6 +48,8 @@ namespace FSY {
 
 	bool GameObject::IsChild() { return m_isChild; }
 
+	bool GameObject::CompareLast() { return position == m_LastPosition && rotation == m_lastRotation && scale == m_lastScale; }
+
 	std::vector<GameObject*> GameObject::GetChildren() { return m_children; }
 
 	std::vector<Component*> GameObject::__GetComponents() { return m_components; }

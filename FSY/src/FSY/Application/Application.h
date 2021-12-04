@@ -79,7 +79,7 @@ namespace FSY {
 #pragma region Scene View
         void RenderUI();
         void RenderChildren(GameObject* g);
-        GameObject* selectedObject = nullptr;
+        //GameObject* selectedObject = nullptr;
         ContentBrowser cb;
 #pragma endregion
 
@@ -87,6 +87,9 @@ namespace FSY {
 
         void MainLoop();
         
+    protected:
+        GameObject* selectedObject = nullptr;
+
 	};
 
 	Application* CreateApplication();

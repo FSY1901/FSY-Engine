@@ -119,6 +119,8 @@ namespace FSY {
 			glm::vec3(0.0f, 0.0f, 0.0f),
 			glm::vec3(0.0f, 1.0f, 0.0f));
 
+		Camera::GetMain()->__SetViewMatrix(view);
+
 		cb.LoadTextures();
 
 		//Sound Setup
@@ -173,6 +175,8 @@ namespace FSY {
 
 		vao->Generate();
 		vao->Bind();
+		VBO vbo;
+		vbo.Bind();
 
 		if (inEditor) {
 			m_activeScene->GetCamera()->AddComponent<SceneCameraController>();
@@ -189,6 +193,8 @@ namespace FSY {
 
 		while (!glfwWindowShouldClose(m_win))
 		{
+
+			bool firstFrame = true;
 
 			//Preventing a crash when minimizing
 			if (m_width != 0 && m_height != 0) {
@@ -211,8 +217,9 @@ namespace FSY {
 				cameraPos.z = m_activeScene->GetCamera()->position.z;
 				glm::vec3 Up = { 0.0f, 1.0f, 0.0f };
 				view = glm::lookAt(cameraPos, cameraPos + cameraFront, Up);
-
+				Camera::GetMain()->__SetViewMatrix(view);
 				projection = glm::perspective(glm::radians(45.0f), (float)m_width / (float)m_height, 0.1f, 100.0f);
+				Camera::GetMain()->__SetProjectionMatrix(projection);
 
 				glClearColor(m_clearColor[0], m_clearColor[1], m_clearColor[2], 1.0f);
 				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -237,7 +244,6 @@ namespace FSY {
 							glEnable(GL_CULL_FACE);
 							glCullFace(GL_BACK);
 						}
-						VBO vbo;
 						vbo.Bind();
 						vbo.SetData(mesh->GetVertices(), sizeof(float) * mesh->GetVertexSize());
 						vao->Link(&vbo, 0, 1);
@@ -281,22 +287,24 @@ namespace FSY {
 								Vector3f dir = { cameraFront.x, cameraFront.y, cameraFront.z };
 								float f_dp = Vector3f::DotProduct(dir, res);
 								if (f_dp >= inView) {
-									glm::mat4 transform = glm::mat4(1.0f);
-									glm::mat4 transMat = glm::translate(transform, it->second);
-									glm::vec3 rot(DegreesToRadians(g->rotation.x), DegreesToRadians(g->rotation.y), DegreesToRadians(g->rotation.z));
-									glm::quat _rot = glm::quat(rot);
-									glm::mat4 rotMat = glm::mat4_cast(_rot);
-									//glm::sin(rot);
-									glm::mat4 scaleMat = glm::scale(transform, glm::vec3(g->scale.x, g->scale.y, g->scale.z));
-									transform = transMat * rotMat * scaleMat;
-									g->transform = transform;
-									glm::mat4 inverse = glm::inverse(transform);
-									glm::mat4 transpose = glm::transpose(inverse);
-									g->fixedNormal = transpose;
-									mesh->GetShader()->setMat4("fixedNormal", g->fixedNormal);
-									mesh->GetShader()->setMat4("transform", g->transform);
+									if (!g->CompareLast()) {
+										glm::mat4 transform = glm::mat4(1.0f);
+										glm::mat4 transMat = glm::translate(transform, it->second);
+										glm::vec3 rot(DegreesToRadians(g->rotation.x), DegreesToRadians(g->rotation.y), DegreesToRadians(g->rotation.z));
+										glm::quat _rot = glm::quat(rot);
+										glm::mat4 rotMat = glm::mat4_cast(_rot);
+										//glm::sin(rot);
+										glm::mat4 scaleMat = glm::scale(transform, glm::vec3(g->scale.x, g->scale.y, g->scale.z));
+										transform = transMat * rotMat * scaleMat;
+										g->transform = transform;
+										glm::mat4 inverse = glm::inverse(transform);
+										glm::mat4 transpose = glm::transpose(inverse);
+										g->fixedNormal = transpose;
+										mesh->GetShader()->setMat4("fixedNormal", g->fixedNormal);
+										mesh->GetShader()->setMat4("transform", g->transform);
+									}
 									glDrawArrays(GL_TRIANGLES, 0, sizeof(float) * mesh->GetVertexSize());
-									vbo.Unbind();
+									//vbo.Unbind();
 									if (!inEditor) {
 										for (Component* c : g->__GetComponents()) {
 											c->Update();
@@ -305,7 +313,7 @@ namespace FSY {
 								}
 							}
 							glDisable(GL_BLEND);
-							vbo.Delete();
+							//vbo.Delete();
 						}
 						else {
 							for (auto g : mesh->_GetGameObjects()) {
@@ -316,22 +324,24 @@ namespace FSY {
 								Vector3f dir = { cameraFront.x, cameraFront.y, cameraFront.z };
 								float f_dp = Vector3f::DotProduct(dir, res);
 								if (f_dp >= inView) {
-									glm::mat4 transform = glm::mat4(1.0f);
-									glm::vec3 rot(DegreesToRadians(g->rotation.x), DegreesToRadians(g->rotation.y), DegreesToRadians(g->rotation.z));
-									glm::quat _rot = glm::quat(rot);
-									glm::mat4 rotMat = glm::mat4_cast(_rot);
-									//glm::sin(rot);
-									glm::mat4 transMat = glm::translate(transform, glm::vec3(g->position.x, g->position.y, g->position.z));
-									glm::mat4 scaleMat = glm::scale(transform, glm::vec3(g->scale.x, g->scale.y, g->scale.z));
-									transform = transMat * rotMat * scaleMat;
-									g->transform = transform;
-									glm::mat4 inverse = glm::inverse(transform);
-									glm::mat4 transpose = glm::transpose(inverse);
-									g->fixedNormal = transpose;
-									mesh->GetShader()->setMat4("fixedNormal", g->fixedNormal);
-									mesh->GetShader()->setMat4("transform", g->transform);
+									if (!g->CompareLast() || firstFrame) {
+										glm::mat4 transform = glm::mat4(1.0f);
+										glm::mat4 transMat = glm::translate(transform, glm::vec3(g->position.x, g->position.y, g->position.z));
+										glm::vec3 rot(DegreesToRadians(g->rotation.x), DegreesToRadians(g->rotation.y), DegreesToRadians(g->rotation.z));
+										glm::quat _rot = glm::quat(rot);
+										glm::mat4 rotMat = glm::mat4_cast(_rot);
+										//glm::sin(rot);
+										glm::mat4 scaleMat = glm::scale(transform, glm::vec3(g->scale.x, g->scale.y, g->scale.z));
+										transform = transMat * rotMat * scaleMat;
+										g->transform = transform;
+										glm::mat4 inverse = glm::inverse(transform);
+										glm::mat4 transpose = glm::transpose(inverse);
+										g->fixedNormal = transpose;
+										mesh->GetShader()->setMat4("fixedNormal", g->fixedNormal);
+										mesh->GetShader()->setMat4("transform", g->transform);
+									}
 									glDrawArrays(GL_TRIANGLES, 0, sizeof(float) * mesh->GetVertexSize());
-									vbo.Unbind();
+									//vbo.Unbind();
 									if (!inEditor) {
 										for (Component* c : g->__GetComponents()) {
 											c->Update();
@@ -341,7 +351,7 @@ namespace FSY {
 							}
 						}
 						glDisable(GL_CULL_FACE);
-						vbo.Delete();
+						//vbo.Delete();
 					}
 					//update all none mesh objects
 					if (!inEditor) {
@@ -371,12 +381,15 @@ namespace FSY {
 			Time::s_deltaTime = currentFrame - Time::s_lastframe;
 			Time::s_lastframe = currentFrame;
 
+			firstFrame = false;
+
 		}
 
 		m_windowOpen = false;
 
 		delete scc;
 		delete vao;
+		vbo.Delete();
 
 		Sound::engine->drop();
 

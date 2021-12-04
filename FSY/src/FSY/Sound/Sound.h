@@ -63,7 +63,7 @@ namespace FSY {
 		void Play(Vector3f position, float minDistance, float maxDistance);
 
 		irrklang::ISoundSource* source = nullptr;
-		irrklang::ISound* music;
+		irrklang::ISound* music = nullptr;
 
 		static irrklang::ISoundEngine* engine;
 		static Vector3f listenerPos;

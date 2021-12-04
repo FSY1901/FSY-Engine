@@ -5,6 +5,40 @@
 using namespace FSY;
 #define DEBUG 1
 
+bool rayTriangleIntersect(Vector3f orig, Vector3f dir,
+	Vector3f v0, Vector3f v1, Vector3f v2,
+	float& t);
+
+bool UnprojectRayCast(glm::vec3 pos, float radius, Vector3f v1, Vector3f v2, Vector3f v3) {
+	float mouse_x = (float)Input::MouseX();
+	float mouse_y = Input::WinHeight() - (float)Input::MouseY();
+	float width = (float)Input::WinWidth();
+	float height = (float)Input::WinHeight();
+	glm::vec4 viewport = glm::vec4(0.0f, 0.0f, width, height);
+	glm::vec3 rayStart = glm::unProject(glm::vec3(mouse_x, mouse_y, 0.0f), Camera::GetMain()->_GetViewMatrix(), Camera::GetMain()->_GetProjectionMatrix(), viewport);
+	glm::vec3 rayEnd = glm::unProject(glm::vec3(mouse_x, mouse_y, 1.0f), Camera::GetMain()->_GetViewMatrix(), Camera::GetMain()->_GetProjectionMatrix(), viewport);
+
+	glm::vec3 dirToSphere = pos - rayStart;
+	//glm::vec3 lineDir = glm::normalize(rayEnd - rayStart);
+	glm::vec3 lineDir = rayEnd - rayStart;
+	float intersect;
+	return rayTriangleIntersect(Camera::GetMain()->position, Vector3f(lineDir.x, lineDir.y, lineDir.z), v1, v2, v3, intersect);
+	//return rayTriangleIntersect(Camera::GetMain()->position, Camera::GetMain()->rotation, v1, v2, v3, intersect);
+
+	/*float len = glm::distance(rayStart, rayEnd);
+	float t = glm::dot(dirToSphere, lineDir);
+	glm::vec3 closestpoint;
+	if (t <= 0)
+		closestpoint = rayStart;
+	else if (t >= len)
+		closestpoint = rayEnd;
+	else
+		closestpoint = rayStart + lineDir * t;
+
+	float dis = glm::distance(pos, closestpoint);
+	return dis <= radius;*/
+}
+
 bool rayTriangleIntersect(
 	Vector3f orig, Vector3f dir,
 	Vector3f v0, Vector3f v1, Vector3f v2,
@@ -117,6 +151,7 @@ public:
 	Mesh m1;
 	Sound* sound;
 	Control* control;
+	SoundExperimental snd;
 
 	App() {
 		
@@ -151,12 +186,21 @@ public:
 		colored = { "Data/Shaders/colored.vert", "Data/Shaders/colored.frag" };
 		sound->Path("Data/Audio/breakout.mp3");
 #endif
-		sound->play = true;
+
+		/*music_source = audeo::load_source(
+			"./src/Data/Audio/breakout.mp3", audeo::AudioType::Music);
+		audeo::Sound music = audeo::play_sound(music_source, 1);*/
+		//sound->play = true;
+		SoundExperimental::Init();
+		snd.LoadSource("./src/Data/Audio/song.mp3");
+		snd.Play();
 		//Meshes & Scene
 		m1 = { Mesh::s_verticesForPlane, Mesh::s_planeMeshSize, &colored };
 		m = { Mesh::s_verticesForCube, Mesh::s_cubeMeshSize, &s };
 		m.SetTexture(&t);
 		g2.AddComponent<Control>();
+		g2.AddChild(&myObject);
+		g2.AddChild(&g);
 		m1.AddGameObject(&myObject);
 		m1.AddGameObject(&g2);
 		m.AddGameObject(&g);
@@ -195,37 +239,31 @@ public:
 		if (Input::GetKey(Keys::Key_Q)) {
 			sound->play = true;
 		}
-		float intersect = 0;
-		glm::vec4 v0_ = { -0.5f, 0.0f, 0.5f, 1 };
-		glm::vec4 v1_ = { 0.5f, 0.0f, 0.5f, 1 };
-		glm::vec4 v2_ = { -0.5f, 0.0f, -0.5f, 1 };
-		glm::vec4 v0_1 = { 0.5f, 0.0f, 0.5f, 1 };
-		glm::vec4 v1_1 = { 0.5f, 0.0f, -0.5f, 1 };
-		glm::vec4 v2_1 = { -0.5f, 0.0f, -0.5f, 1 };
-		//Transform v0_ - v2_
-		v0_ = myObject.GetTransformationMatrix() * v0_;
-		v1_ = myObject.GetTransformationMatrix() * v1_;
-		v2_ = myObject.GetTransformationMatrix() * v2_;
-		v0_1 = myObject.GetTransformationMatrix() * v0_1;
-		v1_1 = myObject.GetTransformationMatrix() * v1_1;
-		v2_1 = myObject.GetTransformationMatrix() * v2_1;
-		if (rayTriangleIntersect(Camera::GetMain()->position, Camera::GetMain()->rotation , Vector3f(v0_.x, v0_.y, v0_.z), Vector3f(v1_.x, v1_.y, v1_.z), Vector3f(v2_.x, v2_.y, v2_.z), intersect)) {
-			colored.setColorValues4("Color", 0.2f, 0.9f, 0.2f, 1.0f);
-			Vector3f v = Vector3f::Normalize(Camera::GetMain()->rotation);
-			Vector3f pos = (v * intersect);
-			g.position = (Camera::GetMain()->position + pos);
-		}
-		if (rayTriangleIntersect(Camera::GetMain()->position, Camera::GetMain()->rotation, Vector3f(v0_1.x, v0_1.y, v0_1.z), Vector3f(v1_1.x, v1_1.y, v1_1.z), Vector3f(v2_1.x, v2_1.y, v2_1.z), intersect)) {
-			colored.setColorValues4("Color", 0.2f, 0.9f, 0.2f, 1.0f);
-			Vector3f v = Vector3f::Normalize(Camera::GetMain()->rotation);
-			Vector3f pos = (v * intersect);
-			g.position = (Camera::GetMain()->position + pos);
+		if (Input::GetMouse(0)) {
+			for (auto m : scene._GetMeshes()) {
+				float* vertices = m->GetVertices();
+				for (auto g : m->_GetGameObjects()) {
+					for (int i = 0; i < m->GetVertexSize() / 24; i++) {
+						glm::vec4 v1 = {vertices[i * 24], vertices[i * 24 + 1], vertices[i * 24 + 2], 1 };
+						glm::vec4 v2 = { vertices[i * 24 + 8], vertices[i * 24 + 9], vertices[i * 24 + 10],1 };
+						glm::vec4 v3 = { vertices[i * 24 + 16], vertices[i * 24 + 17], vertices[i * 24 + 18],1 };
+						glm::vec4 v0_ = g->GetTransformationMatrix() * v1;
+						glm::vec4 v1_ = g->GetTransformationMatrix() * v2;
+						glm::vec4 v2_ = g->GetTransformationMatrix() * v3;
+						if (UnprojectRayCast(glm::vec3(g->position.x, g->position.y, g->position.z), 0.65f, Vector3f(v0_.x, v0_.y, v0_.z), Vector3f(v1_.x, v1_.y, v1_.z), Vector3f(v2_.x, v2_.y, v2_.z))) {
+							selectedObject = g;
+							break;
+						}
+					}
+				}
+			}
 		}
 	}
 
 	void OnClose() override {
 		delete sound;
 		delete[] objs;
+		SoundExperimental::Quit();
 	}
 
 };
