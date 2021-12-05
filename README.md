@@ -24,51 +24,51 @@ To use the Engine do the following steps:
 -Create an App.cpp
 -Add the following code:
 
-#include "FSY.h"
-#include <iostream>
+	#include "FSY.h"
+	#include <iostream>
 
-using namespace FSY;
+	using namespace FSY;
 
-class App : public FSY::Application {
+	class App : public FSY::Application {
 
-public:
+	public:
 
-	Scene scene;
+		Scene scene;
 
-	App() {
+		App() {
 
-	}
+		}
 
-	App(int width, int height, const char* title) : FSY::Application(width, height, title) {
+		App(int width, int height, const char* title) : FSY::Application(width, height, title) {
 		
-	}
+		}
 
-	~App() override {
+		~App() override {
 
-	}
+		}
 
-	void OnStart() override {
-		inEditor = true;
-		ChangeScene(&scene);
-	}
+		void OnStart() override {
+			inEditor = true;
+			ChangeScene(&scene);
+		}
 
-	void OnUpdate() override {
+		void OnUpdate() override {
+			
+		}
+
+		void OnEditorUpdate() override {
 		
-	}
+		}
 
-	void OnEditorUpdate() override {
+		void OnClose() override {
 		
+		}
+	
+	};
+
+	FSY::Application* FSY::CreateApplication() {
+		return new App(800, 600, "My App");
 	}
-
-	void OnClose() override {
-		
-	}
-
-};
-
-FSY::Application* FSY::CreateApplication() {
-	return new App(800, 600, "My App");
-}
 
 -Copy all the dll files you find under bin\Debug-x64\App
  into the output directory of your folder
