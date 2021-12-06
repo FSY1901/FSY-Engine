@@ -1,27 +1,27 @@
 # FSY Engine
  A 3D Game Engine.
 
-The Engine can be used and modified for free.
-Though libaries are used, that have a license that you must always follow.
+The Engine can be used and modified for free. \n
+Though libaries are used, that have a license that you must always follow. \n
 These libaries can be found under: FSY\src\vendor. Their respective license/README
 can be found in the libaries folder(the one in the vendor folder).
 
-There are two main folders: The 'App'-folder & the 'FSY'-folder.
+There are two main folders: The 'App'-folder & the 'FSY'-folder.\n
 In the App-folder you can just find an example on how to use the Engine in App.cpp
 (Though you can't expect to find nice code all the time as it's just used for testing
-purposes!).
+purposes!). \n
 The FSY-folder includes the files for the Engine.
 
-To use the Engine do the following steps:
--Grab FSY.dll & FSY.lib from FSY/bin/Debug-x64/FSY
--Link the libary
--In your project under Properties->C/C++->Preprocessor:
-	-under Preprocessor Definitions add: FSY_PLATFORM_WINDOWS;
+To use the Engine do the following steps: \n
+-Grab FSY.dll & FSY.lib from FSY/bin/Debug-x64/FSY \n
+-Link the libary \n
+-In your project under Properties->C/C++->Preprocessor: \n
+	-under Preprocessor Definitions add: FSY_PLATFORM_WINDOWS; \n
 -Then under roperties->C/C++->General under Addition include directories
  add the src folder from the FSY folder. It should
  look something like this: (PathToYourProject)FSY\src;
--In your Project create a src folder
--Create an App.cpp
+-In your Project create a src folder \n
+-Create an App.cpp \n
 -Add the following code:
 
 	#include "FSY.h"
@@ -71,14 +71,14 @@ To use the Engine do the following steps:
 	}
 
 -Copy all the dll files you find under bin\Debug-x64\App
- into the output directory of your folder
+ into the output directory of your folder \n
 -Copy the Data folder you find under App\src into
  your src folder(or create a Data folder and just
  paste the Assets folder that you find in the Data
  folder as you don't need the textures because
  they have just been used for debug purposes in
- development)
--Run the Application
+ development) \n
+-Run the Application \n
 
 Everything should work now and you should see a grey
 background and the UI.
