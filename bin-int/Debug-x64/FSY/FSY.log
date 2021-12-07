@@ -92,12 +92,12 @@ D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(267,35): warning C424
           [
               T=float
           ]
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(448,23): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(474,36): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(637,37): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(637,28): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(670,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(671,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(450,23): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(476,36): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(639,37): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(639,28): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(672,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(673,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   PerlinNoise.cpp
 D:\VS_Projects\FSY\FSY\src\FSY\Maths\PerlinNoise.h(16,21): warning C4251: 'FSY::PerlinNoise::p': class 'std::vector<int,std::allocator<int>>' needs to have dll-interface to be used by clients of class 'FSY::PerlinNoise'
 D:\VS_Projects\FSY\FSY\src\FSY\Maths\PerlinNoise.h(16): message : see declaration of 'std::vector<int,std::allocator<int>>'
@@ -354,11 +354,11 @@ D:\VS_Projects\FSY\FSY\src\vendor\Audeo\SoundSource.hpp(15): message : see decla
   FSY_Time.cpp
 D:\VS_Projects\FSY\FSY\src\FSY\Application\FSY_Time.h(8,26): warning C4091: 'extern ': ignored on left of 'FSY::Application' when no variable is declared
   Generating Code...
-D:\VS_Projects\FSY\FSY\src\FSY\Maths\Maths.cpp(117): warning C4172: returning address of local variable or temporary: res
-D:\VS_Projects\FSY\FSY\src\FSY\Maths\Maths.cpp(109): warning C4172: returning address of local variable or temporary: res
-D:\VS_Projects\FSY\FSY\src\FSY\Maths\Maths.cpp(93): warning C4172: returning address of local variable or temporary: res
-D:\VS_Projects\FSY\FSY\src\FSY\Maths\Maths.cpp(125): warning C4172: returning address of local variable or temporary: res
 D:\VS_Projects\FSY\FSY\src\FSY\Maths\Maths.cpp(101): warning C4172: returning address of local variable or temporary: res
+D:\VS_Projects\FSY\FSY\src\FSY\Maths\Maths.cpp(125): warning C4172: returning address of local variable or temporary: res
+D:\VS_Projects\FSY\FSY\src\FSY\Maths\Maths.cpp(117): warning C4172: returning address of local variable or temporary: res
+D:\VS_Projects\FSY\FSY\src\FSY\Maths\Maths.cpp(93): warning C4172: returning address of local variable or temporary: res
+D:\VS_Projects\FSY\FSY\src\FSY\Maths\Maths.cpp(109): warning C4172: returning address of local variable or temporary: res
 D:\VS_Projects\FSY\FSY\src\FSY\Scene\GameObject.h(101): warning C4715: 'FSY::GameObject::GetComponent<FSY::SceneCameraController>': not all control paths return a value
   Compiling...
   VAO.cpp

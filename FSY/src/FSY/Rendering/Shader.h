@@ -27,6 +27,10 @@ namespace FSY {
         void setColorValues4(const std::string& name, float r, float g, float b, float a) const;
         void setVec3(const std::string& name, float x, float y, float z) const;
         void setMat4(const std::string& name, const glm::mat4& mat) const;
+
+        //Attributes that should be on every Shader
+        Vector3f Color = {0, 0, 0};
+
     };
 
 }

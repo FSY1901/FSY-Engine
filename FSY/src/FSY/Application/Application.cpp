@@ -139,7 +139,7 @@ namespace FSY {
 		ImGui::StyleColorsDark();
 		ImGui_ImplGlfw_InitForOpenGL(m_win, true);
 		ImGui_ImplOpenGL3_Init("#version 330");
-		if(Settings::s_editorFontPath != "")
+		if (Settings::s_editorFontPath != "")
 			io.FontDefault = io.Fonts->AddFontFromFileTTF(Settings::s_editorFontPath.c_str(), 16.0f);
 
 #pragma region Styling
@@ -296,12 +296,12 @@ namespace FSY {
 				//Render active Scene
 				if (m_activeScene != nullptr) {
 
-					const Frustum camFrustum = CreateFrustum(glm::vec3(Camera::GetMain()->front.x, Camera::GetMain()->front.y, Camera::GetMain()->front.z), 
+					const Frustum camFrustum = CreateFrustum(glm::vec3(Camera::GetMain()->front.x, Camera::GetMain()->front.y, Camera::GetMain()->front.z),
 						glm::vec3(Camera::GetMain()->up.x, Camera::GetMain()->up.y, Camera::GetMain()->up.z),
 						glm::vec3(Camera::GetMain()->right.x, Camera::GetMain()->right.y, Camera::GetMain()->right.z),
 						glm::vec3(Camera::GetMain()->position.x, Camera::GetMain()->position.y, Camera::GetMain()->position.z),
-						(float)m_width/(float)m_height, 90, 0.1f, 100.0f);
-					
+						(float)m_width / (float)m_height, 90, 0.1f, 100.0f);
+
 					for (auto mesh : m_activeScene->_GetMeshes()) {
 						if (mesh->renderMode == RENDER_FRONT) {
 							glEnable(GL_CULL_FACE);
@@ -312,15 +312,17 @@ namespace FSY {
 						vao->Bind();
 						vao->Link(&vbo, 0, 1);
 						vbo.Unbind();
-						mesh->GetShader()->Use();
+						Shader* s = mesh->GetShader();
+						s->Use();
 						if (mesh->HasTexture())
 							mesh->GetTexture()->Bind();
-						mesh->GetShader()->setMat4("view", view);
-						mesh->GetShader()->setMat4("projection", projection);
-						mesh->GetShader()->setColorValues3("lightColor", m_activeScene->GetLight()->GetLightColor().x, m_activeScene->GetLight()->GetLightColor().y,
+						s->setMat4("view", view);
+						s->setMat4("projection", projection);
+						s->setColorValues3("lightColor", m_activeScene->GetLight()->GetLightColor().x, m_activeScene->GetLight()->GetLightColor().y,
 							m_activeScene->GetLight()->GetLightColor().z);
-						mesh->GetShader()->setVec3("lightPos", m_activeScene->GetLight()->position.x, m_activeScene->GetLight()->position.y, m_activeScene->GetLight()->position.z);
-						mesh->GetShader()->setVec3("viewPos", Camera::GetMain()->position.x, Camera::GetMain()->position.y, Camera::GetMain()->position.z);
+						s->setVec3("lightPos", m_activeScene->GetLight()->position.x, m_activeScene->GetLight()->position.y, m_activeScene->GetLight()->position.z);
+						s->setVec3("viewPos", Camera::GetMain()->position.x, Camera::GetMain()->position.y, Camera::GetMain()->position.z);
+						s->setColorValues3("Color", s->Color.x, s->Color.y, s->Color.z );
 
 						if (mesh->isTransparent) {
 							glEnable(GL_BLEND);
@@ -379,7 +381,7 @@ namespace FSY {
 						else {
 							for (auto g : mesh->_GetGameObjects()) {
 								g->__UpdateChildren();
-								if (g->GetBoundingSphere().isOnFrustum(camFrustum, 
+								if (g->GetBoundingSphere().isOnFrustum(camFrustum,
 									glm::vec3(g->position.x, g->position.y, g->position.z),
 									glm::vec3(g->scale.x, g->scale.y, g->scale.z))) {
 									if (!g->CompareLast() || firstFrame) {
@@ -486,7 +488,7 @@ namespace FSY {
 					}
 				}
 			}
-			if(ImGui::BeginPopupContextWindow()){
+			if (ImGui::BeginPopupContextWindow()) {
 				if (ImGui::MenuItem("Click me!")) {
 					std::cout << "CLICK";
 				}
@@ -586,7 +588,7 @@ namespace FSY {
 				}
 				if (ImGui::TreeNodeEx("Components", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
 					for (auto c : selectedObject->__GetComponents()) {
-						if(ImGui::TreeNodeEx(c->getName(), ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)){
+						if (ImGui::TreeNodeEx(c->getName(), ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
 							c->DrawUI();
 							ImGui::TreePop();
 						}
@@ -622,7 +624,7 @@ namespace FSY {
 				ImGui::TreePop();
 			}
 			if (ImGui::TreeNodeEx("Console", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
-				if(Console::_GetLatestMessage() != "")
+				if (Console::_GetLatestMessage() != "")
 					ImGui::Text(Console::_GetLatestMessage().c_str());
 				ImGui::TreePop();
 			}

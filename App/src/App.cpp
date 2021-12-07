@@ -115,13 +115,13 @@ class Control : public FSY::Component {
 public:
 
 	Control() {
-		
+
 	}
 
 	float speed = 10.0f;
 
 	void Start() override {
-		
+
 	}
 
 	void Update() override {
@@ -168,7 +168,7 @@ public:
 	SoundExperimental snd;
 
 	App() {
-		
+
 	}
 
 	App(int width, int height, const char* title) : FSY::Application(width, height, title) {
@@ -176,8 +176,8 @@ public:
 		Settings::s_editorFontPath = "./src/Data/Assets/Fonts/Poppins/Poppins-SemiBold.ttf";
 	}
 
-	~App() override{
-		
+	~App() override {
+
 	}
 
 	void OnStart() override {
@@ -191,8 +191,10 @@ public:
 		//Dirs
 #if DEBUG == 1
 		s = { "./src/Data/Shaders/textured.vert", "./src/Data/Shaders/textured.frag" };
+		s.Color = { 1,1,1 };
 		t = { "./src/Data/Textures/Dirt.png" };
 		colored = { "./src/Data/Shaders/colored.vert", "./src/Data/Shaders/colored.frag" };
+		colored.Color = { 0.9f, 0.2f, 0.2f };
 		sound->Path("./src/Data/Audio/breakout.mp3");
 #else
 		s = { "Data/Shaders/textured.vert", "Data/Shaders/textured.frag" };
@@ -204,15 +206,15 @@ public:
 		snd.LoadSource("./src/Data/Audio/breakout.mp3");
 		snd.Play();
 		//Meshes & Scene
-		m1 = { Mesh::s_verticesForPlane, Mesh::s_planeMeshSize, &colored };
 		m = { Mesh::s_verticesForCube, Mesh::s_cubeMeshSize, &s };
+		m1 = { Mesh::s_verticesForPlane, Mesh::s_planeMeshSize, &colored };
 		m.SetTexture(&t);
 		g2.AddComponent<Control>();
 		g2.AddChild(&myObject);
 		g2.AddChild(&g);
+		m.AddGameObject(&g);
 		m1.AddGameObject(&myObject);
 		m1.AddGameObject(&g2);
-		m.AddGameObject(&g);
 		/*PerlinNoise noise(200);
 		int iter = 0;
 		objs = new GameObject[1000];
@@ -228,8 +230,8 @@ public:
 		scene.AddInstanceMesh(&m1);
 		ChangeScene(&scene);
 		Vector3f v1 = { 0, 0, 0 };
-		Vector3f v2 = {1, 0, 0};
-		Vector3f d1 = {2, 5, -1};
+		Vector3f v2 = { 1, 0, 0 };
+		Vector3f d1 = { 2, 5, -1 };
 		Vector3f d2 = { 0, 0, -1 };
 		Vector3f d3 = Vector3f::CrossProduct(d2, d1);
 		Vector3f v1v2 = v2 - v1;
@@ -239,14 +241,12 @@ public:
 	}
 
 	void OnUpdate() override {
-		colored.setColorValues4("Color", 0.9f, 0.2f, 0.2f, 1.0f);
 		if (Input::GetKey(Keys::Key_ESCAPE)) {
 			Close();
 		}
 	}
 
-	void OnEditorUpdate() override{
-		colored.setColorValues4("Color", 0.9f, 0.2f, 0.2f, 1.0f);
+	void OnEditorUpdate() override {
 		sound->Update();//Testing purposes :)
 		if (Input::GetKey(Keys::Key_ESCAPE)) {
 			Close();
@@ -262,7 +262,7 @@ public:
 				float* vertices = m->GetVertices();
 				for (auto g : m->_GetGameObjects()) {
 					for (int i = 0; i < m->GetVertexSize() / 24; i++) {
-						glm::vec4 v1 = {vertices[i * 24], vertices[i * 24 + 1], vertices[i * 24 + 2], 1 };
+						glm::vec4 v1 = { vertices[i * 24], vertices[i * 24 + 1], vertices[i * 24 + 2], 1 };
 						glm::vec4 v2 = { vertices[i * 24 + 8], vertices[i * 24 + 9], vertices[i * 24 + 10],1 };
 						glm::vec4 v3 = { vertices[i * 24 + 16], vertices[i * 24 + 17], vertices[i * 24 + 18],1 };
 						glm::vec4 v0_ = g->GetTransformationMatrix() * v1;
