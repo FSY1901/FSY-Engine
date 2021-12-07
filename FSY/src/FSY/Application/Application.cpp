@@ -9,6 +9,7 @@
 #include <../imgui/imgui_impl_glfw.h>
 #include <../imgui/imgui_impl_opengl3.h>
 #include <../imgui/imgui_stdlib.h>
+#include "../../vendor/imguizmo/ImGuizmo.h"
 
 #include <map>
 #include <filesystem>
@@ -191,6 +192,59 @@ namespace FSY {
 			}
 		}
 
+		//Framebuffer
+
+		/*float rectangleVertices[] = //covers the whole screen
+		{
+			// Coords    // texCoords
+			 1.0f, -1.0f,  1.0f, 0.0f,
+			-1.0f, -1.0f,  0.0f, 0.0f,
+			-1.0f,  1.0f,  0.0f, 1.0f,
+
+			 1.0f,  1.0f,  1.0f, 1.0f,
+			 1.0f, -1.0f,  1.0f, 0.0f,
+			-1.0f,  1.0f,  0.0f, 1.0f
+		};
+
+		// Prepare framebuffer rectangle VBO and VAO
+		unsigned int rectVAO, rectVBO;
+		glGenVertexArrays(1, &rectVAO);
+		glGenBuffers(1, &rectVBO);
+		glBindVertexArray(rectVAO);
+		glBindBuffer(GL_ARRAY_BUFFER, rectVBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(rectangleVertices), &rectangleVertices, GL_STATIC_DRAW);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+
+		unsigned int FBO;
+		glGenFramebuffers(1, &FBO);
+		glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+
+		unsigned int fboTex;
+		glGenTextures(1, &fboTex);
+		glBindTexture(GL_TEXTURE_2D, fboTex);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_width, m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fboTex, 0);
+
+		unsigned int rbo;
+		glGenRenderbuffers(1, &rbo);
+		glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, m_width, m_height);
+		glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
+
+		Shader fboShader = Shader(Settings::s_fboVertShaderPath.c_str(), Settings::s_fboFragShaderPath.c_str());
+		fboShader.Use();
+		glUniform1i(glGetUniformLocation(fboShader.ID, "screenTexture"), 0);*/
+
 		while (!glfwWindowShouldClose(m_win))
 		{
 
@@ -203,6 +257,7 @@ namespace FSY {
 					ImGui_ImplOpenGL3_NewFrame();
 					ImGui_ImplGlfw_NewFrame();
 					ImGui::NewFrame();
+					ImGuizmo::BeginFrame();
 					scc->Update();
 				}
 
@@ -211,6 +266,9 @@ namespace FSY {
 				direction.y = DegreesToRadians(m_activeScene->GetCamera()->rotation.y);
 				direction.z = DegreesToRadians(m_activeScene->GetCamera()->rotation.z);
 				glm::vec3 cameraFront = glm::normalize(direction);
+				Camera::GetMain()->front = { cameraFront.x, cameraFront.y, cameraFront.z };
+				Camera::GetMain()->right = Vector3f::Normalize(Vector3f::CrossProduct(Camera::GetMain()->front, Vector3f(0, 1, 0)));
+				Camera::GetMain()->up = Vector3f::Normalize(Vector3f::CrossProduct(Camera::GetMain()->right, Camera::GetMain()->front));
 				glm::vec3 cameraPos;
 				cameraPos.x = m_activeScene->GetCamera()->position.x;
 				cameraPos.y = m_activeScene->GetCamera()->position.y;
@@ -221,8 +279,12 @@ namespace FSY {
 				projection = glm::perspective(glm::radians(45.0f), (float)m_width / (float)m_height, 0.1f, 100.0f);
 				Camera::GetMain()->__SetProjectionMatrix(projection);
 
+				//glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+
 				glClearColor(m_clearColor[0], m_clearColor[1], m_clearColor[2], 1.0f);
 				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+				//glEnable(GL_DEPTH_TEST);
 
 				s_processInput(m_win);
 
@@ -234,11 +296,12 @@ namespace FSY {
 				//Render active Scene
 				if (m_activeScene != nullptr) {
 
-					Camera* cam = Camera::GetMain();
-					Vector3f vec1 = { cam->position.x, cam->position.y, cam->position.z };
-					float inView = cos(DegreesToRadians(90 * 0.8));
-					Sound::GetSoundEngine()->setListenerPosition(irrklang::vec3df(vec1.x, vec1.y, vec1.z), irrklang::vec3df(-cameraFront.x, cameraFront.y, -cameraFront.z));
-					Sound::listenerPos = cam->position;
+					const Frustum camFrustum = CreateFrustum(glm::vec3(Camera::GetMain()->front.x, Camera::GetMain()->front.y, Camera::GetMain()->front.z), 
+						glm::vec3(Camera::GetMain()->up.x, Camera::GetMain()->up.y, Camera::GetMain()->up.z),
+						glm::vec3(Camera::GetMain()->right.x, Camera::GetMain()->right.y, Camera::GetMain()->right.z),
+						glm::vec3(Camera::GetMain()->position.x, Camera::GetMain()->position.y, Camera::GetMain()->position.z),
+						(float)m_width/(float)m_height, 90, 0.1f, 100.0f);
+					
 					for (auto mesh : m_activeScene->_GetMeshes()) {
 						if (mesh->renderMode == RENDER_FRONT) {
 							glEnable(GL_CULL_FACE);
@@ -246,6 +309,7 @@ namespace FSY {
 						}
 						vbo.Bind();
 						vbo.SetData(mesh->GetVertices(), sizeof(float) * mesh->GetVertexSize());
+						vao->Bind();
 						vao->Link(&vbo, 0, 1);
 						vbo.Unbind();
 						mesh->GetShader()->Use();
@@ -281,12 +345,9 @@ namespace FSY {
 							{
 								GameObject* g = sorted1[it->first];
 								g->__UpdateChildren();
-								Vector3f vec2 = g->position;
-								Vector3f res = vec2 - vec1;
-								res = Vector3f::Normalize(res);
-								Vector3f dir = { cameraFront.x, cameraFront.y, cameraFront.z };
-								float f_dp = Vector3f::DotProduct(dir, res);
-								if (f_dp >= inView) {
+								if (g->GetBoundingSphere().isOnFrustum(camFrustum,
+									glm::vec3(g->position.x, g->position.y, g->position.z),
+									glm::vec3(g->scale.x, g->scale.y, g->scale.z))) {
 									if (!g->CompareLast()) {
 										glm::mat4 transform = glm::mat4(1.0f);
 										glm::mat4 transMat = glm::translate(transform, it->second);
@@ -296,19 +357,19 @@ namespace FSY {
 										//glm::sin(rot);
 										glm::mat4 scaleMat = glm::scale(transform, glm::vec3(g->scale.x, g->scale.y, g->scale.z));
 										transform = transMat * rotMat * scaleMat;
-										g->transform = transform;
+										g->m_transform = transform;
 										glm::mat4 inverse = glm::inverse(transform);
 										glm::mat4 transpose = glm::transpose(inverse);
-										g->fixedNormal = transpose;
-										mesh->GetShader()->setMat4("fixedNormal", g->fixedNormal);
-										mesh->GetShader()->setMat4("transform", g->transform);
+										g->m_fixedNormal = transpose;
+										mesh->GetShader()->setMat4("fixedNormal", g->m_fixedNormal);
+										mesh->GetShader()->setMat4("transform", g->m_transform);
 									}
 									glDrawArrays(GL_TRIANGLES, 0, sizeof(float) * mesh->GetVertexSize());
-									//vbo.Unbind();
-									if (!inEditor) {
-										for (Component* c : g->__GetComponents()) {
-											c->Update();
-										}
+								}
+								//vbo.Unbind();
+								if (!inEditor) {
+									for (Component* c : g->__GetComponents()) {
+										c->Update();
 									}
 								}
 							}
@@ -318,12 +379,9 @@ namespace FSY {
 						else {
 							for (auto g : mesh->_GetGameObjects()) {
 								g->__UpdateChildren();
-								Vector3f vec2 = g->position;
-								Vector3f res = vec2 - vec1;
-								res = Vector3f::Normalize(res);
-								Vector3f dir = { cameraFront.x, cameraFront.y, cameraFront.z };
-								float f_dp = Vector3f::DotProduct(dir, res);
-								if (f_dp >= inView) {
+								if (g->GetBoundingSphere().isOnFrustum(camFrustum, 
+									glm::vec3(g->position.x, g->position.y, g->position.z),
+									glm::vec3(g->scale.x, g->scale.y, g->scale.z))) {
 									if (!g->CompareLast() || firstFrame) {
 										glm::mat4 transform = glm::mat4(1.0f);
 										glm::mat4 transMat = glm::translate(transform, glm::vec3(g->position.x, g->position.y, g->position.z));
@@ -333,19 +391,19 @@ namespace FSY {
 										//glm::sin(rot);
 										glm::mat4 scaleMat = glm::scale(transform, glm::vec3(g->scale.x, g->scale.y, g->scale.z));
 										transform = transMat * rotMat * scaleMat;
-										g->transform = transform;
+										g->m_transform = transform;
 										glm::mat4 inverse = glm::inverse(transform);
 										glm::mat4 transpose = glm::transpose(inverse);
-										g->fixedNormal = transpose;
-										mesh->GetShader()->setMat4("fixedNormal", g->fixedNormal);
-										mesh->GetShader()->setMat4("transform", g->transform);
+										g->m_fixedNormal = transpose;
+										mesh->GetShader()->setMat4("fixedNormal", g->m_fixedNormal);
+										mesh->GetShader()->setMat4("transform", g->m_transform);
 									}
 									glDrawArrays(GL_TRIANGLES, 0, sizeof(float) * mesh->GetVertexSize());
-									//vbo.Unbind();
-									if (!inEditor) {
-										for (Component* c : g->__GetComponents()) {
-											c->Update();
-										}
+								}
+								//vbo.Unbind();
+								if (!inEditor) {
+									for (Component* c : g->__GetComponents()) {
+										c->Update();
 									}
 								}
 							}
@@ -353,6 +411,7 @@ namespace FSY {
 						glDisable(GL_CULL_FACE);
 						//vbo.Delete();
 					}
+					//vao->Unbind();
 					//update all none mesh objects
 					if (!inEditor) {
 						for (auto g : m_activeScene->_GetObjects()) {
@@ -364,7 +423,16 @@ namespace FSY {
 							}
 						}
 					}
+					/*glBindFramebuffer(GL_FRAMEBUFFER, 0);
+					//glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+					glClear(GL_COLOR_BUFFER_BIT);
 
+					fboShader.Use();
+					glBindVertexArray(rectVAO);
+					glDisable(GL_DEPTH_TEST);
+					glBindTexture(GL_TEXTURE_2D, fboTex);
+					glDisable(GL_CULL_FACE);
+					glDrawArrays(GL_TRIANGLES, 0, 6);*/
 				}
 
 				if (inEditor) {
@@ -390,6 +458,7 @@ namespace FSY {
 		delete scc;
 		delete vao;
 		vbo.Delete();
+		//glDeleteFramebuffers(1, &FBO);
 
 		Sound::engine->drop();
 
@@ -560,6 +629,17 @@ namespace FSY {
 			ImGui::EndTabItem();
 		}
 		ImGui::EndTabBar();
+
+		//ImGuizmo
+		if (selectedObject != nullptr) {
+			ImGuizmo::SetOrthographic(false);
+			ImGuizmo::SetDrawlist(ImGui::GetBackgroundDrawList());
+			ImGuizmo::SetRect(0, 0, m_width, m_height);
+			glm::mat4 transform = selectedObject->GetTransformationMatrix();
+			glm::mat4 view_ = glm::inverse(Camera::GetMain()->GetTransformationMatrix());
+			ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(projection), ImGuizmo::OPERATION::TRANSLATE, ImGuizmo::MODE::LOCAL, glm::value_ptr(transform));
+		}
+
 		ImGui::End();
 
 	}

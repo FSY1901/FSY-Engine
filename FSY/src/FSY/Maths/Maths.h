@@ -52,7 +52,9 @@ namespace FSY {
 
 		Vector3& operator*(Vector3& vec);
 
-		Vector3& operator*(float& f);
+		Vector3& operator*(float f);
+
+		Vector3& operator/(float f);
 
 		bool operator!=(Vector3& other);
 

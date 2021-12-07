@@ -109,7 +109,15 @@ namespace FSY {
 		return res;
 	}
 
-	Vector3f& Vector3f::operator*(float& f) {
+	Vector3f& Vector3f::operator/(float f) {
+		Vector3f res;
+		res.x = this->x / f;
+		res.y = this->y / f;
+		res.z = this->z / f;
+		return res;
+	}
+
+	Vector3f& Vector3f::operator*(float f) {
 		Vector3f res;
 		res.x = f * this->x;
 		res.y = f * this->y;

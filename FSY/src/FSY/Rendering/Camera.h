@@ -21,6 +21,10 @@ namespace FSY {
 		void __SetProjectionMatrix(glm::mat4 projection);
 		glm::mat4 _GetProjectionMatrix();
 
+		Vector3f front;
+		Vector3f up;
+		Vector3f right;
+
 	private:
 		static Camera* main;
 		glm::mat4 viewMatrix;

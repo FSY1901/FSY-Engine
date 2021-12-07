@@ -1,11 +1,10 @@
 #include "../Core/Core.h"
 #include "Mesh.h"
 #include "../Maths/Maths.h"
+#include "../Rendering/FrustumCulling.h"
 
 #include <vector>
-#include <Windows.h>
 #include <string>
-#include <typeinfo>
 
 
 #ifndef GAMEOBJECT_H
@@ -45,6 +44,8 @@ namespace FSY {
 		std::vector<GameObject*> GetChildren();
 
 		glm::mat4 GetTransformationMatrix();
+
+		Sphere GetBoundingSphere();
 
 #pragma region Component Stuff
 
@@ -115,7 +116,6 @@ namespace FSY {
 
 #pragma endregion
 
-
 	private:
 		bool m_hasMesh = false;
 		bool m_isChild = false;
@@ -129,8 +129,10 @@ namespace FSY {
 		std::vector<Component*> m_components;
 		std::vector<GameObject*> m_children;
 
-		glm::mat4 transform;
-		glm::mat4 fixedNormal;
+		glm::mat4 m_transform;
+		glm::mat4 m_fixedNormal;
+
+		Sphere m_boundingSphere;
 
 		friend class Mesh;
 		friend class Application;

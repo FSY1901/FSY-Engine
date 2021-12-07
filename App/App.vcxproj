@@ -94,6 +94,8 @@
     <ClCompile Include="src\App.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="src\Data\Assets\Shaders\FBO.frag" />
+    <None Include="src\Data\Assets\Shaders\FBO.vert" />
     <None Include="src\Shaders\colored.frag" />
     <None Include="src\Shaders\colored.vert" />
     <None Include="src\Shaders\textured.frag" />

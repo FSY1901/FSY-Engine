@@ -97,6 +97,20 @@ bool rayTriangleIntersect(
 	return true; // this ray hits the triangle 
 }
 
+Vector3f Unproject() {
+	float mouse_x = (float)Input::MouseX();
+	float mouse_y = Input::WinHeight() - (float)Input::MouseY();
+	float width = (float)Input::WinWidth();
+	float height = (float)Input::WinHeight();
+	glm::vec4 viewport = glm::vec4(0.0f, 0.0f, width, height);
+	glm::vec3 rayStart = glm::unProject(glm::vec3(mouse_x, mouse_y, 0.0f), Camera::GetMain()->_GetViewMatrix(), Camera::GetMain()->_GetProjectionMatrix(), viewport);
+	glm::vec3 rayEnd = glm::unProject(glm::vec3(mouse_x, mouse_y, 1.0f), Camera::GetMain()->_GetViewMatrix(), Camera::GetMain()->_GetProjectionMatrix(), viewport);
+	//glm::vec3 lineDir = glm::normalize(rayEnd - rayStart);
+	glm::vec3 lineDir = rayEnd - rayStart;
+
+	return Vector3f(lineDir.x, lineDir.y, lineDir.z);
+}
+
 class Control : public FSY::Component {
 public:
 
@@ -186,13 +200,8 @@ public:
 		colored = { "Data/Shaders/colored.vert", "Data/Shaders/colored.frag" };
 		sound->Path("Data/Audio/breakout.mp3");
 #endif
-
-		/*music_source = audeo::load_source(
-			"./src/Data/Audio/breakout.mp3", audeo::AudioType::Music);
-		audeo::Sound music = audeo::play_sound(music_source, 1);*/
-		//sound->play = true;
 		SoundExperimental::Init();
-		snd.LoadSource("./src/Data/Audio/song.mp3");
+		snd.LoadSource("./src/Data/Audio/breakout.mp3");
 		snd.Play();
 		//Meshes & Scene
 		m1 = { Mesh::s_verticesForPlane, Mesh::s_planeMeshSize, &colored };
@@ -218,6 +227,15 @@ public:
 		scene.AddInstanceMesh(&m);
 		scene.AddInstanceMesh(&m1);
 		ChangeScene(&scene);
+		Vector3f v1 = { 0, 0, 0 };
+		Vector3f v2 = {1, 0, 0};
+		Vector3f d1 = {2, 5, -1};
+		Vector3f d2 = { 0, 0, -1 };
+		Vector3f d3 = Vector3f::CrossProduct(d2, d1);
+		Vector3f v1v2 = v2 - v1;
+		Vector3f res = (d3 / d3.Length());
+		float f = Vector3f::DotProduct(v1v2, res);
+		std::cout << f;
 	}
 
 	void OnUpdate() override {
@@ -258,6 +276,7 @@ public:
 				}
 			}
 		}
+
 	}
 
 	void OnClose() override {

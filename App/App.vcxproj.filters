@@ -24,6 +24,8 @@
     <None Include="src\Shaders\colored.vert" />
     <None Include="src\Shaders\textured.frag" />
     <None Include="src\Shaders\textured.vert" />
+    <None Include="src\Data\Assets\Shaders\FBO.vert" />
+    <None Include="src\Data\Assets\Shaders\FBO.frag" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="src\Textures\Icon.png">

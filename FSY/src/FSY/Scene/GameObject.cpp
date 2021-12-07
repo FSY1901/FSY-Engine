@@ -54,7 +54,9 @@ namespace FSY {
 
 	std::vector<Component*> GameObject::__GetComponents() { return m_components; }
 
-	glm::mat4 GameObject::GetTransformationMatrix() { return transform; }
+	glm::mat4 GameObject::GetTransformationMatrix() { return m_transform; }
+
+	Sphere GameObject::GetBoundingSphere() { return m_boundingSphere; }
 
 	/////////////////////////
 	//COMPONENT:

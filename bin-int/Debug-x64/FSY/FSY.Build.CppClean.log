@@ -19,7 +19,6 @@ d:\vs_projects\fsy\bin-int\debug-x64\fsy\contentbrowser.obj
 d:\vs_projects\fsy\bin-int\debug-x64\fsy\console.obj
 d:\vs_projects\fsy\bin-int\debug-x64\fsy\camera.obj
 d:\vs_projects\fsy\bin-int\debug-x64\fsy\perlinnoise.obj
-d:\vs_projects\fsy\bin-int\debug-x64\fsy\application.obj
 d:\vs_projects\fsy\bin-int\debug-x64\fsy\imgui_widgets.obj
 d:\vs_projects\fsy\bin-int\debug-x64\fsy\imgui_tables.obj
 d:\vs_projects\fsy\bin-int\debug-x64\fsy\imgui_stdlib.obj
@@ -28,6 +27,7 @@ d:\vs_projects\fsy\bin-int\debug-x64\fsy\imgui_impl_glfw.obj
 d:\vs_projects\fsy\bin-int\debug-x64\fsy\imgui_draw.obj
 d:\vs_projects\fsy\bin-int\debug-x64\fsy\imgui_demo.obj
 d:\vs_projects\fsy\bin-int\debug-x64\fsy\imgui.obj
+d:\vs_projects\fsy\bin-int\debug-x64\fsy\imguizmo.obj
 d:\vs_projects\fsy\bin-int\debug-x64\fsy\glm.obj
 d:\vs_projects\fsy\bin-int\debug-x64\fsy\dummy.obj
 d:\vs_projects\fsy\bin-int\debug-x64\fsy\vec3.obj
@@ -35,16 +35,6 @@ d:\vs_projects\fsy\bin-int\debug-x64\fsy\soundengine.obj
 d:\vs_projects\fsy\bin-int\debug-x64\fsy\effects.obj
 d:\vs_projects\fsy\bin-int\debug-x64\fsy\vbo.obj
 d:\vs_projects\fsy\bin-int\debug-x64\fsy\vao.obj
-d:\vs_projects\fsy\bin-int\debug-x64\fsy\glad.obj
-d:\vs_projects\fsy\bin\debug-x64\fsy\fsy.lib
-d:\vs_projects\fsy\bin\debug-x64\fsy\fsy.exp
-d:\vs_projects\fsy\bin\debug-x64\fsy\fsy.ilk
-d:\vs_projects\fsy\bin\debug-x64\fsy\fsy.dll
-d:\vs_projects\fsy\bin\debug-x64\fsy\fsy.pdb
 d:\vs_projects\fsy\bin-int\debug-x64\fsy\fsy.tlog\cl.command.1.tlog
 d:\vs_projects\fsy\bin-int\debug-x64\fsy\fsy.tlog\cl.read.1.tlog
 d:\vs_projects\fsy\bin-int\debug-x64\fsy\fsy.tlog\cl.write.1.tlog
-d:\vs_projects\fsy\bin-int\debug-x64\fsy\fsy.tlog\fsy.write.1u.tlog
-d:\vs_projects\fsy\bin-int\debug-x64\fsy\fsy.tlog\link.command.1.tlog
-d:\vs_projects\fsy\bin-int\debug-x64\fsy\fsy.tlog\link.read.1.tlog
-d:\vs_projects\fsy\bin-int\debug-x64\fsy\fsy.tlog\link.write.1.tlog

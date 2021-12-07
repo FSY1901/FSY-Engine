@@ -20,6 +20,7 @@
     <ClInclude Include="src\FSY\Core\Core.h" />
     <ClInclude Include="src\FSY\Editor\EditorUI.h" />
     <ClInclude Include="src\FSY\Application\EntryPoint.h" />
+    <ClInclude Include="src\FSY\Rendering\FrustumCulling.h" />
     <ClInclude Include="src\FSY\Scene\GameObject.h" />
     <ClInclude Include="src\FSY\Input\Input.h" />
     <ClInclude Include="src\FSY\Scene\Light.h" />
@@ -186,6 +187,7 @@
     <ClInclude Include="src\vendor\glm\vec3.hpp" />
     <ClInclude Include="src\vendor\glm\vec4.hpp" />
     <ClInclude Include="src\vendor\glm\vector_relational.hpp" />
+    <ClInclude Include="src\vendor\imguizmo\ImGuizmo.h" />
     <ClInclude Include="src\vendor\imgui\imconfig.h" />
     <ClInclude Include="src\vendor\imgui\imgui.h" />
     <ClInclude Include="src\vendor\imgui\imgui_impl_glfw.h" />
@@ -230,6 +232,7 @@
     <ClCompile Include="src\vendor\Audeo\vec3.cpp" />
     <ClCompile Include="src\vendor\glm\detail\dummy.cpp" />
     <ClCompile Include="src\vendor\glm\detail\glm.cpp" />
+    <ClCompile Include="src\vendor\imguizmo\ImGuizmo.cpp" />
     <ClCompile Include="src\vendor\imgui\imgui.cpp" />
     <ClCompile Include="src\vendor\imgui\imgui_demo.cpp" />
     <ClCompile Include="src\vendor\imgui\imgui_draw.cpp" />
@@ -432,7 +435,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>FSY_PLATFORM_WINDOWS;FSY_BUILD_DLL;</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)FSY\src\vendor\SDL\sdl\include;$(SolutionDir)FSY\src\vendor\SDL\sdl_mixer\include;$(SolutionDir)FSY\src\vendor\irrKlang\include;$(SolutionDir)FSY\src\vendor\OpenGL\include;$(SolutionDir)FSY\src\vendor\imgui;$(SolutionDir)FSY\src\FSY\Headers;$(SolutionDir)FSY\src\vendor\glm\gtx;$(SolutionDir)FSY\src\vendor\glm\gtc;$(SolutionDir)FSY\src\vendor\glm;$(SolutionDir)FSY\src\vendor\Audeo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\VS_Projects\FSY\FSY\src\vendor\imguizmo;$(SolutionDir)FSY\src\vendor\SDL\sdl\include;$(SolutionDir)FSY\src\vendor\SDL\sdl_mixer\include;$(SolutionDir)FSY\src\vendor\irrKlang\include;$(SolutionDir)FSY\src\vendor\OpenGL\include;$(SolutionDir)FSY\src\vendor\imgui;$(SolutionDir)FSY\src\FSY\Headers;$(SolutionDir)FSY\src\vendor\glm\gtx;$(SolutionDir)FSY\src\vendor\glm\gtc;$(SolutionDir)FSY\src\vendor\glm;$(SolutionDir)FSY\src\vendor\Audeo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -451,7 +454,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>FSY_PLATFORM_WINDOWS;FSY_BUILD_DLL;</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)FSY\src\vendor\SDL\sdl\include;$(SolutionDir)FSY\src\vendor\SDL\sdl_mixer\include;$(SolutionDir)FSY\src\vendor\irrKlang\include;$(SolutionDir)FSY\src\vendor\OpenGL\include;$(SolutionDir)FSY\src\vendor\imgui;$(SolutionDir)FSY\src\FSY\Headers;$(SolutionDir)FSY\src\vendor\glm\gtx;$(SolutionDir)FSY\src\vendor\glm\gtc;$(SolutionDir)FSY\src\vendor\glm;$(SolutionDir)FSY\src\vendor\Audeo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\VS_Projects\FSY\FSY\src\vendor\imguizmo;$(SolutionDir)FSY\src\vendor\SDL\sdl\include;$(SolutionDir)FSY\src\vendor\SDL\sdl_mixer\include;$(SolutionDir)FSY\src\vendor\irrKlang\include;$(SolutionDir)FSY\src\vendor\OpenGL\include;$(SolutionDir)FSY\src\vendor\imgui;$(SolutionDir)FSY\src\FSY\Headers;$(SolutionDir)FSY\src\vendor\glm\gtx;$(SolutionDir)FSY\src\vendor\glm\gtc;$(SolutionDir)FSY\src\vendor\glm;$(SolutionDir)FSY\src\vendor\Audeo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
