@@ -18,7 +18,7 @@ namespace FSY {
 	public:
 
 		float cameraSpeed = 10.0f;
-		float sensitivity = 40.0f;
+		float sensitivity = 20.0f;
 
 		SceneCameraController() {
 			

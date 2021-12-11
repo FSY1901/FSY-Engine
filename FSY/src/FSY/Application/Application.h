@@ -7,6 +7,7 @@
 
 #include "../Scene/Scene.h"
 #include "../Rendering/VAO.h"
+#include "../Rendering/Framebuffer.h"
 #include "../Input/Input.h"
 #include "FSY_Time.h"
 #include "../Editor/ContentBrowser.h"
@@ -74,6 +75,8 @@ namespace FSY {
         SceneCameraController* scc = nullptr;
         Scene* m_activeScene = nullptr;
         float m_clearColor[3] = { 0.2f, 0.2f, 0.2f };
+
+        void RenderObject(GameObject* g, Mesh* mesh, bool firstFrame, Frustum camFrustum);
 #pragma endregion
 
 #pragma region Scene View
@@ -81,6 +84,11 @@ namespace FSY {
         void RenderChildren(GameObject* g);
         //GameObject* selectedObject = nullptr;
         ContentBrowser cb;
+        uint32_t FBOTexture;
+        ImVec2 m_PanelSize = {1, 1};
+        ImVec2 m_texSize = { 0,0 };
+        bool isHovered = false;
+        Framebuffer m_framebuffer;
 #pragma endregion
 
         void Init();

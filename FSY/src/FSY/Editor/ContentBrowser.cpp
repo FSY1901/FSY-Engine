@@ -26,9 +26,10 @@ namespace FSY {
 			auto relative = std::filesystem::relative(p.path(), m_AssetPath);
 			std::string file = relative.filename().string();
 			if (p.is_directory()) {
-				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0,0,0,0));
+				/*ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0,0,0,0));
 				ImGui::ImageButton((void*)(intptr_t)m_FolderIcon.GetTexture(), ImVec2(64, 50));
-				ImGui::PopStyleColor();
+				ImGui::PopStyleColor();*/
+				ImGui::Button(file.c_str());
 				if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
 					m_CurrentPath /= p.path().filename();
 				}
@@ -36,16 +37,16 @@ namespace FSY {
 					__wantsRename = true;
 					__originalName = __directoryToRename = file;
 				}
-				ImGui::TextWrapped(file.c_str());
+				//ImGui::TextWrapped(file.c_str());
 			}
 			else {
 				if(relative.filename().extension().string() == ".ttf") {
-					ImGui::Image((void*)(intptr_t)m_FontIcon.GetTexture(), ImVec2(64, 64));
+					//ImGui::Image((void*)(intptr_t)m_FontIcon.GetTexture(), ImVec2(64, 64));
 				}
 				else if (relative.filename().extension().string() == ".png") {
-					ImGui::Image((void*)(intptr_t)m_PNGIcon.GetTexture(), ImVec2(56.4f, 64));
+					//ImGui::Image((void*)(intptr_t)m_PNGIcon.GetTexture(), ImVec2(56.4f, 64));
 				}
-				ImGui::TextWrapped(file.c_str());
+				ImGui::Text(file.c_str());
 			}
 		}
 

@@ -39,7 +39,12 @@ namespace FSY {
         glBindTexture(GL_TEXTURE_2D, m_texture);
     }
 
+    void Texture::Unbind() {
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+
     GLuint Texture::GetTexture() {
+        Bind();
         return m_texture;
     }
 

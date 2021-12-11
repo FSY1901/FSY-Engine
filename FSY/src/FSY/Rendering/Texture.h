@@ -14,6 +14,7 @@ namespace FSY {
 		Texture();
 		Texture(const char* filename, bool flipped=true);
 		void Bind();
+		void Unbind();
 		GLuint GetTexture();
 
 	private:

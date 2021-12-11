@@ -129,8 +129,8 @@ namespace FSY {
 		std::vector<Component*> m_components;
 		std::vector<GameObject*> m_children;
 
-		glm::mat4 m_transform;
 		glm::mat4 m_fixedNormal;
+		glm::mat4 m_transform;
 
 		Sphere m_boundingSphere;
 

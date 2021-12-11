@@ -161,6 +161,7 @@ public:
 	Shader s;
 	Shader colored;
 	Texture t;
+	Texture t1;
 	Mesh m;
 	Mesh m1;
 	Sound* sound;
@@ -193,6 +194,7 @@ public:
 		s = { "./src/Data/Shaders/textured.vert", "./src/Data/Shaders/textured.frag" };
 		s.Color = { 1,1,1 };
 		t = { "./src/Data/Textures/Dirt.png" };
+		t1 = { "./src/Data/Textures/awesomeface.png" };
 		colored = { "./src/Data/Shaders/colored.vert", "./src/Data/Shaders/colored.frag" };
 		colored.Color = { 0.9f, 0.2f, 0.2f };
 		sound->Path("./src/Data/Audio/breakout.mp3");
@@ -204,11 +206,12 @@ public:
 #endif
 		SoundExperimental::Init();
 		snd.LoadSource("./src/Data/Audio/breakout.mp3");
-		snd.Play();
+		//snd.Play();
 		//Meshes & Scene
 		m = { Mesh::s_verticesForCube, Mesh::s_cubeMeshSize, &s };
-		m1 = { Mesh::s_verticesForPlane, Mesh::s_planeMeshSize, &colored };
+		m1 = { Mesh::s_verticesForPlane, Mesh::s_planeMeshSize, &s };
 		m.SetTexture(&t);
+		m1.SetTexture(&t1);
 		g2.AddComponent<Control>();
 		g2.AddChild(&myObject);
 		g2.AddChild(&g);
@@ -288,5 +291,5 @@ public:
 };
 
 FSY::Application* FSY::CreateApplication() {
-	return new App(800, 600, "My App");
+	return new App(1000, 800, "My App");
 }

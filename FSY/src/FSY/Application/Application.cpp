@@ -55,6 +55,30 @@ namespace FSY {
 		stbi_image_free(images[0].pixels);
 	}
 
+	void Application::RenderObject(GameObject* g, Mesh* mesh, bool firstFrame, Frustum camFrustum) {
+		if (g->GetBoundingSphere().isOnFrustum(camFrustum,
+			glm::vec3(g->position.x, g->position.y, g->position.z),
+			glm::vec3(g->scale.x, g->scale.y, g->scale.z))) {
+			if (!g->CompareLast() || firstFrame) {
+				glm::mat4 transform = glm::mat4(1.0f);
+				glm::mat4 transMat = glm::translate(transform, glm::vec3(g->position.x, g->position.y, g->position.z));
+				glm::vec3 rot(DegreesToRadians(g->rotation.x), DegreesToRadians(g->rotation.y), DegreesToRadians(g->rotation.z));
+				glm::quat _rot = glm::quat(rot);
+				glm::mat4 rotMat = glm::mat4_cast(_rot);
+				//glm::sin(rot);
+				glm::mat4 scaleMat = glm::scale(transform, glm::vec3(g->scale.x, g->scale.y, g->scale.z));
+				transform = transMat * rotMat * scaleMat;
+				g->m_transform = transform;
+				glm::mat4 inverse = glm::inverse(transform);
+				glm::mat4 transpose = glm::transpose(inverse);
+				g->m_fixedNormal = transpose;
+				mesh->GetShader()->setMat4("fixedNormal", g->m_fixedNormal);
+				mesh->GetShader()->setMat4("transform", g->m_transform);
+			}
+			glDrawArrays(GL_TRIANGLES, 0, sizeof(float) * mesh->GetVertexSize());
+		}
+	}
+
 	float Application::WinWidth() { return m_width; }
 	float Application::WinHeight() { return m_height; }
 
@@ -136,6 +160,7 @@ namespace FSY {
 
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		io.ConfigFlags = ImGuiConfigFlags_DockingEnable;
 		ImGui::StyleColorsDark();
 		ImGui_ImplGlfw_InitForOpenGL(m_win, true);
 		ImGui_ImplOpenGL3_Init("#version 330");
@@ -194,7 +219,7 @@ namespace FSY {
 
 		//Framebuffer
 
-		/*float rectangleVertices[] = //covers the whole screen
+		float rectangleVertices[] = //covers the whole screen
 		{
 			// Coords    // texCoords
 			 1.0f, -1.0f,  1.0f, 0.0f,
@@ -241,14 +266,46 @@ namespace FSY {
 
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
 
+		//m_framebuffer.Generate(m_width, m_height);
+
 		Shader fboShader = Shader(Settings::s_fboVertShaderPath.c_str(), Settings::s_fboFragShaderPath.c_str());
 		fboShader.Use();
-		glUniform1i(glGetUniformLocation(fboShader.ID, "screenTexture"), 0);*/
+		glUniform1i(glGetUniformLocation(fboShader.ID, "screenTexture"), 0);
 
 		while (!glfwWindowShouldClose(m_win))
 		{
 
 			bool firstFrame = true;
+
+			if ((m_PanelSize.x != m_texSize.x || m_PanelSize.y != m_texSize.y)) {
+				glDeleteTextures(1, &fboTex);
+				glDeleteFramebuffers(1, &FBO);
+				glDeleteTextures(1, &rbo);
+				glDeleteRenderbuffers(1, &rbo);
+
+				glGenFramebuffers(1, &FBO);
+				glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+
+				glGenTextures(1, &fboTex);
+				glBindTexture(GL_TEXTURE_2D, fboTex);
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_PanelSize.x, m_PanelSize.y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+				glBindTexture(GL_TEXTURE_2D, 0);
+				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fboTex, 0);
+
+				glGenRenderbuffers(1, &rbo);
+				glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+				glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, m_PanelSize.x, m_PanelSize.y);
+				glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+				glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
+
+				m_texSize = m_PanelSize;
+				glViewport(0, 0, m_PanelSize.x, m_PanelSize.y);
+			}
 
 			//Preventing a crash when minimizing
 			if (m_width != 0 && m_height != 0) {
@@ -276,15 +333,16 @@ namespace FSY {
 				glm::vec3 Up = { 0.0f, 1.0f, 0.0f };
 				view = glm::lookAt(cameraPos, cameraPos + cameraFront, Up);
 				Camera::GetMain()->__SetViewMatrix(view);
-				projection = glm::perspective(glm::radians(45.0f), (float)m_width / (float)m_height, 0.1f, 100.0f);
+				projection = glm::perspective(glm::radians(45.0f), (float)m_PanelSize.x / (float)m_PanelSize.y, 0.1f, 100.0f);
 				Camera::GetMain()->__SetProjectionMatrix(projection);
 
-				//glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+				glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+				//m_framebuffer.Bind();
 
 				glClearColor(m_clearColor[0], m_clearColor[1], m_clearColor[2], 1.0f);
 				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-				//glEnable(GL_DEPTH_TEST);
+				glEnable(GL_DEPTH_TEST);
 
 				s_processInput(m_win);
 
@@ -322,7 +380,7 @@ namespace FSY {
 							m_activeScene->GetLight()->GetLightColor().z);
 						s->setVec3("lightPos", m_activeScene->GetLight()->position.x, m_activeScene->GetLight()->position.y, m_activeScene->GetLight()->position.z);
 						s->setVec3("viewPos", Camera::GetMain()->position.x, Camera::GetMain()->position.y, Camera::GetMain()->position.z);
-						s->setColorValues3("Color", s->Color.x, s->Color.y, s->Color.z );
+						s->setColorValues3("Color", s->Color.x, s->Color.y, s->Color.z);
 
 						if (mesh->isTransparent) {
 							glEnable(GL_BLEND);
@@ -347,27 +405,7 @@ namespace FSY {
 							{
 								GameObject* g = sorted1[it->first];
 								g->__UpdateChildren();
-								if (g->GetBoundingSphere().isOnFrustum(camFrustum,
-									glm::vec3(g->position.x, g->position.y, g->position.z),
-									glm::vec3(g->scale.x, g->scale.y, g->scale.z))) {
-									if (!g->CompareLast()) {
-										glm::mat4 transform = glm::mat4(1.0f);
-										glm::mat4 transMat = glm::translate(transform, it->second);
-										glm::vec3 rot(DegreesToRadians(g->rotation.x), DegreesToRadians(g->rotation.y), DegreesToRadians(g->rotation.z));
-										glm::quat _rot = glm::quat(rot);
-										glm::mat4 rotMat = glm::mat4_cast(_rot);
-										//glm::sin(rot);
-										glm::mat4 scaleMat = glm::scale(transform, glm::vec3(g->scale.x, g->scale.y, g->scale.z));
-										transform = transMat * rotMat * scaleMat;
-										g->m_transform = transform;
-										glm::mat4 inverse = glm::inverse(transform);
-										glm::mat4 transpose = glm::transpose(inverse);
-										g->m_fixedNormal = transpose;
-										mesh->GetShader()->setMat4("fixedNormal", g->m_fixedNormal);
-										mesh->GetShader()->setMat4("transform", g->m_transform);
-									}
-									glDrawArrays(GL_TRIANGLES, 0, sizeof(float) * mesh->GetVertexSize());
-								}
+								RenderObject(g, mesh, firstFrame, camFrustum);
 								//vbo.Unbind();
 								if (!inEditor) {
 									for (Component* c : g->__GetComponents()) {
@@ -381,27 +419,7 @@ namespace FSY {
 						else {
 							for (auto g : mesh->_GetGameObjects()) {
 								g->__UpdateChildren();
-								if (g->GetBoundingSphere().isOnFrustum(camFrustum,
-									glm::vec3(g->position.x, g->position.y, g->position.z),
-									glm::vec3(g->scale.x, g->scale.y, g->scale.z))) {
-									if (!g->CompareLast() || firstFrame) {
-										glm::mat4 transform = glm::mat4(1.0f);
-										glm::mat4 transMat = glm::translate(transform, glm::vec3(g->position.x, g->position.y, g->position.z));
-										glm::vec3 rot(DegreesToRadians(g->rotation.x), DegreesToRadians(g->rotation.y), DegreesToRadians(g->rotation.z));
-										glm::quat _rot = glm::quat(rot);
-										glm::mat4 rotMat = glm::mat4_cast(_rot);
-										//glm::sin(rot);
-										glm::mat4 scaleMat = glm::scale(transform, glm::vec3(g->scale.x, g->scale.y, g->scale.z));
-										transform = transMat * rotMat * scaleMat;
-										g->m_transform = transform;
-										glm::mat4 inverse = glm::inverse(transform);
-										glm::mat4 transpose = glm::transpose(inverse);
-										g->m_fixedNormal = transpose;
-										mesh->GetShader()->setMat4("fixedNormal", g->m_fixedNormal);
-										mesh->GetShader()->setMat4("transform", g->m_transform);
-									}
-									glDrawArrays(GL_TRIANGLES, 0, sizeof(float) * mesh->GetVertexSize());
-								}
+								RenderObject(g, mesh, firstFrame, camFrustum);
 								//vbo.Unbind();
 								if (!inEditor) {
 									for (Component* c : g->__GetComponents()) {
@@ -411,6 +429,8 @@ namespace FSY {
 							}
 						}
 						glDisable(GL_CULL_FACE);
+						if (mesh->HasTexture())
+							mesh->GetTexture()->Unbind();
 						//vbo.Delete();
 					}
 					//vao->Unbind();
@@ -425,16 +445,18 @@ namespace FSY {
 							}
 						}
 					}
-					/*glBindFramebuffer(GL_FRAMEBUFFER, 0);
-					//glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+					glBindFramebuffer(GL_FRAMEBUFFER, 0);
+					FBOTexture = fboTex;
 					glClear(GL_COLOR_BUFFER_BIT);
 
-					fboShader.Use();
-					glBindVertexArray(rectVAO);
-					glDisable(GL_DEPTH_TEST);
-					glBindTexture(GL_TEXTURE_2D, fboTex);
-					glDisable(GL_CULL_FACE);
-					glDrawArrays(GL_TRIANGLES, 0, 6);*/
+					if (!inEditor) {
+						glBindVertexArray(rectVAO);
+						glDisable(GL_DEPTH_TEST);
+						glBindTexture(GL_TEXTURE_2D, fboTex);
+						FBOTexture = fboTex;
+						glDisable(GL_CULL_FACE);
+						glDrawArrays(GL_TRIANGLES, 0, 6);
+					}
 				}
 
 				if (inEditor) {
@@ -460,7 +482,7 @@ namespace FSY {
 		delete scc;
 		delete vao;
 		vbo.Delete();
-		//glDeleteFramebuffers(1, &FBO);
+		glDeleteFramebuffers(1, &FBO);
 
 		Sound::engine->drop();
 
@@ -471,176 +493,174 @@ namespace FSY {
 
 	void Application::RenderUI() {
 
-		ImGui::Begin("Inspector", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove);
-		ImGui::SetWindowPos(ImVec2(0, 0));
-		ImGui::SetWindowSize(ImVec2(280, m_height));
-		ImGui::BeginTabBar("Inspector");
-		if (ImGui::BeginTabItem("Scene")) {
-			for (auto g : m_activeScene->_GetObjects()) {
-				if (!g->IsChild()) {
-					bool node = ImGui::TreeNodeEx(g->name.c_str(), ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth);
-					if (ImGui::IsItemClicked()) {
-						selectedObject = g;
-					}
-					if (node) {
-						RenderChildren(g);
-						ImGui::TreePop();
-					}
+		static ImGuiWindowFlags winFlags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
+
+		ImGuiViewport* viewport = ImGui::GetMainViewport();
+		ImGui::SetNextWindowPos(viewport->Pos);
+		ImGui::SetNextWindowSize(viewport->Size);
+		ImGui::SetNextWindowViewport(viewport->ID);
+		//ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+		winFlags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{0, 0});
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+		ImGui::Begin("DockSpace", NULL, winFlags);
+		ImGui::PopStyleVar();
+		ImGui::PopStyleVar();
+
+		ImGuiID id = ImGui::GetID("MyDockspace");
+		ImGui::DockSpace(id, ImVec2(0, 0));
+
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
+		ImGui::Begin("Scene");
+		ImGui::PopStyleVar();
+		ImVec2 size = ImGui::GetContentRegionAvail();
+		m_PanelSize = size;
+		ImGui::Image((void*)FBOTexture, size, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+		ImGui::End();
+		ImGui::Begin("Inspector");
+		for (auto g : m_activeScene->_GetObjects()) {
+			if (!g->IsChild()) {
+				bool node = ImGui::TreeNodeEx(g->name.c_str(), ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth);
+				if (ImGui::IsItemClicked()) {
+					selectedObject = g;
 				}
-			}
-			if (ImGui::BeginPopupContextWindow()) {
-				if (ImGui::MenuItem("Click me!")) {
-					std::cout << "CLICK";
-				}
-				ImGui::EndPopup();
-			}
-			ImGui::EndTabItem();
-		}
-		if (ImGui::BeginTabItem("Object")) {
-			if (selectedObject != nullptr) {
-				std::string s = selectedObject->name;
-				ImGui::InputText("Name", &s);
-				if (selectedObject->name != s)
-					selectedObject->name = m_activeScene->__CheckName(s, selectedObject);
-				if (ImGui::TreeNodeEx("Transform", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
-					if (ImGui::TreeNodeEx("Position", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
-						ImGui::AlignTextToFramePadding();
-						ImGui::TextColored(ImVec4(1.0f, 0.2f, 0.2f, 1.0f), "X");
-						ImGui::SameLine();
-						ImGui::PushItemWidth(50);
-						ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(255, 0, 0, 255));
-						std::string x = std::to_string(selectedObject->position.x);
-						ImGui::InputFloat(" ", &selectedObject->position.x, -1000000.0f, 1000000.0f, x.c_str());
-						ImGui::PopStyleColor();
-						ImGui::AlignTextToFramePadding();
-						ImGui::TextColored(ImVec4(0.2f, 1.0f, 0.2f, 1.0f), "Y");
-						ImGui::SameLine();
-						ImGui::PushItemWidth(50);
-						ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(0, 255, 0, 255));
-						std::string y = std::to_string(selectedObject->position.y);
-						ImGui::InputFloat("  ", &selectedObject->position.y, -1000000.0f, 1000000.0f, y.c_str());
-						ImGui::PopStyleColor();
-						ImGui::AlignTextToFramePadding();
-						ImGui::TextColored(ImVec4(0.2f, 0.2f, 1.0f, 1.0f), "Z");
-						ImGui::SameLine();
-						ImGui::PushItemWidth(50);
-						ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(0, 0, 255, 255));
-						std::string z = std::to_string(selectedObject->position.z);
-						ImGui::InputFloat("   ", &selectedObject->position.z, -1000000.0f, 1000000.0f, z.c_str());
-						ImGui::PopStyleColor();
-						ImGui::TreePop();
-					}
-					if (ImGui::TreeNodeEx("Rotation", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
-						ImGui::AlignTextToFramePadding();
-						ImGui::TextColored(ImVec4(1.0f, 0.2f, 0.2f, 1.0f), "X");
-						ImGui::SameLine();
-						ImGui::PushItemWidth(50);
-						ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(255, 0, 0, 255));
-						std::string x = std::to_string(selectedObject->rotation.x);
-						ImGui::InputFloat(" ", &selectedObject->rotation.x, 0, 360, x.c_str());
-						ImGui::PopStyleColor();
-						ImGui::AlignTextToFramePadding();
-						ImGui::TextColored(ImVec4(0.2f, 1.0f, 0.2f, 1.0f), "Y");
-						ImGui::SameLine();
-						ImGui::PushItemWidth(50);
-						ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(0, 255, 0, 255));
-						std::string y = std::to_string(selectedObject->rotation.y);
-						ImGui::InputFloat("  ", &selectedObject->rotation.y, 0, 360, y.c_str());
-						ImGui::PopStyleColor();
-						ImGui::AlignTextToFramePadding();
-						ImGui::TextColored(ImVec4(0.2f, 0.2f, 1.0f, 1.0f), "Z");
-						ImGui::SameLine();
-						ImGui::PushItemWidth(50);
-						ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(0, 0, 255, 255));
-						std::string z = std::to_string(selectedObject->rotation.z);
-						ImGui::InputFloat("   ", &selectedObject->rotation.z, -1000000.0f, 1000000.0f, z.c_str());
-						ImGui::PopStyleColor();
-						ImGui::TreePop();
-					}
-					if (ImGui::TreeNodeEx("Scale", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
-						ImGui::AlignTextToFramePadding();
-						ImGui::TextColored(ImVec4(1.0f, 0.2f, 0.2f, 1.0f), "X");
-						ImGui::SameLine();
-						ImGui::PushItemWidth(50);
-						ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(255, 0, 0, 255));
-						std::string x = std::to_string(selectedObject->scale.x);
-						ImGui::InputFloat(" ", &selectedObject->scale.x, -1000000.0f, 1000000.0f, x.c_str());
-						ImGui::PopStyleColor();
-						ImGui::AlignTextToFramePadding();
-						ImGui::TextColored(ImVec4(0.2f, 1.0f, 0.2f, 1.0f), "Y");
-						ImGui::SameLine();
-						ImGui::PushItemWidth(50);
-						ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(0, 255, 0, 255));
-						std::string y = std::to_string(selectedObject->scale.y);
-						ImGui::InputFloat("  ", &selectedObject->scale.y, -1000000.0f, 1000000.0f, y.c_str());
-						ImGui::PopStyleColor();
-						ImGui::AlignTextToFramePadding();
-						ImGui::TextColored(ImVec4(0.2f, 0.2f, 1.0f, 1.0f), "Z");
-						ImGui::SameLine();
-						ImGui::PushItemWidth(50);
-						ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(0, 0, 255, 255));
-						std::string z = std::to_string(selectedObject->scale.z);
-						ImGui::InputFloat("   ", &selectedObject->scale.z, -1000000.0f, 1000000.0f, z.c_str());
-						ImGui::PopStyleColor();
-						ImGui::TreePop();
-					}
-					ImGui::TreePop();
-				}
-				if (ImGui::TreeNodeEx("Components", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
-					for (auto c : selectedObject->__GetComponents()) {
-						if (ImGui::TreeNodeEx(c->getName(), ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
-							c->DrawUI();
-							ImGui::TreePop();
-						}
-					}
+				if (node) {
+					RenderChildren(g);
 					ImGui::TreePop();
 				}
 			}
-			ImGui::EndTabItem();
 		}
-		if (ImGui::BeginTabItem("Content")) {
-
-			cb.Draw();
-
-			ImGui::EndTabItem();
-		}
-		if (ImGui::BeginTabItem("Debug")) {
-			ImGui::Text("FPS: ");
-			ImGui::SameLine();
-			ImGui::TextColored(ImVec4(1.0f, 0.2f, 0.2f, 1.0f), "%.1f FPS", ImGui::GetIO().Framerate);
-			ImGui::TextColored(ImVec4(1.0f, 0.2f, 0.2f, 1.0f), "%.1f ms/frame", 1000.0f / ImGui::GetIO().Framerate);
-			if (ImGui::TreeNodeEx("Settings", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
-				ImGui::PushItemWidth(170);
-				ImGui::ColorEdit3("Scene Color", m_clearColor);
-				ImGui::PopItemWidth();
-				float col[3];
-				col[0] = m_activeScene->GetLight()->GetLightColor().x;
-				col[1] = m_activeScene->GetLight()->GetLightColor().y;
-				col[2] = m_activeScene->GetLight()->GetLightColor().z;
-				ImGui::PushItemWidth(170);
-				ImGui::ColorEdit3("Light Color", col);
-				ImGui::PopItemWidth();
-				m_activeScene->GetLight()->__SetLightColorEngine(col);
-				ImGui::TreePop();
-			}
-			if (ImGui::TreeNodeEx("Console", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
-				if (Console::_GetLatestMessage() != "")
-					ImGui::Text(Console::_GetLatestMessage().c_str());
-				ImGui::TreePop();
-			}
-			ImGui::EndTabItem();
-		}
-		ImGui::EndTabBar();
-
-		//ImGuizmo
+		ImGui::End();
+		ImGui::Begin("Object");
 		if (selectedObject != nullptr) {
-			ImGuizmo::SetOrthographic(false);
-			ImGuizmo::SetDrawlist(ImGui::GetBackgroundDrawList());
-			ImGuizmo::SetRect(0, 0, m_width, m_height);
-			glm::mat4 transform = selectedObject->GetTransformationMatrix();
-			glm::mat4 view_ = glm::inverse(Camera::GetMain()->GetTransformationMatrix());
-			ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(projection), ImGuizmo::OPERATION::TRANSLATE, ImGuizmo::MODE::LOCAL, glm::value_ptr(transform));
+			std::string s = selectedObject->name;
+			ImGui::InputText("Name", &s);
+			if (selectedObject->name != s)
+				selectedObject->name = m_activeScene->__CheckName(s, selectedObject);
+			if (ImGui::TreeNodeEx("Transform", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
+				if (ImGui::TreeNodeEx("Position", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
+					ImGui::AlignTextToFramePadding();
+					ImGui::TextColored(ImVec4(1.0f, 0.2f, 0.2f, 1.0f), "X");
+					ImGui::SameLine();
+					ImGui::PushItemWidth(50);
+					ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(255, 0, 0, 255));
+					std::string x = std::to_string(selectedObject->position.x);
+					ImGui::InputFloat(" ", &selectedObject->position.x, -1000000.0f, 1000000.0f, x.c_str());
+					ImGui::PopStyleColor();
+					ImGui::AlignTextToFramePadding();
+					ImGui::TextColored(ImVec4(0.2f, 1.0f, 0.2f, 1.0f), "Y");
+					ImGui::SameLine();
+					ImGui::PushItemWidth(50);
+					ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(0, 255, 0, 255));
+					std::string y = std::to_string(selectedObject->position.y);
+					ImGui::InputFloat("  ", &selectedObject->position.y, -1000000.0f, 1000000.0f, y.c_str());
+					ImGui::PopStyleColor();
+					ImGui::AlignTextToFramePadding();
+					ImGui::TextColored(ImVec4(0.2f, 0.2f, 1.0f, 1.0f), "Z");
+					ImGui::SameLine();
+					ImGui::PushItemWidth(50);
+					ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(0, 0, 255, 255));
+					std::string z = std::to_string(selectedObject->position.z);
+					ImGui::InputFloat("   ", &selectedObject->position.z, -1000000.0f, 1000000.0f, z.c_str());
+					ImGui::PopStyleColor();
+					ImGui::TreePop();
+				}
+				if (ImGui::TreeNodeEx("Rotation", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
+					ImGui::AlignTextToFramePadding();
+					ImGui::TextColored(ImVec4(1.0f, 0.2f, 0.2f, 1.0f), "X");
+					ImGui::SameLine();
+					ImGui::PushItemWidth(50);
+					ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(255, 0, 0, 255));
+					std::string x = std::to_string(selectedObject->rotation.x);
+					ImGui::InputFloat(" ", &selectedObject->rotation.x, 0, 360, x.c_str());
+					ImGui::PopStyleColor();
+					ImGui::AlignTextToFramePadding();
+					ImGui::TextColored(ImVec4(0.2f, 1.0f, 0.2f, 1.0f), "Y");
+					ImGui::SameLine();
+					ImGui::PushItemWidth(50);
+					ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(0, 255, 0, 255));
+					std::string y = std::to_string(selectedObject->rotation.y);
+					ImGui::InputFloat("  ", &selectedObject->rotation.y, 0, 360, y.c_str());
+					ImGui::PopStyleColor();
+					ImGui::AlignTextToFramePadding();
+					ImGui::TextColored(ImVec4(0.2f, 0.2f, 1.0f, 1.0f), "Z");
+					ImGui::SameLine();
+					ImGui::PushItemWidth(50);
+					ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(0, 0, 255, 255));
+					std::string z = std::to_string(selectedObject->rotation.z);
+					ImGui::InputFloat("   ", &selectedObject->rotation.z, -1000000.0f, 1000000.0f, z.c_str());
+					ImGui::PopStyleColor();
+					ImGui::TreePop();
+				}
+				if (ImGui::TreeNodeEx("Scale", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
+					ImGui::AlignTextToFramePadding();
+					ImGui::TextColored(ImVec4(1.0f, 0.2f, 0.2f, 1.0f), "X");
+					ImGui::SameLine();
+					ImGui::PushItemWidth(50);
+					ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(255, 0, 0, 255));
+					std::string x = std::to_string(selectedObject->scale.x);
+					ImGui::InputFloat(" ", &selectedObject->scale.x, -1000000.0f, 1000000.0f, x.c_str());
+					ImGui::PopStyleColor();
+					ImGui::AlignTextToFramePadding();
+					ImGui::TextColored(ImVec4(0.2f, 1.0f, 0.2f, 1.0f), "Y");
+					ImGui::SameLine();
+					ImGui::PushItemWidth(50);
+					ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(0, 255, 0, 255));
+					std::string y = std::to_string(selectedObject->scale.y);
+					ImGui::InputFloat("  ", &selectedObject->scale.y, -1000000.0f, 1000000.0f, y.c_str());
+					ImGui::PopStyleColor();
+					ImGui::AlignTextToFramePadding();
+					ImGui::TextColored(ImVec4(0.2f, 0.2f, 1.0f, 1.0f), "Z");
+					ImGui::SameLine();
+					ImGui::PushItemWidth(50);
+					ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(0, 0, 255, 255));
+					std::string z = std::to_string(selectedObject->scale.z);
+					ImGui::InputFloat("   ", &selectedObject->scale.z, -1000000.0f, 1000000.0f, z.c_str());
+					ImGui::PopStyleColor();
+					ImGui::TreePop();
+				}
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNodeEx("Components", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
+				for (auto c : selectedObject->__GetComponents()) {
+					if (ImGui::TreeNodeEx(c->getName(), ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
+						c->DrawUI();
+						ImGui::TreePop();
+					}
+				}
+				ImGui::TreePop();
+			}
 		}
+		ImGui::End();
+		ImGui::Begin("Content");
+		cb.Draw();
+		ImGui::End();
+		ImGui::Begin("Debug");
+		ImGui::Text("FPS: ");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(1.0f, 0.2f, 0.2f, 1.0f), "%.1f FPS", ImGui::GetIO().Framerate);
+		ImGui::TextColored(ImVec4(1.0f, 0.2f, 0.2f, 1.0f), "%.1f ms/frame", 1000.0f / ImGui::GetIO().Framerate);
+		if (ImGui::TreeNodeEx("Settings", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
+			ImGui::PushItemWidth(170);
+			ImGui::ColorEdit3("Scene Color", m_clearColor);
+			ImGui::PopItemWidth();
+			float col[3];
+			col[0] = m_activeScene->GetLight()->GetLightColor().x;
+			col[1] = m_activeScene->GetLight()->GetLightColor().y;
+			col[2] = m_activeScene->GetLight()->GetLightColor().z;
+			ImGui::PushItemWidth(170);
+			ImGui::ColorEdit3("Light Color", col);
+			ImGui::PopItemWidth();
+			m_activeScene->GetLight()->__SetLightColorEngine(col);
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNodeEx("Console", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
+			if (Console::_GetLatestMessage() != "")
+				ImGui::Text(Console::_GetLatestMessage().c_str());
+			ImGui::TreePop();
+		}
+		ImGui::End();
 
 		ImGui::End();
 

@@ -20,6 +20,7 @@
     <ClInclude Include="src\FSY\Core\Core.h" />
     <ClInclude Include="src\FSY\Editor\EditorUI.h" />
     <ClInclude Include="src\FSY\Application\EntryPoint.h" />
+    <ClInclude Include="src\FSY\Rendering\Framebuffer.h" />
     <ClInclude Include="src\FSY\Rendering\FrustumCulling.h" />
     <ClInclude Include="src\FSY\Scene\GameObject.h" />
     <ClInclude Include="src\FSY\Input\Input.h" />
@@ -211,6 +212,7 @@
     <ClCompile Include="src\FSY\Editor\Console.cpp" />
     <ClCompile Include="src\FSY\Editor\ContentBrowser.cpp" />
     <ClCompile Include="src\FSY\Editor\EditorUI.cpp" />
+    <ClCompile Include="src\FSY\Rendering\Framebuffer.cpp" />
     <ClCompile Include="src\FSY\Scene\GameObject.cpp" />
     <ClCompile Include="src\FSY\Editor\SceneCameraController.h" />
     <ClCompile Include="src\FSY\Input\Input.cpp" />
