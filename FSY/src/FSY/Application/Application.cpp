@@ -160,8 +160,6 @@ namespace FSY {
 		//Sound Setup
 		Sound::Init();
 
-		Console::Log("Engine Started");
-
 		MainLoop();
 	}
 

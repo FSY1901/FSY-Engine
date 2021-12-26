@@ -2,6 +2,7 @@
 #include "Mesh.h"
 #include "../Maths/Maths.h"
 #include "../Rendering/FrustumCulling.h"
+#include "../Editor/Console.h"
 
 #include <vector>
 #include <string>
@@ -60,7 +61,8 @@ namespace FSY {
 		template<class T> T* AddComponent() {
 			Component* c = new T();
 			if (this->HasComponent<T>()) {
-				std::cout << "GameObject already has Component attached!" << std::endl;
+				Console::Warn( name + " already has a Component of type " + "\'" + c->getName() + "\'" + " attached!");
+				delete c;
 				return GetComponent<T>();
 			}
 			c->SetGameObject(this);
@@ -84,6 +86,8 @@ namespace FSY {
 				}
 				index++;
 			}
+			Console::Warn(name + " doesn't have a Component of type " + "\'" + c->getName() + "\'" + " attached!");
+			delete c;
 		}
 
 		/// <summary>
@@ -98,6 +102,8 @@ namespace FSY {
 					return (T*)comp;
 				}
 			}
+			Console::Warn(name + " doesn't have a Component of type " + "\'" + c->getName() + "\'" + " attached!");
+			delete c;
 		}
 
 		template<class T> bool HasComponent() {

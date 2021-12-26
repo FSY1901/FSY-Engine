@@ -210,6 +210,7 @@ public:
 		m.SetTexture(&t);
 		//m1.SetTexture(&t1);
 		g2.AddComponent<Control>();
+		g2.AddComponent<Control>();
 		g2.AddChild(&myObject);
 		g2.AddChild(&g);
 		m.AddGameObject(&g);
