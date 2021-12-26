@@ -11,6 +11,7 @@
 #include "../Input/Input.h"
 #include "FSY_Time.h"
 #include "../Editor/ContentBrowser.h"
+#include "../Editor/Console.h"
 
 #include <iostream>
 
@@ -81,14 +82,23 @@ namespace FSY {
 
 #pragma region Scene View
         void RenderUI();
-        void RenderChildren(GameObject* g);
+
+        //Individual panels
+        void RenderInspector();
+        void RenderObjectPanel();
+        void RenderContentBrowser();
+        void RenderDebugPanel();
+        Console m_console; //Console for the Console panel
+        void RenderConsolePanel();
+
+        void RenderChildrenInInspector(GameObject* g);
         //GameObject* selectedObject = nullptr;
         ContentBrowser cb;
         uint32_t FBOTexture;
         ImVec2 m_PanelSize = {1, 1};
         ImVec2 m_texSize = { 0,0 };
         bool isHovered = false;
-        Framebuffer m_framebuffer;
+        //Framebuffer m_framebuffer;
         Camera m_sceneCamera = Camera(Vector3f(), Vector3f(0, 0, -55), Vector3f(1, 1, 1));
 #pragma endregion
 

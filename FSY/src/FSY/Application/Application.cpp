@@ -160,6 +160,8 @@ namespace FSY {
 		//Sound Setup
 		Sound::Init();
 
+		Console::Log("Engine Started");
+
 		MainLoop();
 	}
 
@@ -541,6 +543,16 @@ namespace FSY {
 			scc->inSceneWin = false;
 		ImGui::Image((void*)FBOTexture, size, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 		ImGui::End();
+		RenderInspector();
+		RenderObjectPanel();
+		RenderContentBrowser();
+		RenderDebugPanel();
+		RenderConsolePanel();
+		ImGui::End();
+
+	}
+
+	void Application::RenderInspector() {
 		ImGui::Begin("Inspector");
 		for (auto g : m_activeScene->_GetObjects()) {
 			if (!g->IsChild()) {
@@ -549,7 +561,7 @@ namespace FSY {
 					selectedObject = g;
 				}
 				if (node) {
-					RenderChildren(g);
+					RenderChildrenInInspector(g);
 					ImGui::TreePop();
 				}
 			}
@@ -561,6 +573,9 @@ namespace FSY {
 			ImGui::EndPopup();
 		}
 		ImGui::End();
+	}
+
+	void Application::RenderObjectPanel() {
 		ImGui::Begin("Object");
 		if (selectedObject != nullptr) {
 			std::string s = selectedObject->name;
@@ -668,9 +683,15 @@ namespace FSY {
 			}
 		}
 		ImGui::End();
+	}
+
+	void Application::RenderContentBrowser() {
 		ImGui::Begin("Content");
 		cb.Draw();
 		ImGui::End();
+	}
+
+	void Application::RenderDebugPanel() {
 		ImGui::Begin("Debug");
 		ImGui::Text("FPS: ");
 		ImGui::SameLine();
@@ -690,18 +711,14 @@ namespace FSY {
 			m_activeScene->GetLight()->__SetLightColorEngine(col);
 			ImGui::TreePop();
 		}
-		if (ImGui::TreeNodeEx("Console", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
-			if (Console::_GetLatestMessage() != "")
-				ImGui::Text(Console::_GetLatestMessage().c_str());
-			ImGui::TreePop();
-		}
 		ImGui::End();
-
-		ImGui::End();
-
 	}
 
-	void Application::RenderChildren(GameObject* g) {
+	void Application::RenderConsolePanel() {
+		m_console.Draw();
+	}
+
+	void Application::RenderChildrenInInspector(GameObject* g) {
 		if (g->GetChildren().size() > 0) {
 			for (auto g1 : g->GetChildren()) {
 				bool node = ImGui::TreeNodeEx(g1->name.c_str(), ImGuiTreeNodeFlags_OpenOnArrow);
@@ -709,7 +726,7 @@ namespace FSY {
 					selectedObject = g1;
 				}
 				if (node) {
-					RenderChildren(g1);
+					RenderChildrenInInspector(g1);
 					ImGui::TreePop();
 				}
 			}

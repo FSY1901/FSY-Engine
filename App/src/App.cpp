@@ -203,7 +203,7 @@ public:
 		sound->Path("Data/Audio/breakout.mp3");
 #endif
 		snd.LoadSource("./src/Data/Audio/breakout.mp3");
-		snd.Play();
+		//snd.Play();
 		//Meshes & Scene
 		m = { Mesh::s_verticesForCube, Mesh::s_cubeMeshSize, &s };
 		m1 = { Mesh::s_verticesForCube, Mesh::s_cubeMeshSize, &colored };
@@ -240,6 +240,15 @@ public:
 	void OnEditorUpdate() override {
 		if (Input::GetKey(Keys::Key_ESCAPE)) {
 			Close();
+		}
+		if (Input::GetKey(Keys::Key_Q)) {
+			Console::Log("Hey, it works!");
+		}
+		if (Input::GetKey(Keys::Key_E)) {
+			Console::Warn("Hey, it warns!");
+		}
+		if (Input::GetKey(Keys::Key_TAB)) {
+			Console::Error("Hey, it errors!");
 		}
 		/*if (Input::GetMouse(0)) {
 			for (auto m : scene._GetMeshes()) {

@@ -1,4 +1,9 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(504,5): warning MSB8004: Intermediate Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Intermediate Directory.
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(505,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
-  SoundEngine.cpp
+  Console.cpp
+D:\VS_Projects\FSY\FSY\src\FSY\Editor\Console.h(17,26): warning C4091: 'extern ': ignored on left of 'FSY::Application' when no variable is declared
+D:\VS_Projects\FSY\FSY\src\FSY\Editor\Console.h(43,28): warning C4251: 'FSY::Console::m_items': class 'std::vector<FSY::Item,std::allocator<FSY::Item>>' needs to have dll-interface to be used by clients of class 'FSY::Console'
+D:\VS_Projects\FSY\FSY\src\FSY\Editor\Console.h(43): message : see declaration of 'std::vector<FSY::Item,std::allocator<FSY::Item>>'
+  imgui_demo.cpp
+  Generating Code...
   FSY.vcxproj -> D:\VS_Projects\FSY\bin\Debug-x64\FSY\FSY.dll
