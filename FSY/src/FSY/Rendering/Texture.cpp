@@ -1,5 +1,8 @@
 #include "Texture.h"
+#include "../Editor/Console.h"
+
 #include "../../vendor/stb_image/stb_image.h"
+
 #include <iostream>
 
 namespace FSY {
@@ -29,13 +32,13 @@ namespace FSY {
         }
         else
         {
-            std::cout << "Failed to load texture" << std::endl;
+            Console::Error("Failed to load texture from" + std::string(filename));
         }
         stbi_image_free(data);
     }
 
     void Texture::Bind() {
-        //glActiveTexture(GL_TEXTURE0); // activate the texture unit first before binding texture
+        glActiveTexture(GL_TEXTURE0); // activate the texture unit first before binding texture
         glBindTexture(GL_TEXTURE_2D, m_texture);
     }
 
