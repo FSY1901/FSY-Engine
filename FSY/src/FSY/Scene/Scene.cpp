@@ -39,7 +39,7 @@ namespace FSY {
 		return name;
 	}
 
-	GameObject* Scene::GetCamera() {
+	Camera* Scene::GetCamera() {
 		return &m_camera;
 	}
 

@@ -20,7 +20,7 @@ namespace FSY {
 		//Engine only to check if an object with the name already exists in the Scene
 		std::string __CheckName(std::string& name, GameObject* g);
 
-		GameObject* GetCamera();
+		Camera* GetCamera();
 		Light* GetLight();
 
 		std::vector<GameObject*> _GetObjects();

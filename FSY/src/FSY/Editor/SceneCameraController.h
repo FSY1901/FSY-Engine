@@ -20,6 +20,8 @@ namespace FSY {
 		float cameraSpeed = 10.0f;
 		float sensitivity = 20.0f;
 
+		bool inSceneWin = false;
+
 		SceneCameraController() {
 			
 		}
@@ -43,7 +45,9 @@ namespace FSY {
 			cameraPos.y = Camera::GetMain()->position.y;
 			cameraPos.z = Camera::GetMain()->position.z;
 
-			if (Input::GetMouse(Buttons::Button_RIGHT)) {
+			if (Input::GetMouse(Buttons::Button_RIGHT) && (inSceneWin || controlling)) {
+
+				controlling = true;
 
 				Input::SetCursorMode(CursorMode::Hidden);
 
@@ -94,6 +98,8 @@ namespace FSY {
 
 			}
 
+			controlling = false;
+
 			lastX = Input::MouseX();
 			lastY = Input::MouseY();
 
@@ -120,6 +126,8 @@ namespace FSY {
 
 		float lastX = Input::WinWidth() / 2.0f;
 		float lastY = Input::WinHeight() / 2.0f;
+
+		bool controlling = false;
 
 	};
 

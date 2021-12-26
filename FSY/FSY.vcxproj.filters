@@ -558,9 +558,6 @@
     <ClInclude Include="src\FSY\Maths\PerlinNoise.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\FSY\Sound\SoundExperimental.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\vendor\Audeo\audeo.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -690,9 +687,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\FSY\Maths\PerlinNoise.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FSY\Sound\SoundExperimental.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\vendor\Audeo\SoundEngine.cpp">

@@ -89,12 +89,15 @@ namespace FSY {
         ImVec2 m_texSize = { 0,0 };
         bool isHovered = false;
         Framebuffer m_framebuffer;
+        Camera m_sceneCamera = Camera(Vector3f(), Vector3f(0, 0, -55), Vector3f(1, 1, 1));
 #pragma endregion
 
         void Init();
 
         void MainLoop();
         
+        void CreateNewGameObject(bool asChild = false, GameObject* parent = nullptr);
+
     protected:
         GameObject* selectedObject = nullptr;
 

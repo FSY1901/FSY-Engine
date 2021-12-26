@@ -79,6 +79,15 @@ namespace FSY {
 		}
 	}
 
+	void Application::CreateNewGameObject(bool asChild, GameObject* parent) {
+		GameObject* g = new GameObject(Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1), "New Object");
+		if (asChild) {
+			parent->AddChild(g);
+			m_activeScene->AddObject(g);
+		}
+		m_activeScene->AddObject(g);
+	}
+
 	float Application::WinWidth() { return m_width; }
 	float Application::WinHeight() { return m_height; }
 
@@ -144,12 +153,12 @@ namespace FSY {
 			glm::vec3(0.0f, 0.0f, 0.0f),
 			glm::vec3(0.0f, 1.0f, 0.0f));
 
-		Camera::GetMain()->__SetViewMatrix(view);
+		m_sceneCamera.__SetViewMatrix(view);
 
 		cb.LoadTextures();
 
 		//Sound Setup
-		Sound::CreateSoundEngine();
+		Sound::Init();
 
 		MainLoop();
 	}
@@ -157,6 +166,9 @@ namespace FSY {
 	void Application::MainLoop() {
 
 		OnStart();
+
+		if (inEditor)
+			Camera::SetAsMain(&m_sceneCamera);
 
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
@@ -205,8 +217,8 @@ namespace FSY {
 		vbo.Bind();
 
 		if (inEditor) {
-			m_activeScene->GetCamera()->AddComponent<SceneCameraController>();
-			scc = m_activeScene->GetCamera()->GetComponent<SceneCameraController>();
+			m_sceneCamera.AddComponent<SceneCameraController>();
+			scc = m_sceneCamera.GetComponent<SceneCameraController>();
 			scc->Start();
 		}
 		else {
@@ -277,34 +289,36 @@ namespace FSY {
 
 			bool firstFrame = true;
 
-			if ((m_PanelSize.x != m_texSize.x || m_PanelSize.y != m_texSize.y)) {
-				glDeleteTextures(1, &fboTex);
-				glDeleteFramebuffers(1, &FBO);
-				glDeleteTextures(1, &rbo);
-				glDeleteRenderbuffers(1, &rbo);
+			if (inEditor) {
+				if ((m_PanelSize.x != m_texSize.x || m_PanelSize.y != m_texSize.y)) {
+					glDeleteTextures(1, &fboTex);
+					glDeleteFramebuffers(1, &FBO);
+					glDeleteTextures(1, &rbo);
+					glDeleteRenderbuffers(1, &rbo);
 
-				glGenFramebuffers(1, &FBO);
-				glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+					glGenFramebuffers(1, &FBO);
+					glBindFramebuffer(GL_FRAMEBUFFER, FBO);
 
-				glGenTextures(1, &fboTex);
-				glBindTexture(GL_TEXTURE_2D, fboTex);
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_PanelSize.x, m_PanelSize.y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-				glBindTexture(GL_TEXTURE_2D, 0);
-				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fboTex, 0);
+					glGenTextures(1, &fboTex);
+					glBindTexture(GL_TEXTURE_2D, fboTex);
+					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_PanelSize.x, m_PanelSize.y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+					glBindTexture(GL_TEXTURE_2D, 0);
+					glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fboTex, 0);
 
-				glGenRenderbuffers(1, &rbo);
-				glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-				glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, m_PanelSize.x, m_PanelSize.y);
-				glBindRenderbuffer(GL_RENDERBUFFER, 0);
+					glGenRenderbuffers(1, &rbo);
+					glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+					glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, m_PanelSize.x, m_PanelSize.y);
+					glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
-				glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
+					glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
 
-				m_texSize = m_PanelSize;
-				glViewport(0, 0, m_PanelSize.x, m_PanelSize.y);
+					m_texSize = m_PanelSize;
+					glViewport(0, 0, m_PanelSize.x, m_PanelSize.y);
+				}
 			}
 
 			//Preventing a crash when minimizing
@@ -319,17 +333,17 @@ namespace FSY {
 				}
 
 				glm::vec3 direction;
-				direction.x = DegreesToRadians(m_activeScene->GetCamera()->rotation.x);
-				direction.y = DegreesToRadians(m_activeScene->GetCamera()->rotation.y);
-				direction.z = DegreesToRadians(m_activeScene->GetCamera()->rotation.z);
+				direction.x = DegreesToRadians(Camera::GetMain()->rotation.x);
+				direction.y = DegreesToRadians(Camera::GetMain()->rotation.y);
+				direction.z = DegreesToRadians(Camera::GetMain()->rotation.z);
 				glm::vec3 cameraFront = glm::normalize(direction);
 				Camera::GetMain()->front = { cameraFront.x, cameraFront.y, cameraFront.z };
 				Camera::GetMain()->right = Vector3f::Normalize(Vector3f::CrossProduct(Camera::GetMain()->front, Vector3f(0, 1, 0)));
 				Camera::GetMain()->up = Vector3f::Normalize(Vector3f::CrossProduct(Camera::GetMain()->right, Camera::GetMain()->front));
 				glm::vec3 cameraPos;
-				cameraPos.x = m_activeScene->GetCamera()->position.x;
-				cameraPos.y = m_activeScene->GetCamera()->position.y;
-				cameraPos.z = m_activeScene->GetCamera()->position.z;
+				cameraPos.x = Camera::GetMain()->position.x;
+				cameraPos.y = Camera::GetMain()->position.y;
+				cameraPos.z = Camera::GetMain()->position.z;
 				glm::vec3 Up = { 0.0f, 1.0f, 0.0f };
 				view = glm::lookAt(cameraPos, cameraPos + cameraFront, Up);
 				Camera::GetMain()->__SetViewMatrix(view);
@@ -449,7 +463,11 @@ namespace FSY {
 					FBOTexture = fboTex;
 					glClear(GL_COLOR_BUFFER_BIT);
 
+					//Update Sound Listener
+					Sound::SetListener(Vector3f::Normalize(Camera::GetMain()->rotation), Camera::GetMain()->position);
+
 					if (!inEditor) {
+						fboShader.Use();
 						glBindVertexArray(rectVAO);
 						glDisable(GL_DEPTH_TEST);
 						glBindTexture(GL_TEXTURE_2D, fboTex);
@@ -484,7 +502,8 @@ namespace FSY {
 		vbo.Delete();
 		glDeleteFramebuffers(1, &FBO);
 
-		Sound::engine->drop();
+		//Delete Sound
+		//Sound::Quit();
 
 		glfwDestroyWindow(m_win);
 
@@ -516,6 +535,10 @@ namespace FSY {
 		ImGui::PopStyleVar();
 		ImVec2 size = ImGui::GetContentRegionAvail();
 		m_PanelSize = size;
+		if (ImGui::IsWindowHovered())
+			scc->inSceneWin = true;
+		else
+			scc->inSceneWin = false;
 		ImGui::Image((void*)FBOTexture, size, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 		ImGui::End();
 		ImGui::Begin("Inspector");
@@ -530,6 +553,12 @@ namespace FSY {
 					ImGui::TreePop();
 				}
 			}
+		}
+		if (ImGui::BeginPopupContextWindow()) {
+			if (ImGui::MenuItem("New Object")) {
+				CreateNewGameObject();
+			}
+			ImGui::EndPopup();
 		}
 		ImGui::End();
 		ImGui::Begin("Object");
@@ -630,6 +659,12 @@ namespace FSY {
 					}
 				}
 				ImGui::TreePop();
+			}
+			if (ImGui::BeginPopupContextWindow()) {
+				if (ImGui::MenuItem("New Child Object")) {
+					CreateNewGameObject(true, selectedObject);
+				}
+				ImGui::EndPopup();
 			}
 		}
 		ImGui::End();

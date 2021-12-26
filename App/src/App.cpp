@@ -164,9 +164,8 @@ public:
 	Texture t1;
 	Mesh m;
 	Mesh m1;
-	Sound* sound;
 	Control* control;
-	SoundExperimental snd;
+	Sound snd;
 
 	App() {
 
@@ -182,13 +181,13 @@ public:
 	}
 
 	void OnStart() override {
+		Camera::SetAsMain(scene.GetCamera());
 		//Settings
 		inEditor = true;
 		//Objects
 		myObject = { Vector3f(0, 0, -5.0f), Vector3f(0, 0, 0), Vector3f(1, 1, 1), "Object" };
 		g2 = { Vector3f(2, 0, -5.0f), Vector3f(0, 0, 0), Vector3f(1, 1, 1), "Object" };
 		g = { Vector3f(5, 0, -5.0f), Vector3f(0, 0, 0), Vector3f(0.5f, 0.5f, 0.5f), "Object" };
-		sound = scene.GetCamera()->AddComponent<Sound>();
 		//Dirs
 #if DEBUG == 1
 		s = { "./src/Data/Shaders/textured.vert", "./src/Data/Shaders/textured.frag" };
@@ -197,21 +196,19 @@ public:
 		t1 = { "./src/Data/Textures/awesomeface.png" };
 		colored = { "./src/Data/Shaders/colored.vert", "./src/Data/Shaders/colored.frag" };
 		colored.Color = { 0.9f, 0.2f, 0.2f };
-		sound->Path("./src/Data/Audio/breakout.mp3");
 #else
 		s = { "Data/Shaders/textured.vert", "Data/Shaders/textured.frag" };
 		//t = { "Data/Textures/Dirt.png" };
 		colored = { "Data/Shaders/colored.vert", "Data/Shaders/colored.frag" };
 		sound->Path("Data/Audio/breakout.mp3");
 #endif
-		SoundExperimental::Init();
 		snd.LoadSource("./src/Data/Audio/breakout.mp3");
-		//snd.Play();
+		snd.Play();
 		//Meshes & Scene
 		m = { Mesh::s_verticesForCube, Mesh::s_cubeMeshSize, &s };
-		m1 = { Mesh::s_verticesForPlane, Mesh::s_planeMeshSize, &s };
+		m1 = { Mesh::s_verticesForCube, Mesh::s_cubeMeshSize, &colored };
 		m.SetTexture(&t);
-		m1.SetTexture(&t1);
+		//m1.SetTexture(&t1);
 		g2.AddComponent<Control>();
 		g2.AddChild(&myObject);
 		g2.AddChild(&g);
@@ -232,15 +229,6 @@ public:
 		scene.AddInstanceMesh(&m);
 		scene.AddInstanceMesh(&m1);
 		ChangeScene(&scene);
-		Vector3f v1 = { 0, 0, 0 };
-		Vector3f v2 = { 1, 0, 0 };
-		Vector3f d1 = { 2, 5, -1 };
-		Vector3f d2 = { 0, 0, -1 };
-		Vector3f d3 = Vector3f::CrossProduct(d2, d1);
-		Vector3f v1v2 = v2 - v1;
-		Vector3f res = (d3 / d3.Length());
-		float f = Vector3f::DotProduct(v1v2, res);
-		std::cout << f;
 	}
 
 	void OnUpdate() override {
@@ -250,17 +238,10 @@ public:
 	}
 
 	void OnEditorUpdate() override {
-		sound->Update();//Testing purposes :)
 		if (Input::GetKey(Keys::Key_ESCAPE)) {
 			Close();
 		}
-		if (Input::GetKey(Keys::Key_SPACE)) {
-			sound->Stop();
-		}
-		if (Input::GetKey(Keys::Key_Q)) {
-			sound->play = true;
-		}
-		if (Input::GetMouse(0)) {
+		/*if (Input::GetMouse(0)) {
 			for (auto m : scene._GetMeshes()) {
 				float* vertices = m->GetVertices();
 				for (auto g : m->_GetGameObjects()) {
@@ -278,14 +259,12 @@ public:
 					}
 				}
 			}
-		}
+		}*/
 
 	}
 
 	void OnClose() override {
-		delete sound;
 		delete[] objs;
-		SoundExperimental::Quit();
 	}
 
 };
