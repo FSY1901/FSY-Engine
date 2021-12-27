@@ -19,11 +19,11 @@ The FSY-folder includes the files for the Engine.
 ## Setup
 
 To setup the Engine follow these steps: <br />
--Grab FSY.dll & FSY.lib from FSY/bin/Debug-x64/FSY <br />
--Link the libary \n
+-Grab FSY.dll & FSY.lib from FSY/bin/Debug-x64/FSY or/and FSY/bin/Release-x64/FSY <br />
+-Link the libary <br />
 -In your project under Properties->C/C++->Preprocessor: <br />
 	-under Preprocessor Definitions add: FSY_PLATFORM_WINDOWS; <br />
--Then under roperties->C/C++->General under Addition include directories
+-Then under Properties->C/C++->General under Additional include directories
  add the src folder from the FSY folder. It should
  look something like this: (PathToYourProject)FSY\src; <br />
 -In your Project create a src folder <br />
