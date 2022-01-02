@@ -191,11 +191,13 @@ public:
 		//Dirs
 #if DEBUG == 1
 		s = { "./src/Data/Shaders/textured.vert", "./src/Data/Shaders/textured.frag" };
-		s.Color = { 1,1,1 };
+		s.diffuse = { 1,1,1 };
+		s.specular = { 0.2f, 0.2f, 0.2f };
 		t = { "./src/Data/Textures/Dirt.png" };
 		t1 = { "./src/Data/Textures/awesomeface.png" };
 		colored = { "./src/Data/Shaders/colored.vert", "./src/Data/Shaders/colored.frag" };
-		colored.Color = { 0.9f, 0.2f, 0.2f };
+		colored.diffuse = { 0.9f, 0.2f, 0.2f };
+		colored.specular = { .5f, .5f, .5f };
 #else
 		s = { "Data/Shaders/textured.vert", "Data/Shaders/textured.frag" };
 		//t = { "Data/Textures/Dirt.png" };
@@ -209,7 +211,6 @@ public:
 		m1 = { Mesh::s_verticesForCube, Mesh::s_cubeMeshSize, &colored };
 		m.SetTexture(&t);
 		//m1.SetTexture(&t1);
-		g2.AddComponent<Control>();
 		g2.AddComponent<Control>();
 		g2.AddChild(&myObject);
 		g2.AddChild(&g);
@@ -241,15 +242,6 @@ public:
 	void OnEditorUpdate() override {
 		if (Input::GetKey(Keys::Key_ESCAPE)) {
 			Close();
-		}
-		if (Input::GetKey(Keys::Key_Q)) {
-			Console::Log("Hey, it works!");
-		}
-		if (Input::GetKey(Keys::Key_E)) {
-			Console::Warn("Hey, it warns!");
-		}
-		if (Input::GetKey(Keys::Key_TAB)) {
-			Console::Error("Hey, it errors!");
 		}
 		/*if (Input::GetMouse(0)) {
 			for (auto m : scene._GetMeshes()) {

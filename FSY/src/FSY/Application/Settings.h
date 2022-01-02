@@ -20,6 +20,7 @@ namespace FSY {
 		static std::string s_folderIconPath;
 		static std::string s_ttfIcon;
 		static std::string s_pngIcon;
+		static std::string s_txtIcon;
 		static std::string s_fboVertShaderPath;
 		static std::string s_fboFragShaderPath;
 

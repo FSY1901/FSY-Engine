@@ -15,12 +15,13 @@ namespace FSY {
 
 	private:
 
-		const std::filesystem::path m_AssetPath = "src/Data";
+		const std::filesystem::path m_AssetPath = "src\\Data";
 		std::filesystem::path m_CurrentPath;
 		//Textures/Icons
 		Texture m_FolderIcon;
 		Texture m_FontIcon;
 		Texture m_PNGIcon;
+		Texture m_TXTIcon;
 
 		Texture m_buggyTexture; //For some reason the first texture that is loaded isn't loaded properly, so an unused texture is assigned
 

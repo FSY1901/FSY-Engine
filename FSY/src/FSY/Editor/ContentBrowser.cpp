@@ -13,6 +13,7 @@ namespace FSY {
 		m_FolderIcon = { Settings::s_folderIconPath.c_str(), false };
 		m_FontIcon = { Settings::s_ttfIcon.c_str(), false };
 		m_PNGIcon = { Settings::s_pngIcon.c_str(), false };
+		m_TXTIcon = { Settings::s_txtIcon.c_str(), false };
 	}
 
 	void ContentBrowser::Draw() {
@@ -23,10 +24,18 @@ namespace FSY {
 			}
 		}
 
+		ImGui::Text(m_CurrentPath.string().c_str());
+		float cellSize = 85;
+		float panelWidth = ImGui::GetContentRegionAvail().x;
+		int columns = (int)(panelWidth / cellSize);
+		if (columns < 1)
+			columns = 1;
+		ImGui::Columns(columns, 0, false);
+
 		for (auto& p : std::filesystem::directory_iterator(m_CurrentPath)) {
 			auto relative = std::filesystem::relative(p.path(), m_AssetPath);
 			std::string file = relative.filename().string();
-			ImGui::BeginGroup();
+
 			if (p.is_directory()) {
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0,0,0,0));
 				ImGui::ImageButton((void*)(intptr_t)m_FolderIcon.GetTexture(), ImVec2(64, 50));
@@ -48,10 +57,16 @@ namespace FSY {
 				else if (relative.filename().extension().string() == ".png") {
 					ImGui::Image((void*)(intptr_t)m_PNGIcon.GetTexture(), ImVec2(56.4f, 64));
 				}
-				ImGui::Text(file.c_str());
+				else if (relative.filename().extension().string() == ".txt") {
+					ImGui::Image((void*)(intptr_t)m_TXTIcon.GetTexture(), ImVec2(62.7f, 70.4f));
+				}
+				ImGui::TextWrapped(file.c_str());
 			}
-			ImGui::EndGroup();
+
+			ImGui::NextColumn();
 		}
+
+		ImGui::Columns(1);
 
 		if (ImGui::BeginPopupContextWindow()) {
 			if (ImGui::MenuItem("New...") && !__creatingNewFolder) {

@@ -65,7 +65,6 @@ namespace FSY {
 				glm::vec3 rot(DegreesToRadians(g->rotation.x), DegreesToRadians(g->rotation.y), DegreesToRadians(g->rotation.z));
 				glm::quat _rot = glm::quat(rot);
 				glm::mat4 rotMat = glm::mat4_cast(_rot);
-				//glm::sin(rot);
 				glm::mat4 scaleMat = glm::scale(transform, glm::vec3(g->scale.x, g->scale.y, g->scale.z));
 				transform = transMat * rotMat * scaleMat;
 				g->m_transform = transform;
@@ -230,7 +229,7 @@ namespace FSY {
 		}
 
 		//Framebuffer
-
+#pragma region Framebuffer
 		float rectangleVertices[] = //covers the whole screen
 		{
 			// Coords    // texCoords
@@ -283,12 +282,14 @@ namespace FSY {
 		Shader fboShader = Shader(Settings::s_fboVertShaderPath.c_str(), Settings::s_fboFragShaderPath.c_str());
 		fboShader.Use();
 		glUniform1i(glGetUniformLocation(fboShader.ID, "screenTexture"), 0);
+#pragma endregion
 
 		while (!glfwWindowShouldClose(m_win))
 		{
 
 			bool firstFrame = true;
 
+			//TODO: Make this a function
 			if (inEditor) {
 				if ((m_PanelSize.x != m_texSize.x || m_PanelSize.y != m_texSize.y)) {
 					glDeleteTextures(1, &fboTex);
@@ -320,6 +321,37 @@ namespace FSY {
 					glViewport(0, 0, m_PanelSize.x, m_PanelSize.y);
 				}
 			}
+			else {
+				if ((m_width != m_texSize.x || m_height != m_texSize.y)) {
+					glDeleteTextures(1, &fboTex);
+					glDeleteFramebuffers(1, &FBO);
+					glDeleteTextures(1, &rbo);
+					glDeleteRenderbuffers(1, &rbo);
+
+					glGenFramebuffers(1, &FBO);
+					glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+
+					glGenTextures(1, &fboTex);
+					glBindTexture(GL_TEXTURE_2D, fboTex);
+					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_width, m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+					glBindTexture(GL_TEXTURE_2D, 0);
+					glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fboTex, 0);
+
+					glGenRenderbuffers(1, &rbo);
+					glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+					glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, m_width, m_height);
+					glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+					glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
+
+					m_texSize = ImVec2(m_width, m_height);
+					glViewport(0, 0, m_width, m_height);
+				}
+			}
 
 			//Preventing a crash when minimizing
 			if (m_width != 0 && m_height != 0) {
@@ -347,7 +379,11 @@ namespace FSY {
 				glm::vec3 Up = { 0.0f, 1.0f, 0.0f };
 				view = glm::lookAt(cameraPos, cameraPos + cameraFront, Up);
 				Camera::GetMain()->__SetViewMatrix(view);
-				projection = glm::perspective(glm::radians(45.0f), (float)m_PanelSize.x / (float)m_PanelSize.y, 0.1f, 100.0f);
+				if(inEditor)
+					projection = glm::perspective(glm::radians(45.0f), (float)m_PanelSize.x / (float)m_PanelSize.y, 0.1f, 100.0f);
+				else
+					projection = glm::perspective(glm::radians(45.0f), (float)m_width / (float)m_height, 0.1f, 100.0f);
+
 				Camera::GetMain()->__SetProjectionMatrix(projection);
 
 				glBindFramebuffer(GL_FRAMEBUFFER, FBO);
@@ -390,11 +426,15 @@ namespace FSY {
 							mesh->GetTexture()->Bind();
 						s->setMat4("view", view);
 						s->setMat4("projection", projection);
-						s->setColorValues3("lightColor", m_activeScene->GetLight()->GetLightColor().x, m_activeScene->GetLight()->GetLightColor().y,
-							m_activeScene->GetLight()->GetLightColor().z);
-						s->setVec3("lightPos", m_activeScene->GetLight()->position.x, m_activeScene->GetLight()->position.y, m_activeScene->GetLight()->position.z);
 						s->setVec3("viewPos", Camera::GetMain()->position.x, Camera::GetMain()->position.y, Camera::GetMain()->position.z);
-						s->setColorValues3("Color", s->Color.x, s->Color.y, s->Color.z);
+						s->setVec3("material.diffuse", s->diffuse.x, s->diffuse.y, s->diffuse.z);
+						s->setVec3("material.specular", s->specular.x, s->specular.y, s->specular.z);
+						s->setFloat("material.shininess", s->shininess);
+						s->setVec3("lightPos", m_activeScene->GetLight()->position.x, m_activeScene->GetLight()->position.y, m_activeScene->GetLight()->position.z);
+						s->setVec3("light.ambient", m_activeScene->GetLight()->ambient.x, m_activeScene->GetLight()->ambient.y, m_activeScene->GetLight()->ambient.z);
+						s->setVec3("light.diffuse", m_activeScene->GetLight()->color.x, m_activeScene->GetLight()->color.y,
+							m_activeScene->GetLight()->color.z);
+						s->setVec3("light.specular", m_activeScene->GetLight()->specular.x, m_activeScene->GetLight()->specular.y, m_activeScene->GetLight()->specular.z);
 
 						if (mesh->isTransparent) {
 							glEnable(GL_BLEND);
@@ -512,6 +552,9 @@ namespace FSY {
 
 	void Application::RenderUI() {
 
+
+		//ImGui::ShowDemoWindow();
+
 		static ImGuiWindowFlags winFlags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
 
 		ImGuiViewport* viewport = ImGui::GetMainViewport();
@@ -530,6 +573,28 @@ namespace FSY {
 		ImGuiID id = ImGui::GetID("MyDockspace");
 		ImGui::DockSpace(id, ImVec2(0, 0));
 
+		if (ImGui::BeginMainMenuBar()) {
+			if (ImGui::BeginMenu("Project")) {
+				if (ImGui::MenuItem("Save", "Ctrl+S")) {
+					Console::Log("Still in work...");
+				}
+				if (ImGui::BeginMenu("New")) {
+					if (ImGui::MenuItem("Folder")) {
+
+					}
+					if (ImGui::MenuItem("File")) {
+						
+					}
+					if (ImGui::MenuItem("Scene")) {
+						
+					}
+					ImGui::EndMenu();
+				}
+				ImGui::EndMenu();
+			}
+			ImGui::EndMainMenuBar();
+		}
+
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
 		ImGui::Begin("Scene");
 		ImGui::PopStyleVar();
@@ -540,6 +605,42 @@ namespace FSY {
 		else
 			scc->inSceneWin = false;
 		ImGui::Image((void*)FBOTexture, size, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
+
+		static int op;
+		if (selectedObject != nullptr) {
+
+			if (Input::GetKey(Keys::Key_G) && Input::GetKey(Keys::Key_LEFT_SHIFT)) {
+				op = ImGuizmo::TRANSLATE;
+			}
+			else if (Input::GetKey(Keys::Key_S) && Input::GetKey(Keys::Key_LEFT_SHIFT)) {
+				op = ImGuizmo::SCALE;
+			}
+			else if (Input::GetKey(Keys::Key_TAB)) {
+				op = -1;
+			}
+
+			if (op != -1) {
+				ImGuizmo::SetOrthographic(true);
+				ImGuizmo::SetDrawlist();
+				ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight());
+
+				glm::mat4 viewMat = glm::inverse(m_sceneCamera.GetTransformationMatrix());
+				glm::mat4 transform = selectedObject->GetTransformationMatrix();
+
+				ImGuizmo::Manipulate(glm::value_ptr(viewMat), glm::value_ptr(projection * view), (ImGuizmo::OPERATION)op, ImGuizmo::MODE::LOCAL, glm::value_ptr(transform));
+
+				if (ImGuizmo::IsUsing()) {
+					glm::vec3 pos, rot, scale;
+
+					DecomposeTransform(transform, pos, rot, scale);
+					Vector3f deltaRotation = Vector3f(rot.x, rot.y, rot.z) - selectedObject->rotation;
+					selectedObject->position = Vector3f(pos.x, pos.y, pos.z);
+					selectedObject->rotation += deltaRotation;
+					selectedObject->scale = Vector3f(scale.x, scale.y, scale.z);
+				}
+			}
+		}
+
 		ImGui::End();
 		RenderInspector();
 		RenderObjectPanel();
@@ -699,14 +800,6 @@ namespace FSY {
 			ImGui::PushItemWidth(170);
 			ImGui::ColorEdit3("Scene Color", m_clearColor);
 			ImGui::PopItemWidth();
-			float col[3];
-			col[0] = m_activeScene->GetLight()->GetLightColor().x;
-			col[1] = m_activeScene->GetLight()->GetLightColor().y;
-			col[2] = m_activeScene->GetLight()->GetLightColor().z;
-			ImGui::PushItemWidth(170);
-			ImGui::ColorEdit3("Light Color", col);
-			ImGui::PopItemWidth();
-			m_activeScene->GetLight()->__SetLightColorEngine(col);
 			ImGui::TreePop();
 		}
 		ImGui::End();

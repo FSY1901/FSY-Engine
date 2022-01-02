@@ -1,6 +1,75 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(504,5): warning MSB8004: Intermediate Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Intermediate Directory.
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(505,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
-  ContentBrowser.cpp
+  Application.cpp
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\Mesh.h(15,3): warning C4091: '__declspec(dllexport)': ignored on left of 'FSY::RenderModes' when no variable is declared
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\Mesh.h(18,25): warning C4091: 'extern ': ignored on left of 'FSY::GameObject' when no variable is declared
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\Mesh.h(64,38): warning C4251: 'FSY::Mesh::m_objects': class 'std::vector<FSY::GameObject *,std::allocator<FSY::GameObject *>>' needs to have dll-interface to be used by clients of class 'FSY::Mesh'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\Mesh.h(45): message : see declaration of 'std::vector<FSY::GameObject *,std::allocator<FSY::GameObject *>>'
+D:\VS_Projects\FSY\FSY\src\FSY\Editor\Console.h(17,26): warning C4091: 'extern ': ignored on left of 'FSY::Application' when no variable is declared
+D:\VS_Projects\FSY\FSY\src\FSY\Editor\Console.h(43,28): warning C4251: 'FSY::Console::m_items': class 'std::vector<FSY::Item,std::allocator<FSY::Item>>' needs to have dll-interface to be used by clients of class 'FSY::Console'
+D:\VS_Projects\FSY\FSY\src\FSY\Editor\Console.h(43): message : see declaration of 'std::vector<FSY::Item,std::allocator<FSY::Item>>'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\GameObject.h(18,26): warning C4091: 'extern ': ignored on left of 'FSY::Application' when no variable is declared
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\GameObject.h(26,20): warning C4251: 'FSY::GameObject::name': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'FSY::GameObject'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\xstring(4648): message : see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\GameObject.h(135,39): warning C4251: 'FSY::GameObject::m_components': class 'std::vector<FSY::Component *,std::allocator<FSY::Component *>>' needs to have dll-interface to be used by clients of class 'FSY::GameObject'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\GameObject.h(54): message : see declaration of 'std::vector<FSY::Component *,std::allocator<FSY::Component *>>'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\GameObject.h(136,38): warning C4251: 'FSY::GameObject::m_children': class 'std::vector<FSY::GameObject *,std::allocator<FSY::GameObject *>>' needs to have dll-interface to be used by clients of class 'FSY::GameObject'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\Mesh.h(45): message : see declaration of 'std::vector<FSY::GameObject *,std::allocator<FSY::GameObject *>>'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\GameObject.h(138,26): warning C4251: 'FSY::GameObject::m_fixedNormal': struct 'glm::tmat4x4<float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'FSY::GameObject'
+D:\VS_Projects\FSY\FSY\src\vendor\glm\detail\type_mat.hpp(304): message : see declaration of 'glm::tmat4x4<float,glm::packed_highp>'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\GameObject.h(139,24): warning C4251: 'FSY::GameObject::m_transform': struct 'glm::tmat4x4<float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'FSY::GameObject'
+D:\VS_Projects\FSY\FSY\src\vendor\glm\detail\type_mat.hpp(304): message : see declaration of 'glm::tmat4x4<float,glm::packed_highp>'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\GameObject.h(141,26): warning C4251: 'FSY::GameObject::m_boundingSphere': struct 'FSY::Sphere' needs to have dll-interface to be used by clients of class 'FSY::GameObject'
+D:\VS_Projects\FSY\FSY\src\FSY\Rendering\FrustumCulling.h(40): message : see declaration of 'FSY::Sphere'
+D:\VS_Projects\FSY\FSY\src\FSY\Rendering\Camera.h(30,23): warning C4251: 'FSY::Camera::viewMatrix': struct 'glm::tmat4x4<float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'FSY::Camera'
+D:\VS_Projects\FSY\FSY\src\vendor\glm\detail\type_mat.hpp(304): message : see declaration of 'glm::tmat4x4<float,glm::packed_highp>'
+D:\VS_Projects\FSY\FSY\src\FSY\Rendering\Camera.h(31,29): warning C4251: 'FSY::Camera::projectionMatrix': struct 'glm::tmat4x4<float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'FSY::Camera'
+D:\VS_Projects\FSY\FSY\src\vendor\glm\detail\type_mat.hpp(304): message : see declaration of 'glm::tmat4x4<float,glm::packed_highp>'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\Scene.h(34,38): warning C4251: 'FSY::Scene::m_objects': class 'std::vector<FSY::GameObject *,std::allocator<FSY::GameObject *>>' needs to have dll-interface to be used by clients of class 'FSY::Scene'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\Mesh.h(45): message : see declaration of 'std::vector<FSY::GameObject *,std::allocator<FSY::GameObject *>>'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\Scene.h(35,31): warning C4251: 'FSY::Scene::m_meshes': class 'std::vector<FSY::Mesh *,std::allocator<FSY::Mesh *>>' needs to have dll-interface to be used by clients of class 'FSY::Scene'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\Scene.h(27): message : see declaration of 'std::vector<FSY::Mesh *,std::allocator<FSY::Mesh *>>'
+D:\VS_Projects\FSY\FSY\src\FSY\Input\Input.h(133,3): warning C4091: '__declspec(dllexport)': ignored on left of 'FSY::Keys' when no variable is declared
+D:\VS_Projects\FSY\FSY\src\FSY\Input\Input.h(148,3): warning C4091: '__declspec(dllexport)': ignored on left of 'FSY::Buttons' when no variable is declared
+D:\VS_Projects\FSY\FSY\src\FSY\Input\Input.h(153,3): warning C4091: '__declspec(dllexport)': ignored on left of 'FSY::CursorMode' when no variable is declared
+D:\VS_Projects\FSY\FSY\src\FSY\Application\FSY_Time.h(8,26): warning C4091: 'extern ': ignored on left of 'FSY::Application' when no variable is declared
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.h(20,39): warning C4091: 'extern ': ignored on left of 'FSY::SceneCameraController' when no variable is declared
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.h(71,24): warning C4251: 'FSY::Application::view': struct 'glm::tmat4x4<float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'FSY::Application'
+D:\VS_Projects\FSY\FSY\src\vendor\glm\detail\type_mat.hpp(304): message : see declaration of 'glm::tmat4x4<float,glm::packed_highp>'
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.h(72,29): warning C4251: 'FSY::Application::projection': struct 'glm::tmat4x4<float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'FSY::Application'
+D:\VS_Projects\FSY\FSY\src\vendor\glm\detail\type_mat.hpp(304): message : see declaration of 'glm::tmat4x4<float,glm::packed_highp>'
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.h(96,26): warning C4251: 'FSY::Application::cb': class 'FSY::ContentBrowser' needs to have dll-interface to be used by clients of class 'FSY::Application'
+D:\VS_Projects\FSY\FSY\src\FSY\Editor\ContentBrowser.h(9): message : see declaration of 'FSY::ContentBrowser'
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.h(98,36): warning C4251: 'FSY::Application::m_PanelSize': struct 'ImVec2' needs to have dll-interface to be used by clients of class 'FSY::Application'
+D:\VS_Projects\FSY\FSY\src\vendor\imgui\imgui.h(266): message : see declaration of 'ImVec2'
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.h(99,35): warning C4251: 'FSY::Application::m_texSize': struct 'ImVec2' needs to have dll-interface to be used by clients of class 'FSY::Application'
+D:\VS_Projects\FSY\FSY\src\vendor\imgui\imgui.h(266): message : see declaration of 'ImVec2'
+D:\VS_Projects\FSY\FSY\src\FSY\Editor\SceneCameraController.h(119,23): warning C4251: 'FSY::SceneCameraController::cameraPos': struct 'glm::tvec3<float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'FSY::SceneCameraController'
+D:\VS_Projects\FSY\FSY\src\vendor\glm\detail\type_vec.hpp(243): message : see declaration of 'glm::tvec3<float,glm::packed_highp>'
+D:\VS_Projects\FSY\FSY\src\FSY\Editor\SceneCameraController.h(121,25): warning C4251: 'FSY::SceneCameraController::cameraFront': struct 'glm::tvec3<float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'FSY::SceneCameraController'
+D:\VS_Projects\FSY\FSY\src\vendor\glm\detail\type_vec.hpp(243): message : see declaration of 'glm::tvec3<float,glm::packed_highp>'
+D:\VS_Projects\FSY\FSY\src\FSY\Editor\SceneCameraController.h(122,22): warning C4251: 'FSY::SceneCameraController::cameraUp': struct 'glm::tvec3<float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'FSY::SceneCameraController'
+D:\VS_Projects\FSY\FSY\src\vendor\glm\detail\type_vec.hpp(243): message : see declaration of 'glm::tvec3<float,glm::packed_highp>'
+D:\VS_Projects\FSY\FSY\src\FSY\Editor\SceneCameraController.h(76,53): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+D:\VS_Projects\FSY\FSY\src\FSY\Editor\SceneCameraController.h(77,53): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+D:\VS_Projects\FSY\FSY\src\FSY\Editor\SceneCameraController.h(78,53): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+D:\VS_Projects\FSY\FSY\src\FSY\Sound\Sound.h(13,25): warning C4091: 'extern ': ignored on left of 'Application' when no variable is declared
+D:\VS_Projects\FSY\FSY\src\FSY\Sound\Sound.h(32,25): warning C4251: 'FSY::Sound::src': class 'audeo::SoundSource' needs to have dll-interface to be used by clients of class 'FSY::Sound'
+D:\VS_Projects\FSY\FSY\src\vendor\Audeo\SoundSource.hpp(15): message : see declaration of 'audeo::SoundSource'
+D:\VS_Projects\FSY\FSY\src\FSY\Sound\Sound.h(33,19): warning C4251: 'FSY::Sound::snd': class 'audeo::Sound' needs to have dll-interface to be used by clients of class 'FSY::Sound'
+D:\VS_Projects\FSY\FSY\src\vendor\Audeo\Sound.hpp(10): message : see declaration of 'audeo::Sound'
 D:\VS_Projects\FSY\FSY\src\FSY\Application\Settings.h(19,38): warning C4251: 'FSY::Settings::s_editorFontPath': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'FSY::Settings'
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\xstring(4648): message : see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
 D:\VS_Projects\FSY\FSY\src\FSY\Application\Settings.h(20,38): warning C4251: 'FSY::Settings::s_folderIconPath': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'FSY::Settings'
@@ -9,8 +78,116 @@ D:\VS_Projects\FSY\FSY\src\FSY\Application\Settings.h(21,31): warning C4251: 'FS
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\xstring(4648): message : see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
 D:\VS_Projects\FSY\FSY\src\FSY\Application\Settings.h(22,31): warning C4251: 'FSY::Settings::s_pngIcon': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'FSY::Settings'
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\xstring(4648): message : see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Settings.h(23,41): warning C4251: 'FSY::Settings::s_fboVertShaderPath': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'FSY::Settings'
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Settings.h(23,31): warning C4251: 'FSY::Settings::s_txtIcon': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'FSY::Settings'
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\xstring(4648): message : see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Settings.h(24,41): warning C4251: 'FSY::Settings::s_fboFragShaderPath': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'FSY::Settings'
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Settings.h(24,41): warning C4251: 'FSY::Settings::s_fboVertShaderPath': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'FSY::Settings'
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\xstring(4648): message : see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Settings.h(25,41): warning C4251: 'FSY::Settings::s_fboFragShaderPath': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'FSY::Settings'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\xstring(4648): message : see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(90,41): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(91,42): warning C4244: 'return': conversion from 'int' to 'float', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(305,71): warning C4244: 'argument': conversion from 'float' to 'GLsizei', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(305,56): warning C4244: 'argument': conversion from 'float' to 'GLsizei', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(315,92): warning C4244: 'argument': conversion from 'float' to 'GLsizei', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(315,77): warning C4244: 'argument': conversion from 'float' to 'GLsizei', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(321,49): warning C4244: 'argument': conversion from 'float' to 'GLsizei', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(321,34): warning C4244: 'argument': conversion from 'float' to 'GLsizei', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(351,34): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(351,25): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(368,35): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(369,35): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(370,35): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(530,23): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(607,33): warning C4312: 'type cast': conversion from 'uint32_t' to 'void *' of greater size
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(835,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(836,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  Input.cpp
+D:\VS_Projects\FSY\FSY\src\FSY\Input\Input.h(133,3): warning C4091: '__declspec(dllexport)': ignored on left of 'FSY::Keys' when no variable is declared
+D:\VS_Projects\FSY\FSY\src\FSY\Input\Input.h(148,3): warning C4091: '__declspec(dllexport)': ignored on left of 'FSY::Buttons' when no variable is declared
+D:\VS_Projects\FSY\FSY\src\FSY\Input\Input.h(153,3): warning C4091: '__declspec(dllexport)': ignored on left of 'FSY::CursorMode' when no variable is declared
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\Mesh.h(15,3): warning C4091: '__declspec(dllexport)': ignored on left of 'FSY::RenderModes' when no variable is declared
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\Mesh.h(18,25): warning C4091: 'extern ': ignored on left of 'FSY::GameObject' when no variable is declared
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\Mesh.h(64,38): warning C4251: 'FSY::Mesh::m_objects': class 'std::vector<FSY::GameObject *,std::allocator<FSY::GameObject *>>' needs to have dll-interface to be used by clients of class 'FSY::Mesh'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\Mesh.h(45): message : see declaration of 'std::vector<FSY::GameObject *,std::allocator<FSY::GameObject *>>'
+D:\VS_Projects\FSY\FSY\src\FSY\Editor\Console.h(17,26): warning C4091: 'extern ': ignored on left of 'FSY::Application' when no variable is declared
+D:\VS_Projects\FSY\FSY\src\FSY\Editor\Console.h(43,28): warning C4251: 'FSY::Console::m_items': class 'std::vector<FSY::Item,std::allocator<FSY::Item>>' needs to have dll-interface to be used by clients of class 'FSY::Console'
+D:\VS_Projects\FSY\FSY\src\FSY\Editor\Console.h(43): message : see declaration of 'std::vector<FSY::Item,std::allocator<FSY::Item>>'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\GameObject.h(18,26): warning C4091: 'extern ': ignored on left of 'FSY::Application' when no variable is declared
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\GameObject.h(26,20): warning C4251: 'FSY::GameObject::name': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'FSY::GameObject'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\xstring(4648): message : see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\GameObject.h(135,39): warning C4251: 'FSY::GameObject::m_components': class 'std::vector<FSY::Component *,std::allocator<FSY::Component *>>' needs to have dll-interface to be used by clients of class 'FSY::GameObject'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\GameObject.h(54): message : see declaration of 'std::vector<FSY::Component *,std::allocator<FSY::Component *>>'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\GameObject.h(136,38): warning C4251: 'FSY::GameObject::m_children': class 'std::vector<FSY::GameObject *,std::allocator<FSY::GameObject *>>' needs to have dll-interface to be used by clients of class 'FSY::GameObject'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\Mesh.h(45): message : see declaration of 'std::vector<FSY::GameObject *,std::allocator<FSY::GameObject *>>'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\GameObject.h(138,26): warning C4251: 'FSY::GameObject::m_fixedNormal': struct 'glm::tmat4x4<float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'FSY::GameObject'
+D:\VS_Projects\FSY\FSY\src\vendor\glm\detail\type_mat.hpp(304): message : see declaration of 'glm::tmat4x4<float,glm::packed_highp>'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\GameObject.h(139,24): warning C4251: 'FSY::GameObject::m_transform': struct 'glm::tmat4x4<float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'FSY::GameObject'
+D:\VS_Projects\FSY\FSY\src\vendor\glm\detail\type_mat.hpp(304): message : see declaration of 'glm::tmat4x4<float,glm::packed_highp>'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\GameObject.h(141,26): warning C4251: 'FSY::GameObject::m_boundingSphere': struct 'FSY::Sphere' needs to have dll-interface to be used by clients of class 'FSY::GameObject'
+D:\VS_Projects\FSY\FSY\src\FSY\Rendering\FrustumCulling.h(40): message : see declaration of 'FSY::Sphere'
+D:\VS_Projects\FSY\FSY\src\FSY\Rendering\Camera.h(30,23): warning C4251: 'FSY::Camera::viewMatrix': struct 'glm::tmat4x4<float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'FSY::Camera'
+D:\VS_Projects\FSY\FSY\src\vendor\glm\detail\type_mat.hpp(304): message : see declaration of 'glm::tmat4x4<float,glm::packed_highp>'
+D:\VS_Projects\FSY\FSY\src\FSY\Rendering\Camera.h(31,29): warning C4251: 'FSY::Camera::projectionMatrix': struct 'glm::tmat4x4<float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'FSY::Camera'
+D:\VS_Projects\FSY\FSY\src\vendor\glm\detail\type_mat.hpp(304): message : see declaration of 'glm::tmat4x4<float,glm::packed_highp>'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\Scene.h(34,38): warning C4251: 'FSY::Scene::m_objects': class 'std::vector<FSY::GameObject *,std::allocator<FSY::GameObject *>>' needs to have dll-interface to be used by clients of class 'FSY::Scene'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\Mesh.h(45): message : see declaration of 'std::vector<FSY::GameObject *,std::allocator<FSY::GameObject *>>'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\Scene.h(35,31): warning C4251: 'FSY::Scene::m_meshes': class 'std::vector<FSY::Mesh *,std::allocator<FSY::Mesh *>>' needs to have dll-interface to be used by clients of class 'FSY::Scene'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\Scene.h(27): message : see declaration of 'std::vector<FSY::Mesh *,std::allocator<FSY::Mesh *>>'
+D:\VS_Projects\FSY\FSY\src\FSY\Application\FSY_Time.h(8,26): warning C4091: 'extern ': ignored on left of 'FSY::Application' when no variable is declared
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.h(20,39): warning C4091: 'extern ': ignored on left of 'FSY::SceneCameraController' when no variable is declared
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.h(71,24): warning C4251: 'FSY::Application::view': struct 'glm::tmat4x4<float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'FSY::Application'
+D:\VS_Projects\FSY\FSY\src\vendor\glm\detail\type_mat.hpp(304): message : see declaration of 'glm::tmat4x4<float,glm::packed_highp>'
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.h(72,29): warning C4251: 'FSY::Application::projection': struct 'glm::tmat4x4<float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'FSY::Application'
+D:\VS_Projects\FSY\FSY\src\vendor\glm\detail\type_mat.hpp(304): message : see declaration of 'glm::tmat4x4<float,glm::packed_highp>'
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.h(96,26): warning C4251: 'FSY::Application::cb': class 'FSY::ContentBrowser' needs to have dll-interface to be used by clients of class 'FSY::Application'
+D:\VS_Projects\FSY\FSY\src\FSY\Editor\ContentBrowser.h(9): message : see declaration of 'FSY::ContentBrowser'
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.h(98,36): warning C4251: 'FSY::Application::m_PanelSize': struct 'ImVec2' needs to have dll-interface to be used by clients of class 'FSY::Application'
+D:\VS_Projects\FSY\FSY\src\vendor\imgui\imgui.h(266): message : see declaration of 'ImVec2'
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.h(99,35): warning C4251: 'FSY::Application::m_texSize': struct 'ImVec2' needs to have dll-interface to be used by clients of class 'FSY::Application'
+D:\VS_Projects\FSY\FSY\src\vendor\imgui\imgui.h(266): message : see declaration of 'ImVec2'
+D:\VS_Projects\FSY\FSY\src\FSY\Input\Input.cpp(74,71): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Input\Input.cpp(76,69): warning C4244: 'return': conversion from 'float' to 'int', possible loss of data
+  Scene.cpp
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\Mesh.h(15,3): warning C4091: '__declspec(dllexport)': ignored on left of 'FSY::RenderModes' when no variable is declared
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\Mesh.h(18,25): warning C4091: 'extern ': ignored on left of 'FSY::GameObject' when no variable is declared
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\Mesh.h(64,38): warning C4251: 'FSY::Mesh::m_objects': class 'std::vector<FSY::GameObject *,std::allocator<FSY::GameObject *>>' needs to have dll-interface to be used by clients of class 'FSY::Mesh'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\Mesh.h(45): message : see declaration of 'std::vector<FSY::GameObject *,std::allocator<FSY::GameObject *>>'
+D:\VS_Projects\FSY\FSY\src\FSY\Editor\Console.h(17,26): warning C4091: 'extern ': ignored on left of 'FSY::Application' when no variable is declared
+D:\VS_Projects\FSY\FSY\src\FSY\Editor\Console.h(43,28): warning C4251: 'FSY::Console::m_items': class 'std::vector<FSY::Item,std::allocator<FSY::Item>>' needs to have dll-interface to be used by clients of class 'FSY::Console'
+D:\VS_Projects\FSY\FSY\src\FSY\Editor\Console.h(43): message : see declaration of 'std::vector<FSY::Item,std::allocator<FSY::Item>>'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\GameObject.h(18,26): warning C4091: 'extern ': ignored on left of 'FSY::Application' when no variable is declared
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\GameObject.h(26,20): warning C4251: 'FSY::GameObject::name': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'FSY::GameObject'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\xstring(4648): message : see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\GameObject.h(135,39): warning C4251: 'FSY::GameObject::m_components': class 'std::vector<FSY::Component *,std::allocator<FSY::Component *>>' needs to have dll-interface to be used by clients of class 'FSY::GameObject'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\GameObject.h(54): message : see declaration of 'std::vector<FSY::Component *,std::allocator<FSY::Component *>>'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\GameObject.h(136,38): warning C4251: 'FSY::GameObject::m_children': class 'std::vector<FSY::GameObject *,std::allocator<FSY::GameObject *>>' needs to have dll-interface to be used by clients of class 'FSY::GameObject'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\Mesh.h(45): message : see declaration of 'std::vector<FSY::GameObject *,std::allocator<FSY::GameObject *>>'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\GameObject.h(138,26): warning C4251: 'FSY::GameObject::m_fixedNormal': struct 'glm::tmat4x4<float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'FSY::GameObject'
+D:\VS_Projects\FSY\FSY\src\vendor\glm\detail\type_mat.hpp(304): message : see declaration of 'glm::tmat4x4<float,glm::packed_highp>'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\GameObject.h(139,24): warning C4251: 'FSY::GameObject::m_transform': struct 'glm::tmat4x4<float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'FSY::GameObject'
+D:\VS_Projects\FSY\FSY\src\vendor\glm\detail\type_mat.hpp(304): message : see declaration of 'glm::tmat4x4<float,glm::packed_highp>'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\GameObject.h(141,26): warning C4251: 'FSY::GameObject::m_boundingSphere': struct 'FSY::Sphere' needs to have dll-interface to be used by clients of class 'FSY::GameObject'
+D:\VS_Projects\FSY\FSY\src\FSY\Rendering\FrustumCulling.h(40): message : see declaration of 'FSY::Sphere'
+D:\VS_Projects\FSY\FSY\src\FSY\Rendering\Camera.h(30,23): warning C4251: 'FSY::Camera::viewMatrix': struct 'glm::tmat4x4<float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'FSY::Camera'
+D:\VS_Projects\FSY\FSY\src\vendor\glm\detail\type_mat.hpp(304): message : see declaration of 'glm::tmat4x4<float,glm::packed_highp>'
+D:\VS_Projects\FSY\FSY\src\FSY\Rendering\Camera.h(31,29): warning C4251: 'FSY::Camera::projectionMatrix': struct 'glm::tmat4x4<float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'FSY::Camera'
+D:\VS_Projects\FSY\FSY\src\vendor\glm\detail\type_mat.hpp(304): message : see declaration of 'glm::tmat4x4<float,glm::packed_highp>'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\Scene.h(34,38): warning C4251: 'FSY::Scene::m_objects': class 'std::vector<FSY::GameObject *,std::allocator<FSY::GameObject *>>' needs to have dll-interface to be used by clients of class 'FSY::Scene'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\Mesh.h(45): message : see declaration of 'std::vector<FSY::GameObject *,std::allocator<FSY::GameObject *>>'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\Scene.h(35,31): warning C4251: 'FSY::Scene::m_meshes': class 'std::vector<FSY::Mesh *,std::allocator<FSY::Mesh *>>' needs to have dll-interface to be used by clients of class 'FSY::Scene'
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\Scene.h(27): message : see declaration of 'std::vector<FSY::Mesh *,std::allocator<FSY::Mesh *>>'
+  Generating Code...
+D:\VS_Projects\FSY\FSY\src\FSY\Scene\GameObject.h(107): warning C4715: 'FSY::GameObject::GetComponent<FSY::SceneCameraController>': not all control paths return a value
   FSY.vcxproj -> D:\VS_Projects\FSY\bin\Debug-x64\FSY\FSY.dll

@@ -1,5 +1,5 @@
-#ifndef BLUEBOXMATHS_H
-#define BLUEBOXMATHS_H
+#ifndef FSYMATHS_H
+#define FSYMATHS_H
 
 #include <iostream>
 #include <cmath>
@@ -8,6 +8,9 @@
 #include "../../vendor/glm/gtc/matrix_transform.hpp"
 #include "../../vendor/glm/gtc/type_ptr.hpp"
 
+#define GLM_ENABLE_EXPERIMENTAL
+#include "../../vendor/glm/gtx/matrix_decompose.hpp"
+
 namespace FSY {
 
 	const double PI = 3.1415926;
@@ -15,6 +18,8 @@ namespace FSY {
 	double FSY_API RadiansToDegrees(double radians);
 
 	double FSY_API DegreesToRadians(double degrees);
+
+	bool DecomposeTransform(const glm::mat4& transform, glm::vec3& translation, glm::vec3& rotation, glm::vec3& scale);
 
 	template<typename T>
 	class FSY_API Vector3 {

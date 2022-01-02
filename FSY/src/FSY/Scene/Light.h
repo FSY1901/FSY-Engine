@@ -10,15 +10,11 @@ namespace FSY {
 
 	public:
 		Light();
-		Light(Vector3f pos, Vector3f color);
+		Light(Vector3f pos, Vector3f color, Vector3f ambient, Vector3f specular);;
 
-		//Should only be used by the Editor, use ... instead.
-		void __SetLightColorEngine(float col[3]);
-
-		Vector3f GetLightColor();
-
-	private:
-		Vector3f m_color;
+		Vector3f color;
+		Vector3f ambient;
+		Vector3f specular;
 
 	};
 

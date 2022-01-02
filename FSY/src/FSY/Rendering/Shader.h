@@ -29,8 +29,9 @@ namespace FSY {
         void setMat4(const std::string& name, const glm::mat4& mat) const;
 
         //Attributes that should be on every Shader
-        Vector3f Color = {0, 0, 0};
-
+        Vector3f diffuse = {1.0f, 1.0f, 1.0f};
+        Vector3f specular = { 0.2f, 0.2f, 0.2f };
+        float shininess = 32.0f;
     };
 
 }
