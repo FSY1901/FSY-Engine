@@ -19,6 +19,14 @@ namespace FSY {
 
     extern class SceneCameraController;
 
+    struct Window {
+        GLFWwindow* m_win = nullptr;
+        bool m_windowOpen;
+        int m_width;
+        int m_height;
+        const char* m_title = "My Win";
+    };
+
 	class FSY_API Application
 	{
 	public:
@@ -38,12 +46,12 @@ namespace FSY {
         void ChangeScene(Scene* scene);
         void SetIcon(const char* filename);
 
-        float WinWidth();
-        float WinHeight();
+        float WinWidth() const;
+        float WinHeight() const;
 
         Scene* GetActiveScene();
 
-        bool inEditor = true;
+        bool inEditor = false;
 
         //DON'T USE
         GLFWwindow* __GetWindow();
@@ -53,11 +61,12 @@ namespace FSY {
         static Application* app;
 
 #pragma region Win Vars
-        GLFWwindow* m_win = nullptr;
+        /*GLFWwindow* m_win = nullptr;
         bool m_windowOpen = true;
         int m_width = 1000;
         int m_height = 800;
-        const char* m_title = "My Win";
+        const char* m_title = "My Win";*/
+        Window m_window;
 #pragma endregion
 
 #pragma region Win Callbacks
@@ -81,6 +90,8 @@ namespace FSY {
 #pragma endregion
 
 #pragma region Scene View
+        void SetStyling();
+
         void RenderUI();
 
         //Individual panels

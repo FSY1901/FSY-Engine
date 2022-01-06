@@ -23,8 +23,10 @@ namespace FSY {
 	}
 
 	Application::Application(int width, int height, const char* title)
-		: m_width(width), m_height(height), m_title(title)
 	{
+		m_window.m_width = width;
+		m_window.m_height = height;
+		m_window.m_title = title;
 		app = this;
 	}
 
@@ -41,7 +43,7 @@ namespace FSY {
 	}
 
 	void Application::Close() {
-		glfwSetWindowShouldClose(m_win, 1);
+		glfwSetWindowShouldClose(m_window.m_win, 1);
 	}
 
 	void Application::ChangeScene(Scene* scene) {
@@ -51,7 +53,7 @@ namespace FSY {
 	void Application::SetIcon(const char* filename) {
 		GLFWimage images[1];
 		images[0].pixels = stbi_load(filename, &images[0].width, &images[0].height, 0, 4);
-		glfwSetWindowIcon(m_win, 1, images);
+		glfwSetWindowIcon(m_window.m_win, 1, images);
 		stbi_image_free(images[0].pixels);
 	}
 
@@ -87,98 +89,7 @@ namespace FSY {
 		m_activeScene->AddObject(g);
 	}
 
-	float Application::WinWidth() { return m_width; }
-	float Application::WinHeight() { return m_height; }
-
-	Scene* Application::GetActiveScene() {
-		return m_activeScene;
-	}
-
-	GLFWwindow* Application::__GetWindow() {
-		return m_win;
-	}
-
-	void Application::Init() {
-		glfwInit();
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-#ifdef __APPLE__
-		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#endif
-
-		if (Settings::s_fullscreen) {
-			GLFWmonitor* monitor = glfwGetPrimaryMonitor();
-			const GLFWvidmode* mode = glfwGetVideoMode(monitor);
-			m_width = mode->width;
-			m_height = mode->height;
-			m_win = glfwCreateWindow(m_width, m_height, m_title, monitor, NULL);
-		}
-		else {
-			m_win = glfwCreateWindow(m_width, m_height, m_title, NULL, NULL);
-		}
-
-		if (m_win == NULL)
-		{
-			std::cout << "Failed to create GLFW window" << std::endl;
-			glfwTerminate();
-			return;
-		}
-		glfwMakeContextCurrent(m_win);
-
-		Input::__SetWindow(m_win);
-
-		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-		{
-			std::cout << "Failed to initialize GLAD" << std::endl;
-			glfwDestroyWindow(m_win);
-			glfwTerminate();
-			return;
-		}
-
-		glEnable(GL_DEPTH_TEST);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glViewport(0, 0, m_width, m_height);
-		glfwSetFramebufferSizeCallback(m_win, s_framebuffer_size_callback);
-		glfwSetCursorPosCallback(m_win, s_mouse_callback);
-		glfwSwapInterval(0);
-
-		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -1.0f));
-		projection = glm::perspective(glm::radians(45.0f), (float)m_width / (float)m_height, 0.01f, 100.0f);
-
-		//Camera Setup
-		view = glm::lookAt(glm::vec3(0.0f, 0.0f, 4.0f),
-			glm::vec3(0.0f, 0.0f, 0.0f),
-			glm::vec3(0.0f, 1.0f, 0.0f));
-
-		m_sceneCamera.__SetViewMatrix(view);
-
-		cb.LoadTextures();
-
-		//Sound Setup
-		Sound::Init();
-
-		MainLoop();
-	}
-
-	void Application::MainLoop() {
-
-		OnStart();
-
-		if (inEditor)
-			Camera::SetAsMain(&m_sceneCamera);
-
-		ImGui::CreateContext();
-		ImGuiIO& io = ImGui::GetIO(); (void)io;
-		io.ConfigFlags = ImGuiConfigFlags_DockingEnable;
-		ImGui::StyleColorsDark();
-		ImGui_ImplGlfw_InitForOpenGL(m_win, true);
-		ImGui_ImplOpenGL3_Init("#version 330");
-		if (Settings::s_editorFontPath != "")
-			io.FontDefault = io.Fonts->AddFontFromFileTTF(Settings::s_editorFontPath.c_str(), 16.0f);
-
-#pragma region Styling
+	void Application::SetStyling() {
 		auto colors = ImGui::GetStyle().Colors;
 		colors[ImGuiCol_WindowBg] = ImVec4{ 0.1f, 0.105f, 0.11f, 1.0f };
 
@@ -208,7 +119,100 @@ namespace FSY {
 		colors[ImGuiCol_TitleBg] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
 		colors[ImGuiCol_TitleBgActive] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
 		colors[ImGuiCol_TitleBgCollapsed] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
-#pragma endregion
+	}
+
+	float Application::WinWidth() const { return m_window.m_width; }
+	float Application::WinHeight() const { return m_window.m_height; }
+
+	Scene* Application::GetActiveScene() {
+		return m_activeScene;
+	}
+
+	GLFWwindow* Application::__GetWindow() {
+		return m_window.m_win;
+	}
+
+	void Application::Init() {
+		glfwInit();
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+#ifdef __APPLE__
+		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#endif
+
+		if (Settings::s_fullscreen) {
+			GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+			const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+			m_window.m_width = mode->width;
+			m_window.m_height = mode->height;
+			m_window.m_win = glfwCreateWindow(m_window.m_width, m_window.m_height, m_window.m_title, monitor, NULL);
+		}
+		else {
+			m_window.m_win = glfwCreateWindow(m_window.m_width, m_window.m_height, m_window.m_title, NULL, NULL);
+		}
+
+		if (m_window.m_win == NULL)
+		{
+			std::cout << "Failed to create GLFW window" << std::endl;
+			glfwTerminate();
+			return;
+		}
+		glfwMakeContextCurrent(m_window.m_win);
+
+		Input::__SetWindow(m_window.m_win);
+
+		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+		{
+			std::cout << "Failed to initialize GLAD" << std::endl;
+			glfwDestroyWindow(m_window.m_win);
+			glfwTerminate();
+			return;
+		}
+
+		glEnable(GL_DEPTH_TEST);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glViewport(0, 0, m_window.m_width, m_window.m_height);
+		glfwSetFramebufferSizeCallback(m_window.m_win, s_framebuffer_size_callback);
+		glfwSetCursorPosCallback(m_window.m_win, s_mouse_callback);
+		glfwSwapInterval(0);
+
+		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -1.0f));
+		projection = glm::perspective(glm::radians(45.0f), (float)m_window.m_width / (float)m_window.m_height, 0.01f, 100.0f);
+
+		//Camera Setup
+		view = glm::lookAt(glm::vec3(0.0f, 0.0f, 4.0f),
+			glm::vec3(0.0f, 0.0f, 0.0f),
+			glm::vec3(0.0f, 1.0f, 0.0f));
+
+		m_sceneCamera.__SetViewMatrix(view);
+
+		cb.LoadTextures();
+
+		//Sound Setup
+		Sound::Init();
+
+		MainLoop();
+	}
+
+	void Application::MainLoop() {
+
+		OnStart();
+
+		if (inEditor)
+			Camera::SetAsMain(&m_sceneCamera);
+
+		ImGui::CreateContext();
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		io.ConfigFlags = ImGuiConfigFlags_DockingEnable;
+		ImGui::StyleColorsDark();
+		ImGui_ImplGlfw_InitForOpenGL(m_window.m_win, true);
+		ImGui_ImplOpenGL3_Init("#version 330");
+		if (Settings::s_editorFontPath != "")
+			io.FontDefault = io.Fonts->AddFontFromFileTTF(Settings::s_editorFontPath.c_str(), 16.0f);
+
+		SetStyling();
 
 		vao->Generate();
 		vao->Bind();
@@ -261,7 +265,7 @@ namespace FSY {
 		unsigned int fboTex;
 		glGenTextures(1, &fboTex);
 		glBindTexture(GL_TEXTURE_2D, fboTex);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_width, m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_window.m_width, m_window.m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -272,7 +276,7 @@ namespace FSY {
 		unsigned int rbo;
 		glGenRenderbuffers(1, &rbo);
 		glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, m_width, m_height);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, m_window.m_width, m_window.m_height);
 		glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
@@ -284,7 +288,7 @@ namespace FSY {
 		glUniform1i(glGetUniformLocation(fboShader.ID, "screenTexture"), 0);
 #pragma endregion
 
-		while (!glfwWindowShouldClose(m_win))
+		while (!glfwWindowShouldClose(m_window.m_win))
 		{
 
 			bool firstFrame = true;
@@ -322,7 +326,7 @@ namespace FSY {
 				}
 			}
 			else {
-				if ((m_width != m_texSize.x || m_height != m_texSize.y)) {
+				if ((m_window.m_width != m_texSize.x || m_window.m_height != m_texSize.y)) {
 					glDeleteTextures(1, &fboTex);
 					glDeleteFramebuffers(1, &FBO);
 					glDeleteTextures(1, &rbo);
@@ -333,7 +337,7 @@ namespace FSY {
 
 					glGenTextures(1, &fboTex);
 					glBindTexture(GL_TEXTURE_2D, fboTex);
-					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_width, m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_window.m_width, m_window.m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -343,18 +347,18 @@ namespace FSY {
 
 					glGenRenderbuffers(1, &rbo);
 					glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-					glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, m_width, m_height);
+					glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, m_window.m_width, m_window.m_height);
 					glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
 					glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
 
-					m_texSize = ImVec2(m_width, m_height);
-					glViewport(0, 0, m_width, m_height);
+					m_texSize = ImVec2(m_window.m_width, m_window.m_height);
+					glViewport(0, 0, m_window.m_width, m_window.m_height);
 				}
 			}
 
 			//Preventing a crash when minimizing
-			if (m_width != 0 && m_height != 0) {
+			if (m_window.m_width != 0 && m_window.m_height != 0) {
 
 				if (inEditor) {
 					ImGui_ImplOpenGL3_NewFrame();
@@ -382,7 +386,7 @@ namespace FSY {
 				if(inEditor)
 					projection = glm::perspective(glm::radians(45.0f), (float)m_PanelSize.x / (float)m_PanelSize.y, 0.1f, 100.0f);
 				else
-					projection = glm::perspective(glm::radians(45.0f), (float)m_width / (float)m_height, 0.1f, 100.0f);
+					projection = glm::perspective(glm::radians(45.0f), (float)m_window.m_width / (float)m_window.m_height, 0.1f, 100.0f);
 
 				Camera::GetMain()->__SetProjectionMatrix(projection);
 
@@ -394,7 +398,7 @@ namespace FSY {
 
 				glEnable(GL_DEPTH_TEST);
 
-				s_processInput(m_win);
+				s_processInput(m_window.m_win);
 
 				if (!inEditor)
 					OnUpdate();
@@ -408,7 +412,7 @@ namespace FSY {
 						glm::vec3(Camera::GetMain()->up.x, Camera::GetMain()->up.y, Camera::GetMain()->up.z),
 						glm::vec3(Camera::GetMain()->right.x, Camera::GetMain()->right.y, Camera::GetMain()->right.z),
 						glm::vec3(Camera::GetMain()->position.x, Camera::GetMain()->position.y, Camera::GetMain()->position.z),
-						(float)m_width / (float)m_height, 90, 0.1f, 100.0f);
+						(float)m_window.m_width / (float)m_window.m_height, 90, 0.1f, 100.0f);
 
 					for (auto mesh : m_activeScene->_GetMeshes()) {
 						if (mesh->renderMode == RENDER_FRONT) {
@@ -524,7 +528,7 @@ namespace FSY {
 				}
 			}
 
-			glfwSwapBuffers(m_win);
+			glfwSwapBuffers(m_window.m_win);
 			glfwPollEvents();
 
 			float currentFrame = glfwGetTime();
@@ -535,7 +539,7 @@ namespace FSY {
 
 		}
 
-		m_windowOpen = false;
+		m_window.m_windowOpen = false;
 
 		delete scc;
 		delete vao;
@@ -545,10 +549,100 @@ namespace FSY {
 		//Delete Sound
 		//Sound::Quit();
 
-		glfwDestroyWindow(m_win);
+		glfwDestroyWindow(m_window.m_win);
 
 		glfwTerminate();
 	}
+
+#pragma region IMGUIZMO HELPER
+	void _Frustum(float left, float right, float bottom, float top, float znear, float zfar, float* m16)
+	{
+		float temp, temp2, temp3, temp4;
+		temp = 2.0f * znear;
+		temp2 = right - left;
+		temp3 = top - bottom;
+		temp4 = zfar - znear;
+		m16[0] = temp / temp2;
+		m16[1] = 0.0;
+		m16[2] = 0.0;
+		m16[3] = 0.0;
+		m16[4] = 0.0;
+		m16[5] = temp / temp3;
+		m16[6] = 0.0;
+		m16[7] = 0.0;
+		m16[8] = (right + left) / temp2;
+		m16[9] = (top + bottom) / temp3;
+		m16[10] = (-zfar - znear) / temp4;
+		m16[11] = -1.0f;
+		m16[12] = 0.0;
+		m16[13] = 0.0;
+		m16[14] = (-temp * zfar) / temp4;
+		m16[15] = 0.0;
+	}
+
+	void Perspective(float fovyInDegrees, float aspectRatio, float znear, float zfar, float* m16)
+	{
+		float ymax, xmax;
+		ymax = znear * tanf(fovyInDegrees * 3.141592f / 180.0f);
+		xmax = ymax * aspectRatio;
+		_Frustum(-xmax, xmax, -ymax, ymax, znear, zfar, m16);
+	}
+
+	void Cross(const float* a, const float* b, float* r)
+	{
+		r[0] = a[1] * b[2] - a[2] * b[1];
+		r[1] = a[2] * b[0] - a[0] * b[2];
+		r[2] = a[0] * b[1] - a[1] * b[0];
+	}
+
+	float Dot(const float* a, const float* b)
+	{
+		return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+	}
+
+	void Normalize(const float* a, float* r)
+	{
+		float il = 1.f / (sqrtf(Dot(a, a)) + FLT_EPSILON);
+		r[0] = a[0] * il;
+		r[1] = a[1] * il;
+		r[2] = a[2] * il;
+	}
+
+	void LookAt(const float* eye, const float* at, const float* up, float* m16)
+	{
+		float X[3], Y[3], Z[3], tmp[3];
+
+		tmp[0] = eye[0] - at[0];
+		tmp[1] = eye[1] - at[1];
+		tmp[2] = eye[2] - at[2];
+		Normalize(tmp, Z);
+		Normalize(up, Y);
+
+		Cross(Y, Z, tmp);
+		Normalize(tmp, X);
+
+		Cross(Z, X, tmp);
+		Normalize(tmp, Y);
+
+		m16[0] = X[0];
+		m16[1] = Y[0];
+		m16[2] = Z[0];
+		m16[3] = 0.0f;
+		m16[4] = X[1];
+		m16[5] = Y[1];
+		m16[6] = Z[1];
+		m16[7] = 0.0f;
+		m16[8] = X[2];
+		m16[9] = Y[2];
+		m16[10] = Z[2];
+		m16[11] = 0.0f;
+		m16[12] = -Dot(X, eye);
+		m16[13] = -Dot(Y, eye);
+		m16[14] = -Dot(Z, eye);
+		m16[15] = 1.0f;
+	}
+#pragma endregion
+
 
 	void Application::RenderUI() {
 
@@ -615,6 +709,9 @@ namespace FSY {
 			else if (Input::GetKey(Keys::Key_S) && Input::GetKey(Keys::Key_LEFT_SHIFT)) {
 				op = ImGuizmo::SCALE;
 			}
+			else if (Input::GetKey(Keys::Key_R) && Input::GetKey(Keys::Key_LEFT_SHIFT)) {
+				op = ImGuizmo::ROTATE;
+			}
 			else if (Input::GetKey(Keys::Key_TAB)) {
 				op = -1;
 			}
@@ -627,14 +724,36 @@ namespace FSY {
 				glm::mat4 viewMat = glm::inverse(m_sceneCamera.GetTransformationMatrix());
 				glm::mat4 transform = selectedObject->GetTransformationMatrix();
 
-				ImGuizmo::Manipulate(glm::value_ptr(viewMat), glm::value_ptr(projection * view), (ImGuizmo::OPERATION)op, ImGuizmo::MODE::LOCAL, glm::value_ptr(transform));
+				float _pers[16];
+				Perspective(45.0f, (float)m_PanelSize.x / (float)m_PanelSize.y, 0.1f, 100.0f, _pers);
+				float _view[16] =
+				{ 1.f, 0.f, 0.f, 0.f,
+				0.f, 1.f, 0.f, 0.f,
+				 0.f, 0.f, 1.f, 0.f,
+				0.f, 0.f, 0.f, 1.f };
+				float eye[] = { Camera::GetMain()->position.x, Camera::GetMain()->position.y , Camera::GetMain()->position.z };
+				glm::vec3 direction;
+				direction.x = Camera::GetMain()->rotation.x;
+				direction.y = Camera::GetMain()->rotation.y;
+				direction.z = Camera::GetMain()->rotation.z;
+				glm::vec3 front = glm::normalize(direction);
+				float at[3] = {
+					eye[0] + front.x,
+					eye[1] + front.y,
+					eye[2] + front.z
+				};
+				float up[3] = { 0, 1, 0 };
+				LookAt(eye, at, up, _view);
+
+				ImGuizmo::Manipulate(_view, _pers, (ImGuizmo::OPERATION)op, ImGuizmo::MODE::LOCAL, glm::value_ptr(transform));
+
+				//ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(projection * viewMat), (ImGuizmo::OPERATION)op, ImGuizmo::MODE::LOCAL, glm::value_ptr(transform));
 
 				if (ImGuizmo::IsUsing()) {
 					glm::vec3 pos, rot, scale;
-
 					DecomposeTransform(transform, pos, rot, scale);
-					Vector3f deltaRotation = Vector3f(rot.x, rot.y, rot.z) - selectedObject->rotation;
 					selectedObject->position = Vector3f(pos.x, pos.y, pos.z);
+					Vector3f deltaRotation = Vector3f(RadiansToDegrees(rot.x), RadiansToDegrees(rot.y), RadiansToDegrees(rot.z)) - selectedObject->rotation;
 					selectedObject->rotation += deltaRotation;
 					selectedObject->scale = Vector3f(scale.x, scale.y, scale.z);
 				}
@@ -827,8 +946,8 @@ namespace FSY {
 	void Application::s_framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	{
 		glViewport(0, 0, width, height);
-		app->m_width = width;
-		app->m_height = height;
+		app->m_window.m_width = width;
+		app->m_window.m_height = height;
 	}
 
 	void Application::s_mouse_callback(GLFWwindow* window, double xpos, double ypos) {

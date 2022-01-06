@@ -42,7 +42,7 @@ namespace FSY {
 		m_logged = true;
 	}
 
-	void Console::Draw() {
+	void Console::Draw(){
 		ImGui::Begin("Console");
 		if (ImGui::SmallButton("Clear")) { m_items.clear(); }
 		ImGui::BeginChild("Scroll Region");
