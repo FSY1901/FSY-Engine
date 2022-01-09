@@ -171,9 +171,8 @@ public:
 
 	}
 
-	App(int width, int height, const char* title) : FSY::Application(width, height, title) {
-		//Settings::s_fullscreen = true;
-		Settings::s_editorFontPath = "./src/Data/Assets/Fonts/Poppins/Poppins-SemiBold.ttf";
+	App(int width, int height, const char* title, bool inEditor) : FSY::Application(width, height, title, inEditor) {
+		
 	}
 
 	~App() override {
@@ -182,8 +181,6 @@ public:
 
 	void OnStart() override {
 		Camera::SetAsMain(scene.GetCamera());
-		//Settings
-		inEditor = true;
 		//Objects
 		myObject = { Vector3f(0, 0, -5.0f), Vector3f(0, 0, 0), Vector3f(1, 1, 1), "Object" };
 		g2 = { Vector3f(2, 0, -5.0f), Vector3f(0, 0, 0), Vector3f(1, 1, 1), "Object" };
@@ -210,7 +207,6 @@ public:
 		m = { Mesh::s_verticesForCube, Mesh::s_cubeMeshSize, &s };
 		m1 = { Mesh::s_verticesForCube, Mesh::s_cubeMeshSize, &colored };
 		m.SetTexture(&t);
-		//m1.SetTexture(&t1);
 		//g2.AddComponent<Control>();
 		g2.AddChild(&myObject);
 		g2.AddChild(&g);
@@ -272,5 +268,5 @@ public:
 };
 
 FSY::Application* FSY::CreateApplication() {
-	return new App(1000, 800, "My App");
+	return new App(1000, 800, "My App", true);
 }

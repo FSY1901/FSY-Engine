@@ -31,7 +31,7 @@ namespace FSY {
 	{
 	public:
 		Application();
-        Application(int width, int height, const char* title);
+        Application(int width, int height, const char* title, bool inEditor);
 		virtual ~Application();
 
         static Application* GetInstance();
@@ -86,7 +86,7 @@ namespace FSY {
         Scene* m_activeScene = nullptr;
         float m_clearColor[3] = { 0.2f, 0.2f, 0.2f };
 
-        void RenderObject(GameObject* g, Mesh* mesh, bool firstFrame, Frustum camFrustum);
+        void RenderObject(GameObject* g, Mesh* mesh, bool firstFrame, Frustum camFrustum, bool isEmpty = false);
 #pragma endregion
 
 #pragma region Scene View

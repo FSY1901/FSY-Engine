@@ -37,8 +37,8 @@ namespace FSY {
         stbi_image_free(data);
     }
 
-    void Texture::Bind() {
-        glActiveTexture(GL_TEXTURE0); // activate the texture unit first before binding texture
+    void Texture::Bind(int offset) {
+        glActiveTexture(GL_TEXTURE0 + offset); // activate the texture unit first before binding texture
         glBindTexture(GL_TEXTURE_2D, m_texture);
     }
 
