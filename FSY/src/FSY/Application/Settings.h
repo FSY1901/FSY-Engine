@@ -17,6 +17,7 @@ namespace FSY {
 		static bool s_fullscreen;
 		//The Path where the Font for the Editor can be found.
 		static std::string s_editorFontPath;
+		static std::string s_playButtonPath;
 		static std::string s_folderIconPath;
 		static std::string s_ttfIcon;
 		static std::string s_pngIcon;

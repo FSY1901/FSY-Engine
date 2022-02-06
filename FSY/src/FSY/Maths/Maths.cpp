@@ -1,4 +1,5 @@
 #include "Maths.h"
+#include "../Scene/GameObject.h"
 
 namespace FSY {
 
@@ -11,6 +12,15 @@ namespace FSY {
 		return degrees * PI / 180.0;
 	}
 #pragma endregion
+
+	float Clamp(float a, float b, float value) {
+		if (value < a)
+			return a;
+		else if (value > b)
+			return b;
+		else
+			return value;
+	}
 
 #pragma region Decompose Matrix
 	bool DecomposeTransform(const glm::mat4& transform, glm::vec3& translation, glm::vec3& rotation, glm::vec3& scale)
@@ -81,7 +91,6 @@ namespace FSY {
 		return true;
 	}
 #pragma endregion
-
 
 #pragma region Vector(float)
 	Vector3f::Vector3() {

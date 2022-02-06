@@ -9,6 +9,10 @@
 
 namespace FSY {
 
+	enum class FSY_API SceneState {
+		Edit = 0, Play = 1
+	};
+
 	class FSY_API Scene {
 
 	public:
@@ -25,6 +29,8 @@ namespace FSY {
 
 		std::vector<GameObject*> _GetObjects();
 		std::vector<Mesh*> _GetMeshes();
+
+		SceneState state;
 
 	private:
 		const int c_maxObjects = 100000;

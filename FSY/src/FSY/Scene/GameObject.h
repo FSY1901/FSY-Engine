@@ -139,6 +139,7 @@ namespace FSY {
 		glm::mat4 m_transform;
 
 		Sphere m_boundingSphere;
+		Mesh* m_mesh;
 
 		friend class Mesh;
 		friend class Application;

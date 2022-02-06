@@ -21,7 +21,7 @@ namespace FSY {
 
 	public:
 		Mesh();
-		Mesh(float* Vertices, int size, Shader* Shader);
+		Mesh(float* Vertices, int size, Shader* Shader, std::string name);
 		Shader* GetShader();
 		Texture* GetTexture();
 		//Change the shader with which the object is rendered
@@ -29,6 +29,7 @@ namespace FSY {
 		void SetTexture(Texture* tex);
 		void SetVertices(float* Vertices, int size);
 		void AddGameObject(GameObject* g);
+		void RemoveGameObject(GameObject* obj);
 		/// <summary>
 		/// Returns true if the Mesh has a Texture.
 		/// </summary>
@@ -39,10 +40,14 @@ namespace FSY {
 		float* GetVertices();
 		int GetVertexSize();
 
+		std::string GetName();
+		void SetName(std::string);
+
 		int renderMode = RenderModes::RENDER_FRONT;
 		bool isTransparent = false;
 
 		std::vector<GameObject*> _GetGameObjects();
+		std::vector<GameObject*>* _GetObjectList();
 
 #pragma region MESHES
 		static float s_verticesForCube[288];
@@ -60,6 +65,7 @@ namespace FSY {
 		Shader* m_shader = nullptr;
 		Texture* m_texture = nullptr;
 		bool m_hasTexture = false;
+		std::string m_name;
 
 		std::vector<GameObject*> m_objects = {};
 

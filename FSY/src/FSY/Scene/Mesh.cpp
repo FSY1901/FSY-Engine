@@ -70,7 +70,7 @@ namespace FSY {
 
     }
 
-    Mesh::Mesh(float* Vertices, int size, Shader* Shader) : m_vertices(Vertices), m_size(size), m_shader(Shader) {
+    Mesh::Mesh(float* Vertices, int size, Shader* Shader, std::string name) : m_vertices(Vertices), m_size(size), m_shader(Shader), m_name(name) {
         m_objects.reserve(10000);
     }
 
@@ -99,7 +99,18 @@ namespace FSY {
 
     void Mesh::AddGameObject(GameObject* g) {
         g->m_hasMesh = true;
+        g->m_mesh = this;
         m_objects.push_back(g);
+    }
+
+    void Mesh::RemoveGameObject(GameObject* obj) {
+        for (int i = 0; i < m_objects.size(); i++) {
+            if (m_objects.at(i) == obj) {
+                m_objects.at(i)->m_hasMesh = false;
+                m_objects.at(i)->m_mesh = nullptr;
+                m_objects.erase(m_objects.begin()+i);
+            }
+        }
     }
 
     bool Mesh::HasTexture() {
@@ -115,8 +126,20 @@ namespace FSY {
         return m_size;
     }
 
+    std::string Mesh::GetName() {
+        return m_name;
+    }
+
+    void Mesh::SetName(std::string name) {
+        m_name = name;
+    }
+
     std::vector<GameObject*> Mesh::_GetGameObjects() {
         return m_objects;
+    }
+
+    std::vector<GameObject*>* Mesh::_GetObjectList() {
+        return &m_objects;
     }
 
 }

@@ -150,6 +150,18 @@ public:
 
 };
 
+Vector3f LookAt(Vector3f direction) {
+	Vector3f result;
+	/*if(direction.z >= 0)
+		result.x = RadiansToDegrees(-atan2f(direction.y, direction.z + cos(direction.z)));
+	else
+		result.x = RadiansToDegrees(-atan2f(direction.y, -direction.z + cos(direction.z)));*/
+
+	result.y = RadiansToDegrees(atan2f(direction.x, direction.z));
+
+	return result;
+}
+
 class App : public FSY::Application {
 
 public:
@@ -204,26 +216,15 @@ public:
 		snd.LoadSource("./src/Data/Audio/breakout.mp3");
 		//snd.Play();
 		//Meshes & Scene
-		m = { Mesh::s_verticesForCube, Mesh::s_cubeMeshSize, &s };
-		m1 = { Mesh::s_verticesForCube, Mesh::s_cubeMeshSize, &colored };
+		m = { Mesh::s_verticesForCube, Mesh::s_cubeMeshSize, &s, "Dirt Block" };
+		m1 = { Mesh::s_verticesForCube, Mesh::s_cubeMeshSize, &colored, "Red Cube" };
 		m.SetTexture(&t);
-		//g2.AddComponent<Control>();
+		g2.AddComponent<Control>();
 		g2.AddChild(&myObject);
 		g2.AddChild(&g);
 		m.AddGameObject(&g);
 		m1.AddGameObject(&myObject);
 		m1.AddGameObject(&g2);
-		/*PerlinNoise noise(200);
-		int iter = 0;
-		objs = new GameObject[1000];
-		for (int x = 0; x < 25; x++) {
-			for (int y = 0; y < 40; y++) {
-				double yVal = noise.noise((double)x, (double)y, 0.5);
-				objs[iter] = GameObject(Vector3f((float)x, (float)yVal*2, (float)y), Vector3f(0,0,0), Vector3f(1,1,1), "Object");
-				m1.AddGameObject(&objs[iter]);
-				iter++;
-			}
-		}*/
 		scene.AddInstanceMesh(&m);
 		scene.AddInstanceMesh(&m1);
 		ChangeScene(&scene);
@@ -239,6 +240,8 @@ public:
 		if (Input::GetKey(Keys::Key_ESCAPE)) {
 			Close();
 		}
+		//scene.GetLight()->position = m_sceneCamera.position;
+		//g.rotation = LookAt(Vector3f::Normalize((myObject.position - g.position)));
 		/*if (Input::GetMouse(0)) {
 			for (auto m : scene._GetMeshes()) {
 				float* vertices = m->GetVertices();
@@ -258,7 +261,6 @@ public:
 				}
 			}
 		}*/
-
 	}
 
 	void OnClose() override {

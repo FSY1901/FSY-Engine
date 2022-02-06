@@ -90,7 +90,8 @@ namespace FSY {
 #pragma endregion
 
 #pragma region Scene View
-        void SetStyling();
+        void SetStylingEditScene();
+        void SetStylingPlayScene();
 
         void RenderUI();
 
@@ -101,15 +102,18 @@ namespace FSY {
         void RenderDebugPanel();
         Console m_console; //Console for the Console panel
         void RenderConsolePanel();
-
         void RenderChildrenInInspector(GameObject* g);
-        //GameObject* selectedObject = nullptr;
+
+        Texture m_playButtonTexture;
+        Texture m_stopTexture;
+
         ContentBrowser cb;
         uint32_t FBOTexture;
         ImVec2 m_PanelSize = {1, 1};
         ImVec2 m_texSize = { 0,0 };
         bool isHovered = false;
-        Camera m_sceneCamera = Camera(Vector3f(), Vector3f(0, 0, -55), Vector3f(1, 1, 1));
+        //Camera m_sceneCamera = Camera(Vector3f(), Vector3f(0, 0, -55), Vector3f(1, 1, 1));
+        Camera m_renderCamera;
 #pragma endregion
 
         void Init();
@@ -119,6 +123,7 @@ namespace FSY {
         void CreateNewGameObject(bool asChild = false, GameObject* parent = nullptr);
 
     protected:
+        Camera m_sceneCamera = Camera(Vector3f(), Vector3f(0, 0, -55), Vector3f(1, 1, 1));
         GameObject* selectedObject = nullptr;
 
 	};

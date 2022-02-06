@@ -3,7 +3,9 @@
 
 #include <iostream>
 #include <cmath>
+
 #include "../Core/Core.h"
+
 #include "../../vendor/glm/glm.hpp"
 #include "../../vendor/glm/gtc/matrix_transform.hpp"
 #include "../../vendor/glm/gtc/type_ptr.hpp"
@@ -13,11 +15,15 @@
 
 namespace FSY {
 
+	extern class GameObject;
+
 	const double PI = 3.1415926;
 
 	double FSY_API RadiansToDegrees(double radians);
 
 	double FSY_API DegreesToRadians(double degrees);
+
+	float FSY_API Clamp(float a, float b, float value);
 
 	bool DecomposeTransform(const glm::mat4& transform, glm::vec3& translation, glm::vec3& rotation, glm::vec3& scale);
 

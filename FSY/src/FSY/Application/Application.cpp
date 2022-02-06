@@ -88,7 +88,12 @@ namespace FSY {
 	}
 
 	void Application::CreateNewGameObject(bool asChild, GameObject* parent) {
-		GameObject* g = new GameObject(Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1), "New Object");
+		GameObject* g;
+		if(parent != nullptr)
+			g = new GameObject(parent->position, Vector3f(0, 0, 0), Vector3f(1, 1, 1), "New Object");
+		else
+			g = new GameObject(Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1), "New Object");
+
 		if (asChild) {
 			parent->AddChild(g);
 			m_activeScene->AddObject(g);
@@ -96,7 +101,7 @@ namespace FSY {
 		m_activeScene->AddObject(g);
 	}
 
-	void Application::SetStyling() {
+	void Application::SetStylingEditScene() {
 		auto colors = ImGui::GetStyle().Colors;
 		colors[ImGuiCol_WindowBg] = ImVec4{ 0.1f, 0.105f, 0.11f, 1.0f };
 
@@ -126,6 +131,38 @@ namespace FSY {
 		colors[ImGuiCol_TitleBg] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
 		colors[ImGuiCol_TitleBgActive] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
 		colors[ImGuiCol_TitleBgCollapsed] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
+	}
+
+	void Application::SetStylingPlayScene() {
+		auto colors = ImGui::GetStyle().Colors;
+		colors[ImGuiCol_WindowBg] = ImVec4{ 0.2f, 0.105f, 0.11f, 1.0f };
+
+		// Headers
+		colors[ImGuiCol_Header] = ImVec4{ 0.3f, 0.205f, 0.21f, 1.0f };
+		colors[ImGuiCol_HeaderHovered] = ImVec4{ 0.4f, 0.305f, 0.31f, 1.0f };
+		colors[ImGuiCol_HeaderActive] = ImVec4{ 0.3f, 0.1505f, 0.151f, 1.0f };
+
+		// Buttons
+		colors[ImGuiCol_Button] = ImVec4{ 0.3f, 0.205f, 0.21f, 1.0f };
+		colors[ImGuiCol_ButtonHovered] = ImVec4{ 0.4f, 0.305f, 0.31f, 1.0f };
+		colors[ImGuiCol_ButtonActive] = ImVec4{ 0.3f, 0.1505f, 0.151f, 1.0f };
+
+		// Frame BG
+		colors[ImGuiCol_FrameBg] = ImVec4{ 0.3f, 0.205f, 0.21f, 1.0f };
+		colors[ImGuiCol_FrameBgHovered] = ImVec4{ 0.4f, 0.305f, 0.31f, 1.0f };
+		colors[ImGuiCol_FrameBgActive] = ImVec4{ 0.3f, 0.1505f, 0.151f, 1.0f };
+
+		// Tabs
+		colors[ImGuiCol_Tab] = ImVec4{ 0.3f, 0.1505f, 0.151f, 1.0f };
+		colors[ImGuiCol_TabHovered] = ImVec4{ 0.5f, 0.3805f, 0.381f, 1.0f };
+		colors[ImGuiCol_TabActive] = ImVec4{ 0.4f, 0.2805f, 0.281f, 1.0f };
+		colors[ImGuiCol_TabUnfocused] = ImVec4{ 0.3f, 0.1505f, 0.151f, 1.0f };
+		colors[ImGuiCol_TabUnfocusedActive] = ImVec4{ 0.3f, 0.205f, 0.21f, 1.0f };
+
+		// Title
+		colors[ImGuiCol_TitleBg] = ImVec4{ 0.3f, 0.1505f, 0.151f, 1.0f };
+		colors[ImGuiCol_TitleBgActive] = ImVec4{ 0.3f, 0.1505f, 0.151f, 1.0f };
+		colors[ImGuiCol_TitleBgCollapsed] = ImVec4{ 0.3f, 0.1505f, 0.151f, 1.0f };
 	}
 
 	float Application::WinWidth() const { return m_window.m_width; }
@@ -196,6 +233,8 @@ namespace FSY {
 		m_sceneCamera.__SetViewMatrix(view);
 
 		cb.LoadTextures();
+		m_playButtonTexture = Texture(Settings::s_playButtonPath.c_str());
+		m_stopTexture = Texture("./src/Data/Assets/Icons/Pause.png");
 
 		//Sound Setup
 		Sound::Init();
@@ -219,7 +258,7 @@ namespace FSY {
 		if (Settings::s_editorFontPath != "")
 			io.FontDefault = io.Fonts->AddFontFromFileTTF(Settings::s_editorFontPath.c_str(), 16.0f);
 
-		SetStyling();
+		SetStylingEditScene();
 
 		vao->Generate();
 		vao->Bind();
@@ -227,11 +266,13 @@ namespace FSY {
 		vbo.Bind();
 
 		if (inEditor) {
+			m_activeScene->state = SceneState::Edit;
 			m_sceneCamera.AddComponent<SceneCameraController>();
 			scc = m_sceneCamera.GetComponent<SceneCameraController>();
 			scc->Start();
 		}
 		else {
+			m_activeScene->state = SceneState::Play;
 			for (GameObject* g : m_activeScene->_GetObjects()) {
 				for (Component* c : g->__GetComponents()) {
 					c->Start();
@@ -372,7 +413,8 @@ namespace FSY {
 					ImGui_ImplGlfw_NewFrame();
 					ImGui::NewFrame();
 					ImGuizmo::BeginFrame();
-					scc->Update();
+					if(m_activeScene->state == SceneState::Edit)
+						scc->Update();
 				}
 
 				glm::vec3 direction;
@@ -472,7 +514,7 @@ namespace FSY {
 								g->__UpdateChildren();
 								RenderObject(g, mesh, firstFrame, camFrustum);
 								//vbo.Unbind();
-								if (!inEditor) {
+								if (!inEditor || m_activeScene->state == SceneState::Play) {
 									for (Component* c : g->__GetComponents()) {
 										c->Update();
 									}
@@ -486,7 +528,7 @@ namespace FSY {
 								g->__UpdateChildren();
 								RenderObject(g, mesh, firstFrame, camFrustum);
 								//vbo.Unbind();
-								if (!inEditor) {
+								if (!inEditor || m_activeScene->state == SceneState::Play) {
 									for (Component* c : g->__GetComponents()) {
 										c->Update();
 									}
@@ -500,7 +542,7 @@ namespace FSY {
 					}
 					//vao->Unbind();
 					//update all none mesh objects
-					if (!inEditor) {
+					if (!inEditor || m_activeScene->state == SceneState::Play) {
 						for (auto g : m_activeScene->_GetObjects()) {
 							if (!g->HasMesh()) {
 								g->__UpdateChildren();
@@ -613,6 +655,23 @@ namespace FSY {
 				}
 				ImGui::EndMenu();
 			}
+			Texture iconTex = m_activeScene->state == SceneState::Edit ? m_playButtonTexture : m_stopTexture;
+			float size = ImGui::GetWindowHeight() - 4.0f;
+			ImGui::SameLine((m_window.m_width * 0.5f) - (size * 0.5f));
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+			if (ImGui::ImageButton((void*)(intptr_t)iconTex.GetTexture(), ImVec2(size, size))) {
+				if (m_activeScene->state == SceneState::Edit) {
+					m_activeScene->state = SceneState::Play;
+					Camera::SetAsMain(m_activeScene->GetCamera());
+					SetStylingPlayScene();
+				}
+				else if (m_activeScene->state == SceneState::Play) {
+					m_activeScene->state = SceneState::Edit;
+					Camera::SetAsMain(&m_sceneCamera);
+					SetStylingEditScene();
+				}
+			}
+			ImGui::PopStyleColor();
 			ImGui::EndMainMenuBar();
 		}
 
@@ -628,7 +687,7 @@ namespace FSY {
 		ImGui::Image((void*)FBOTexture, size, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
 		static int op;
-		if (selectedObject != nullptr) {
+		if (selectedObject != nullptr && m_activeScene->state == SceneState::Edit) {
 
 			if (Input::GetKey(Keys::Key_G) && Input::GetKey(Keys::Key_LEFT_SHIFT)) {
 				op = ImGuizmo::TRANSLATE;
@@ -690,7 +749,7 @@ namespace FSY {
 		}
 		if (ImGui::BeginPopupContextWindow()) {
 			if (ImGui::MenuItem("New Object")) {
-				CreateNewGameObject();
+				CreateNewGameObject(false, &m_sceneCamera);
 			}
 			ImGui::EndPopup();
 		}
@@ -797,9 +856,26 @@ namespace FSY {
 				}
 				ImGui::TreePop();
 			}
-			if (ImGui::BeginPopupContextWindow()) {
+			if (ImGui::BeginPopupContextWindow("Actions On Object")) {
 				if (ImGui::MenuItem("New Child Object")) {
 					CreateNewGameObject(true, selectedObject);
+				}
+				if (selectedObject->HasMesh()) {
+					if (ImGui::Button("Remove Mesh")) {
+						selectedObject->m_mesh->RemoveGameObject(selectedObject);
+					}
+				}
+				else {
+					if (ImGui::Button("Add Mesh"))
+						ImGui::OpenPopup("Meshes");
+					if (ImGui::BeginPopup("Meshes")) {
+						for (auto m : m_activeScene->_GetMeshes()) {
+							if (ImGui::MenuItem(m->GetName().c_str())) {
+								m->AddGameObject(selectedObject);
+							}
+						}
+						ImGui::EndPopup();
+					}
 				}
 				ImGui::EndPopup();
 			}
