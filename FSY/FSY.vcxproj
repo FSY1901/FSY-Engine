@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClInclude Include="src\FSY.h" />
     <ClInclude Include="src\FSY\Application\Application.h" />
+    <ClInclude Include="src\FSY\Editor\Editor.h" />
     <ClInclude Include="src\FSY\Maths\PerlinNoise.h" />
     <ClInclude Include="src\FSY\Rendering\Camera.h" />
     <ClInclude Include="src\FSY\Editor\Console.h" />
@@ -206,6 +207,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\FSY\Application\Application.cpp" />
+    <ClCompile Include="src\FSY\Editor\Editor.cpp" />
     <ClCompile Include="src\FSY\Maths\PerlinNoise.cpp" />
     <ClCompile Include="src\FSY\Rendering\Camera.cpp" />
     <ClCompile Include="src\FSY\Editor\Console.cpp" />

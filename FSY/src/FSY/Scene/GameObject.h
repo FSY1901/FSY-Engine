@@ -16,6 +16,7 @@ namespace FSY {
 	class FSY_API Component;
 
 	extern class Application;
+	extern class Scene;
 
 	class FSY_API GameObject {
 
@@ -36,6 +37,7 @@ namespace FSY {
 		/// Returns true if the GameObject has a Mesh.
 		/// </summary>
 		bool HasMesh();
+		Mesh* GetMesh();
 		/// <summary>
 		/// Returns true if the GameObject is a Child of another GameObject
 		/// </summary>
@@ -121,6 +123,8 @@ namespace FSY {
 		}
 
 #pragma endregion
+
+		static void CreateGameObject(bool asChild, GameObject* parent, Scene* scene);
 
 	private:
 		bool m_hasMesh = false;

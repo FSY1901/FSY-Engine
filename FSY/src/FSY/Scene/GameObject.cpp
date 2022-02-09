@@ -1,4 +1,5 @@
 #include "GameObject.h"
+#include "Scene.h"
 
 namespace FSY {
 
@@ -46,6 +47,8 @@ namespace FSY {
 
 	bool GameObject::HasMesh(){ return m_hasMesh; }
 
+	Mesh* GameObject::GetMesh() { return m_mesh; }
+
 	bool GameObject::IsChild() { return m_isChild; }
 
 	bool GameObject::CompareLast() { return position == m_LastPosition && rotation == m_lastRotation && scale == m_lastScale; }
@@ -57,6 +60,20 @@ namespace FSY {
 	glm::mat4 GameObject::GetTransformationMatrix() { return m_transform; }
 
 	Sphere GameObject::GetBoundingSphere() { return m_boundingSphere; }
+
+	void GameObject::CreateGameObject(bool asChild, GameObject* parent, Scene* scene) {
+		GameObject* g;
+		if (parent != nullptr)
+			g = new GameObject(parent->position, Vector3f(0, 0, 0), Vector3f(1, 1, 1), "New Object");
+		else
+			g = new GameObject(Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1), "New Object");
+
+		if (asChild) {
+			parent->AddChild(g);
+			scene->AddObject(g);
+		}
+		scene->AddObject(g);
+	}
 
 	/////////////////////////
 	//COMPONENT:

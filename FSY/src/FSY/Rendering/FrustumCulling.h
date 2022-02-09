@@ -39,7 +39,7 @@ namespace FSY {
 
 	struct Sphere : public BoundingVolume {
 		glm::vec3 center = { 0, 0, 0 };
-		float radius = 0;
+		float radius = 1;
 
 		Sphere(){}
 
@@ -69,7 +69,7 @@ namespace FSY {
 
 		Frustum frustum;
 
-		const float halfVSide = far * tanf(fovY * .5f);
+		const float halfVSide = far * tanf(fovY * 0.5f);
 		const float halfHSide = halfVSide * aspect;
 		const glm::vec3 frontMultFar = far * camFront;
 

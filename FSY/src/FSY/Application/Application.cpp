@@ -3,6 +3,7 @@
 #include "../Editor/Console.h"
 #include "../Sound/Sound.h"
 #include "Settings.h"
+#include "../Editor/Editor.h"
 
 #include "../../vendor/stb_image/stb_image.h"
 #include <../imgui/imgui.h>
@@ -89,7 +90,7 @@ namespace FSY {
 
 	void Application::CreateNewGameObject(bool asChild, GameObject* parent) {
 		GameObject* g;
-		if(parent != nullptr)
+		if (parent != nullptr)
 			g = new GameObject(parent->position, Vector3f(0, 0, 0), Vector3f(1, 1, 1), "New Object");
 		else
 			g = new GameObject(Vector3f(0, 0, 0), Vector3f(0, 0, 0), Vector3f(1, 1, 1), "New Object");
@@ -433,14 +434,13 @@ namespace FSY {
 				view = glm::lookAt(cameraPos, cameraPos + cameraFront, Up);
 				Camera::GetMain()->__SetViewMatrix(view);
 				if(inEditor)
-					projection = glm::perspective(glm::radians(45.0f), (float)m_PanelSize.x / (float)m_PanelSize.y, 0.1f, 100.0f);
+					projection = glm::perspective(glm::radians(Camera::GetMain()->fov), (float)m_PanelSize.x / (float)m_PanelSize.y, Camera::GetMain()->zNear, Camera::GetMain()->zFar);
 				else
-					projection = glm::perspective(glm::radians(45.0f), (float)m_window.m_width / (float)m_window.m_height, 0.1f, 100.0f);
+					projection = glm::perspective(glm::radians(Camera::GetMain()->fov), (float)m_window.m_width / (float)m_window.m_height, Camera::GetMain()->zNear, Camera::GetMain()->zFar);
 
 				Camera::GetMain()->__SetProjectionMatrix(projection);
 
 				glBindFramebuffer(GL_FRAMEBUFFER, FBO);
-				//m_framebuffer.Bind();
 
 				glClearColor(m_clearColor[0], m_clearColor[1], m_clearColor[2], 1.0f);
 				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -461,7 +461,7 @@ namespace FSY {
 						glm::vec3(Camera::GetMain()->up.x, Camera::GetMain()->up.y, Camera::GetMain()->up.z),
 						glm::vec3(Camera::GetMain()->right.x, Camera::GetMain()->right.y, Camera::GetMain()->right.z),
 						glm::vec3(Camera::GetMain()->position.x, Camera::GetMain()->position.y, Camera::GetMain()->position.z),
-						(float)m_window.m_width / (float)m_window.m_height, 90, 0.1f, 100.0f);
+						(float)m_window.m_width / (float)m_window.m_height, Camera::GetMain()->fov, Camera::GetMain()->zNear, Camera::GetMain()->zFar);
 
 					for (auto mesh : m_activeScene->_GetMeshes()) {
 						if (mesh->renderMode == RENDER_FRONT) {
@@ -513,7 +513,6 @@ namespace FSY {
 								GameObject* g = sorted1[it->first];
 								g->__UpdateChildren();
 								RenderObject(g, mesh, firstFrame, camFrustum);
-								//vbo.Unbind();
 								if (!inEditor || m_activeScene->state == SceneState::Play) {
 									for (Component* c : g->__GetComponents()) {
 										c->Update();
@@ -521,13 +520,11 @@ namespace FSY {
 								}
 							}
 							glDisable(GL_BLEND);
-							//vbo.Delete();
 						}
 						else {
 							for (auto g : mesh->_GetGameObjects()) {
 								g->__UpdateChildren();
 								RenderObject(g, mesh, firstFrame, camFrustum);
-								//vbo.Unbind();
 								if (!inEditor || m_activeScene->state == SceneState::Play) {
 									for (Component* c : g->__GetComponents()) {
 										c->Update();
@@ -538,9 +535,7 @@ namespace FSY {
 						glDisable(GL_CULL_FACE);
 						if (mesh->HasTexture())
 							mesh->GetTexture()->Unbind();
-						//vbo.Delete();
 					}
-					//vao->Unbind();
 					//update all none mesh objects
 					if (!inEditor || m_activeScene->state == SceneState::Play) {
 						for (auto g : m_activeScene->_GetObjects()) {
@@ -557,6 +552,7 @@ namespace FSY {
 						for (auto g : m_activeScene->_GetObjects()) {
 							if (!g->HasMesh()) {
 								//Gizmos need the right Transformation Matrix, which is calculated with this:
+								g->__UpdateChildren();
 								RenderObject(g, nullptr, firstFrame, camFrustum, true);
 							}
 						}
@@ -724,168 +720,11 @@ namespace FSY {
 		}
 
 		ImGui::End();
-		RenderInspector();
-		RenderObjectPanel();
-		RenderContentBrowser();
+	 	selectedObject = RenderInspector(m_activeScene, selectedObject, m_sceneCamera);
+		RenderObjectPanel(selectedObject, m_activeScene);
+		RenderContentBrowser(&cb);
+		RenderConsolePanel(&m_console);
 		RenderDebugPanel();
-		RenderConsolePanel();
-		ImGui::End();
-
-	}
-
-	void Application::RenderInspector() {
-		ImGui::Begin("Inspector");
-		for (auto g : m_activeScene->_GetObjects()) {
-			if (!g->IsChild()) {
-				bool node = ImGui::TreeNodeEx(g->name.c_str(), ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_SpanAvailWidth);
-				if (ImGui::IsItemClicked()) {
-					selectedObject = g;
-				}
-				if (node) {
-					RenderChildrenInInspector(g);
-					ImGui::TreePop();
-				}
-			}
-		}
-		if (ImGui::BeginPopupContextWindow()) {
-			if (ImGui::MenuItem("New Object")) {
-				CreateNewGameObject(false, &m_sceneCamera);
-			}
-			ImGui::EndPopup();
-		}
-		ImGui::End();
-	}
-
-	void Application::RenderObjectPanel() {
-		ImGui::Begin("Object");
-		if (selectedObject != nullptr) {
-			std::string s = selectedObject->name;
-			ImGui::InputText("Name", &s);
-			if (selectedObject->name != s)
-				selectedObject->name = m_activeScene->__CheckName(s, selectedObject);
-			if (ImGui::TreeNodeEx("Transform", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
-				if (ImGui::TreeNodeEx("Position", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
-					ImGui::AlignTextToFramePadding();
-					ImGui::TextColored(ImVec4(1.0f, 0.2f, 0.2f, 1.0f), "X");
-					ImGui::SameLine();
-					ImGui::PushItemWidth(50);
-					ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(255, 0, 0, 255));
-					std::string x = std::to_string(selectedObject->position.x);
-					ImGui::InputFloat(" ", &selectedObject->position.x, -1000000.0f, 1000000.0f, x.c_str());
-					ImGui::PopStyleColor();
-					ImGui::AlignTextToFramePadding();
-					ImGui::TextColored(ImVec4(0.2f, 1.0f, 0.2f, 1.0f), "Y");
-					ImGui::SameLine();
-					ImGui::PushItemWidth(50);
-					ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(0, 255, 0, 255));
-					std::string y = std::to_string(selectedObject->position.y);
-					ImGui::InputFloat("  ", &selectedObject->position.y, -1000000.0f, 1000000.0f, y.c_str());
-					ImGui::PopStyleColor();
-					ImGui::AlignTextToFramePadding();
-					ImGui::TextColored(ImVec4(0.2f, 0.2f, 1.0f, 1.0f), "Z");
-					ImGui::SameLine();
-					ImGui::PushItemWidth(50);
-					ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(0, 0, 255, 255));
-					std::string z = std::to_string(selectedObject->position.z);
-					ImGui::InputFloat("   ", &selectedObject->position.z, -1000000.0f, 1000000.0f, z.c_str());
-					ImGui::PopStyleColor();
-					ImGui::TreePop();
-				}
-				if (ImGui::TreeNodeEx("Rotation", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
-					ImGui::AlignTextToFramePadding();
-					ImGui::TextColored(ImVec4(1.0f, 0.2f, 0.2f, 1.0f), "X");
-					ImGui::SameLine();
-					ImGui::PushItemWidth(50);
-					ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(255, 0, 0, 255));
-					std::string x = std::to_string(selectedObject->rotation.x);
-					ImGui::InputFloat(" ", &selectedObject->rotation.x, 0, 360, x.c_str());
-					ImGui::PopStyleColor();
-					ImGui::AlignTextToFramePadding();
-					ImGui::TextColored(ImVec4(0.2f, 1.0f, 0.2f, 1.0f), "Y");
-					ImGui::SameLine();
-					ImGui::PushItemWidth(50);
-					ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(0, 255, 0, 255));
-					std::string y = std::to_string(selectedObject->rotation.y);
-					ImGui::InputFloat("  ", &selectedObject->rotation.y, 0, 360, y.c_str());
-					ImGui::PopStyleColor();
-					ImGui::AlignTextToFramePadding();
-					ImGui::TextColored(ImVec4(0.2f, 0.2f, 1.0f, 1.0f), "Z");
-					ImGui::SameLine();
-					ImGui::PushItemWidth(50);
-					ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(0, 0, 255, 255));
-					std::string z = std::to_string(selectedObject->rotation.z);
-					ImGui::InputFloat("   ", &selectedObject->rotation.z, -1000000.0f, 1000000.0f, z.c_str());
-					ImGui::PopStyleColor();
-					ImGui::TreePop();
-				}
-				if (ImGui::TreeNodeEx("Scale", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
-					ImGui::AlignTextToFramePadding();
-					ImGui::TextColored(ImVec4(1.0f, 0.2f, 0.2f, 1.0f), "X");
-					ImGui::SameLine();
-					ImGui::PushItemWidth(50);
-					ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(255, 0, 0, 255));
-					std::string x = std::to_string(selectedObject->scale.x);
-					ImGui::InputFloat(" ", &selectedObject->scale.x, -1000000.0f, 1000000.0f, x.c_str());
-					ImGui::PopStyleColor();
-					ImGui::AlignTextToFramePadding();
-					ImGui::TextColored(ImVec4(0.2f, 1.0f, 0.2f, 1.0f), "Y");
-					ImGui::SameLine();
-					ImGui::PushItemWidth(50);
-					ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(0, 255, 0, 255));
-					std::string y = std::to_string(selectedObject->scale.y);
-					ImGui::InputFloat("  ", &selectedObject->scale.y, -1000000.0f, 1000000.0f, y.c_str());
-					ImGui::PopStyleColor();
-					ImGui::AlignTextToFramePadding();
-					ImGui::TextColored(ImVec4(0.2f, 0.2f, 1.0f, 1.0f), "Z");
-					ImGui::SameLine();
-					ImGui::PushItemWidth(50);
-					ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(0, 0, 255, 255));
-					std::string z = std::to_string(selectedObject->scale.z);
-					ImGui::InputFloat("   ", &selectedObject->scale.z, -1000000.0f, 1000000.0f, z.c_str());
-					ImGui::PopStyleColor();
-					ImGui::TreePop();
-				}
-				ImGui::TreePop();
-			}
-			if (ImGui::TreeNodeEx("Components", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
-				for (auto c : selectedObject->__GetComponents()) {
-					if (ImGui::TreeNodeEx(c->getName(), ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
-						c->DrawUI();
-						ImGui::TreePop();
-					}
-				}
-				ImGui::TreePop();
-			}
-			if (ImGui::BeginPopupContextWindow("Actions On Object")) {
-				if (ImGui::MenuItem("New Child Object")) {
-					CreateNewGameObject(true, selectedObject);
-				}
-				if (selectedObject->HasMesh()) {
-					if (ImGui::Button("Remove Mesh")) {
-						selectedObject->m_mesh->RemoveGameObject(selectedObject);
-					}
-				}
-				else {
-					if (ImGui::Button("Add Mesh"))
-						ImGui::OpenPopup("Meshes");
-					if (ImGui::BeginPopup("Meshes")) {
-						for (auto m : m_activeScene->_GetMeshes()) {
-							if (ImGui::MenuItem(m->GetName().c_str())) {
-								m->AddGameObject(selectedObject);
-							}
-						}
-						ImGui::EndPopup();
-					}
-				}
-				ImGui::EndPopup();
-			}
-		}
-		ImGui::End();
-	}
-
-	void Application::RenderContentBrowser() {
-		ImGui::Begin("Content");
-		cb.Draw();
 		ImGui::End();
 	}
 
@@ -902,25 +741,6 @@ namespace FSY {
 			ImGui::TreePop();
 		}
 		ImGui::End();
-	}
-
-	void Application::RenderConsolePanel() {
-		m_console.Draw();
-	}
-
-	void Application::RenderChildrenInInspector(GameObject* g) {
-		if (g->GetChildren().size() > 0) {
-			for (auto g1 : g->GetChildren()) {
-				bool node = ImGui::TreeNodeEx(g1->name.c_str(), ImGuiTreeNodeFlags_OpenOnArrow);
-				if (ImGui::IsItemClicked()) {
-					selectedObject = g1;
-				}
-				if (node) {
-					RenderChildrenInInspector(g1);
-					ImGui::TreePop();
-				}
-			}
-		}
 	}
 
 	void Application::s_framebuffer_size_callback(GLFWwindow* window, int width, int height)

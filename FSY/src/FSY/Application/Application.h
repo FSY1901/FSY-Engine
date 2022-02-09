@@ -61,11 +61,6 @@ namespace FSY {
         static Application* app;
 
 #pragma region Win Vars
-        /*GLFWwindow* m_win = nullptr;
-        bool m_windowOpen = true;
-        int m_width = 1000;
-        int m_height = 800;
-        const char* m_title = "My Win";*/
         Window m_window;
 #pragma endregion
 
@@ -96,13 +91,15 @@ namespace FSY {
         void RenderUI();
 
         //Individual panels
-        void RenderInspector();
-        void RenderObjectPanel();
+        //void RenderInspector(Scene* activeScene, GameObject* selectedObject, Camera& sceneCamera);
+        /*void RenderObjectPanel();
         void RenderContentBrowser();
         void RenderDebugPanel();
         Console m_console; //Console for the Console panel
         void RenderConsolePanel();
-        void RenderChildrenInInspector(GameObject* g);
+        void RenderChildrenInInspector(GameObject* g);*/
+        Console m_console;//Console for the Console panel
+        void RenderDebugPanel();
 
         Texture m_playButtonTexture;
         Texture m_stopTexture;
@@ -112,7 +109,6 @@ namespace FSY {
         ImVec2 m_PanelSize = {1, 1};
         ImVec2 m_texSize = { 0,0 };
         bool isHovered = false;
-        //Camera m_sceneCamera = Camera(Vector3f(), Vector3f(0, 0, -55), Vector3f(1, 1, 1));
         Camera m_renderCamera;
 #pragma endregion
 

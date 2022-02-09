@@ -12,6 +12,10 @@ namespace FSY {
 		Camera();
 		Camera(Vector3f pos, Vector3f rot, Vector3f scale);
 
+		float fov = 45.0f;
+		float zNear = 0.1f;
+		float zFar = 100.0f;
+
 		static Camera* GetMain();
 		static void SetAsMain(Camera* cam);
 

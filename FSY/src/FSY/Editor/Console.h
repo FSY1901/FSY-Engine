@@ -36,15 +36,13 @@ namespace FSY {
 		static void Log(std::string message);
 		static void Warn(std::string message);
 		static void Error(std::string message);
-
+		void Draw();
 	private:
 		static Console* m_Console;
 		static bool m_logged;
 		std::vector<Item> m_items;
 
-		void Draw();
-
-		friend class Application;
+		//friend class Application;
 	};
 
 }

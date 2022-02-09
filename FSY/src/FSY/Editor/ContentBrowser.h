@@ -4,6 +4,9 @@
 #include "../Rendering/Texture.h"
 #include <filesystem>
 
+#ifndef CONTENT_BROWSER_H
+#define CONTENT_BROWSER_H
+
 namespace FSY {
 
 	class ContentBrowser {
@@ -38,3 +41,5 @@ namespace FSY {
 	};
 
 }
+
+#endif
