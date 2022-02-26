@@ -97,8 +97,8 @@ namespace FSY {
 
 		if (asChild) {
 			parent->AddChild(g);
-			m_activeScene->AddObject(g);
 		}
+
 		m_activeScene->AddObject(g);
 	}
 
@@ -419,9 +419,9 @@ namespace FSY {
 				}
 
 				glm::vec3 direction;
-				direction.x = DegreesToRadians(Camera::GetMain()->rotation.x);
-				direction.y = DegreesToRadians(Camera::GetMain()->rotation.y);
-				direction.z = DegreesToRadians(Camera::GetMain()->rotation.z);
+				direction.x = cos(glm::radians(Camera::GetMain()->rotation.y)) * cos(glm::radians(Camera::GetMain()->rotation.x));
+				direction.y = sin(glm::radians(Camera::GetMain()->rotation.x));
+				direction.z = sin(glm::radians(Camera::GetMain()->rotation.y)) * cos(glm::radians(Camera::GetMain()->rotation.x));
 				glm::vec3 cameraFront = glm::normalize(direction);
 				Camera::GetMain()->front = { cameraFront.x, cameraFront.y, cameraFront.z };
 				Camera::GetMain()->right = Vector3f::Normalize(Vector3f::CrossProduct(Camera::GetMain()->front, Vector3f(0, 1, 0)));
@@ -683,6 +683,7 @@ namespace FSY {
 		ImGui::Image((void*)FBOTexture, size, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
 		static int op;
+
 		if (selectedObject != nullptr && m_activeScene->state == SceneState::Edit) {
 
 			if (Input::GetKey(Keys::Key_G) && Input::GetKey(Keys::Key_LEFT_SHIFT)) {
@@ -741,6 +742,10 @@ namespace FSY {
 			ImGui::TreePop();
 		}
 		ImGui::End();
+	}
+
+	void Application::__SetSelectedObject(GameObject* g) {
+		selectedObject = g;
 	}
 
 	void Application::s_framebuffer_size_callback(GLFWwindow* window, int width, int height)

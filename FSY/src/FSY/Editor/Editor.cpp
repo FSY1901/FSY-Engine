@@ -1,4 +1,5 @@
 #include "Editor.h"
+#include "../Application/Application.h"
 
 namespace FSY {
 
@@ -35,7 +36,7 @@ namespace FSY {
 					selectedObject = g1;
 				}
 				if (node) {
-					RenderChildrenInInspector(g1, selectedObject);
+					selectedObject = RenderChildrenInInspector(g1, selectedObject);
 					ImGui::TreePop();
 				}
 			}
@@ -148,6 +149,12 @@ namespace FSY {
 				if (ImGui::MenuItem("New Child Object")) {
 					GameObject::CreateGameObject(true, selectedObject, activeScene);
 				}
+
+				if (ImGui::MenuItem("Remove From Scene")) {
+					activeScene->DeleteObject(selectedObject);
+					Application::GetInstance()->__SetSelectedObject(nullptr);
+				}
+
 				if (selectedObject->HasMesh()) {
 					if (ImGui::Button("Remove Mesh")) {
 						selectedObject->GetMesh()->RemoveGameObject(selectedObject);

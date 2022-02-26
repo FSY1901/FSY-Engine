@@ -55,6 +55,7 @@ namespace FSY {
 
         //DON'T USE
         GLFWwindow* __GetWindow();
+        void __SetSelectedObject(GameObject* g);
 
 	private:
 
@@ -90,14 +91,6 @@ namespace FSY {
 
         void RenderUI();
 
-        //Individual panels
-        //void RenderInspector(Scene* activeScene, GameObject* selectedObject, Camera& sceneCamera);
-        /*void RenderObjectPanel();
-        void RenderContentBrowser();
-        void RenderDebugPanel();
-        Console m_console; //Console for the Console panel
-        void RenderConsolePanel();
-        void RenderChildrenInInspector(GameObject* g);*/
         Console m_console;//Console for the Console panel
         void RenderDebugPanel();
 
@@ -119,7 +112,7 @@ namespace FSY {
         void CreateNewGameObject(bool asChild = false, GameObject* parent = nullptr);
 
     protected:
-        Camera m_sceneCamera = Camera(Vector3f(), Vector3f(0, 0, -55), Vector3f(1, 1, 1));
+        Camera m_sceneCamera = Camera(Vector3f(), Vector3f(0, -90.0f, 0), Vector3f(1, 1, 1));
         GameObject* selectedObject = nullptr;
 
 	};

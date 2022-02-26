@@ -73,10 +73,6 @@ namespace FSY {
 				direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
 				cameraFront = glm::normalize(direction);
 
-				Camera::GetMain()->rotation.x = RadiansToDegrees(direction.x);
-				Camera::GetMain()->rotation.y = RadiansToDegrees(direction.y);
-				Camera::GetMain()->rotation.z = RadiansToDegrees(direction.z);
-
 				float xoffset = Input::MouseX() - lastX;
 				float yoffset = lastY - Input::MouseY();
 
@@ -84,7 +80,9 @@ namespace FSY {
 				yoffset *= sensitivity * Time::deltaTime();
 
 				yaw += xoffset;
+				Camera::GetMain()->rotation.y = yaw;
 				pitch += yoffset;
+				Camera::GetMain()->rotation.x = pitch;
 
 				if (pitch > 89.0f)
 					pitch = 89.0f;
@@ -121,8 +119,8 @@ namespace FSY {
 		glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 		glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 
-		float yaw = -90.0f + Camera::GetMain()->rotation.x;
-		float pitch = 0.0f + Camera::GetMain()->rotation.y;
+		float yaw = -90.0f;
+		float pitch = 0.0f;
 
 		float lastX = Input::WinWidth() / 2.0f;
 		float lastY = Input::WinHeight() / 2.0f;

@@ -30,6 +30,7 @@ namespace FSY {
 		GameObject(Vector3f pos, Vector3f rot, Vector3f scale, const char* Name);
 
 		void AddChild(GameObject* g);
+		void RemoveChild(GameObject* g);
 		//ENGINE ONLY --> DONT USE
 		void __UpdateChildren();
 
@@ -43,6 +44,9 @@ namespace FSY {
 		/// </summary>
 		/// <returns></returns>
 		bool IsChild();
+
+		//Returns the parent GameObject if this GameObject is a child
+		GameObject* GetParent();
 
 		std::vector<GameObject*> GetChildren();
 
@@ -137,6 +141,8 @@ namespace FSY {
 		Vector3f m_lastScale;
 
 		std::vector<Component*> m_components;
+
+		GameObject* parent = nullptr; //If object is a child
 		std::vector<GameObject*> m_children;
 
 		glm::mat4 m_fixedNormal;

@@ -16,7 +16,19 @@ namespace FSY {
 
 	void GameObject::AddChild(GameObject* g) {
 		g->m_isChild = true;
+		g->parent = this;
 		m_children.push_back(g);
+	}
+
+	void GameObject::RemoveChild(GameObject* g) {
+		for (int i = 0; i < m_children.size(); i++) {
+			GameObject* obj = m_children[i];
+			if (obj == g) {
+				m_children.erase(m_children.begin() + i);
+				g->m_isChild = false;
+				g->parent = nullptr;
+			}
+		}
 	}
 
 	void GameObject::__UpdateChildren() {
@@ -50,6 +62,8 @@ namespace FSY {
 	Mesh* GameObject::GetMesh() { return m_mesh; }
 
 	bool GameObject::IsChild() { return m_isChild; }
+	
+	GameObject* GameObject::GetParent() { return parent; }
 
 	bool GameObject::CompareLast() { return position == m_LastPosition && rotation == m_lastRotation && scale == m_lastScale; }
 
@@ -70,7 +84,6 @@ namespace FSY {
 
 		if (asChild) {
 			parent->AddChild(g);
-			scene->AddObject(g);
 		}
 		scene->AddObject(g);
 	}

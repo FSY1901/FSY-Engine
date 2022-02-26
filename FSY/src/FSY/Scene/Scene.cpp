@@ -16,6 +16,40 @@ namespace FSY {
 		}
 	}
 
+	void Scene::DeleteObject(GameObject* obj) {
+		for (int i = 0; i < m_objects.size(); i++) {
+			GameObject* g = m_objects[i];
+			if (obj == g) {
+				m_objects.erase(m_objects.begin() + i);
+				RemoveChildrenOfObject(obj);
+				if (obj->IsChild()) {
+					obj->GetParent()->RemoveChild(obj);
+				}
+				if (obj->HasMesh()) {
+					Mesh* m = obj->GetMesh();
+					m->RemoveGameObject(obj);
+				}
+			}
+		}
+	}
+
+	void Scene::RemoveChildrenOfObject(GameObject* parent) {
+		if (parent->GetChildren().size() != 0) {
+			for (int i = 0; i < parent->GetChildren().size(); i++) {
+				GameObject* g1 = parent->GetChildren()[i];
+				for (int j = 0; j < m_objects.size(); j++) {
+					if (g1 == m_objects[j]) {
+						RemoveChildrenOfObject(g1);
+						m_objects.erase(m_objects.begin() + j);
+						if (g1->HasMesh()) {
+							g1->GetMesh()->RemoveGameObject(g1);
+						}
+					}
+				}
+			}
+		}
+	}
+
 	void Scene::AddInstanceMesh(Mesh* m) {
 
 		if (m_meshes.size() < 10000)
