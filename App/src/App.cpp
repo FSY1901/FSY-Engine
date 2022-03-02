@@ -121,7 +121,7 @@ public:
 	float speed = 10.0f;
 
 	void Start() override {
-
+		
 	}
 
 	void Update() override {
@@ -270,5 +270,5 @@ public:
 };
 
 FSY::Application* FSY::CreateApplication() {
-	return new App(1000, 800, "My App", true);
+	return new App(1000, 800, "My App", false);
 }

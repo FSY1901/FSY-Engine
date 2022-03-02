@@ -19,7 +19,7 @@ namespace FSY {
 		void Draw();
 		void Delete();
 		void Resize(int x, int y);
-
+		unsigned int GetVAO();
 		unsigned int GetTexture();
 
 	private:

@@ -281,61 +281,13 @@ namespace FSY {
 			}
 		}
 
-		//Framebuffer
-#pragma region Framebuffer
-		float rectangleVertices[] = //covers the whole screen
-		{
-			// Coords    // texCoords
-			 1.0f, -1.0f,  1.0f, 0.0f,
-			-1.0f, -1.0f,  0.0f, 0.0f,
-			-1.0f,  1.0f,  0.0f, 1.0f,
+		Framebuffer fbo;
 
-			 1.0f,  1.0f,  1.0f, 1.0f,
-			 1.0f, -1.0f,  1.0f, 0.0f,
-			-1.0f,  1.0f,  0.0f, 1.0f
-		};
-
-		// Prepare framebuffer rectangle VBO and VAO
-		unsigned int rectVAO, rectVBO;
-		glGenVertexArrays(1, &rectVAO);
-		glGenBuffers(1, &rectVBO);
-		glBindVertexArray(rectVAO);
-		glBindBuffer(GL_ARRAY_BUFFER, rectVBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(rectangleVertices), &rectangleVertices, GL_STATIC_DRAW);
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
-
-		unsigned int FBO;
-		glGenFramebuffers(1, &FBO);
-		glBindFramebuffer(GL_FRAMEBUFFER, FBO);
-
-		unsigned int fboTex;
-		glGenTextures(1, &fboTex);
-		glBindTexture(GL_TEXTURE_2D, fboTex);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_window.m_width, m_window.m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glBindTexture(GL_TEXTURE_2D, 0);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fboTex, 0);
-
-		unsigned int rbo;
-		glGenRenderbuffers(1, &rbo);
-		glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, m_window.m_width, m_window.m_height);
-		glBindRenderbuffer(GL_RENDERBUFFER, 0);
-
-		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
-
-		//m_framebuffer.Generate(m_width, m_height);
+		fbo.Generate(m_window.m_width, m_window.m_height);
 
 		Shader fboShader = Shader(Settings::s_fboVertShaderPath.c_str(), Settings::s_fboFragShaderPath.c_str());
 		fboShader.Use();
 		glUniform1i(glGetUniformLocation(fboShader.ID, "screenTexture"), 0);
-#pragma endregion
 
 		while (!glfwWindowShouldClose(m_window.m_win))
 		{
@@ -345,30 +297,7 @@ namespace FSY {
 			//TODO: Make this a function
 			if (inEditor) {
 				if ((m_PanelSize.x != m_texSize.x || m_PanelSize.y != m_texSize.y)) {
-					glDeleteTextures(1, &fboTex);
-					glDeleteFramebuffers(1, &FBO);
-					glDeleteTextures(1, &rbo);
-					glDeleteRenderbuffers(1, &rbo);
-
-					glGenFramebuffers(1, &FBO);
-					glBindFramebuffer(GL_FRAMEBUFFER, FBO);
-
-					glGenTextures(1, &fboTex);
-					glBindTexture(GL_TEXTURE_2D, fboTex);
-					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_PanelSize.x, m_PanelSize.y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-					glBindTexture(GL_TEXTURE_2D, 0);
-					glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fboTex, 0);
-
-					glGenRenderbuffers(1, &rbo);
-					glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-					glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, m_PanelSize.x, m_PanelSize.y);
-					glBindRenderbuffer(GL_RENDERBUFFER, 0);
-
-					glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
+					fbo.Resize(m_PanelSize.x, m_PanelSize.y);
 
 					m_texSize = m_PanelSize;
 					glViewport(0, 0, m_PanelSize.x, m_PanelSize.y);
@@ -376,30 +305,7 @@ namespace FSY {
 			}
 			else {
 				if ((m_window.m_width != m_texSize.x || m_window.m_height != m_texSize.y)) {
-					glDeleteTextures(1, &fboTex);
-					glDeleteFramebuffers(1, &FBO);
-					glDeleteTextures(1, &rbo);
-					glDeleteRenderbuffers(1, &rbo);
-
-					glGenFramebuffers(1, &FBO);
-					glBindFramebuffer(GL_FRAMEBUFFER, FBO);
-
-					glGenTextures(1, &fboTex);
-					glBindTexture(GL_TEXTURE_2D, fboTex);
-					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_window.m_width, m_window.m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-					glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-					glBindTexture(GL_TEXTURE_2D, 0);
-					glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fboTex, 0);
-
-					glGenRenderbuffers(1, &rbo);
-					glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-					glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, m_window.m_width, m_window.m_height);
-					glBindRenderbuffer(GL_RENDERBUFFER, 0);
-
-					glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
+					fbo.Resize(m_window.m_width, m_window.m_height);
 
 					m_texSize = ImVec2(m_window.m_width, m_window.m_height);
 					glViewport(0, 0, m_window.m_width, m_window.m_height);
@@ -440,7 +346,7 @@ namespace FSY {
 
 				Camera::GetMain()->__SetProjectionMatrix(projection);
 
-				glBindFramebuffer(GL_FRAMEBUFFER, FBO);
+				fbo.Bind();
 
 				glClearColor(m_clearColor[0], m_clearColor[1], m_clearColor[2], 1.0f);
 				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -559,7 +465,7 @@ namespace FSY {
 
 					}
 					glBindFramebuffer(GL_FRAMEBUFFER, 0);
-					FBOTexture = fboTex;
+					FBOTexture = fbo.GetTexture();
 					glClear(GL_COLOR_BUFFER_BIT);
 
 					//Update Sound Listener
@@ -567,10 +473,10 @@ namespace FSY {
 
 					if (!inEditor) {
 						fboShader.Use();
-						glBindVertexArray(rectVAO);
+						glBindVertexArray(fbo.GetVAO());
 						glDisable(GL_DEPTH_TEST);
-						glBindTexture(GL_TEXTURE_2D, fboTex);
-						FBOTexture = fboTex;
+						glBindTexture(GL_TEXTURE_2D, fbo.GetTexture());
+						FBOTexture = fbo.GetTexture();
 						glDisable(GL_CULL_FACE);
 						glDrawArrays(GL_TRIANGLES, 0, 6);
 					}
@@ -599,8 +505,7 @@ namespace FSY {
 		delete scc;
 		delete vao;
 		vbo.Delete();
-		glDeleteFramebuffers(1, &FBO);
-
+		fbo.Delete();
 		//Delete Sound
 		//Sound::Quit();
 

@@ -77,9 +77,10 @@ namespace FSY {
 	}
 
 	void Framebuffer::Delete(){
-		glDeleteFramebuffers(1, &m_ID);
 		glDeleteTextures(1, &m_texture);
+		glDeleteFramebuffers(1, &m_ID);
 		glDeleteTextures(1, &m_RBO);
+		glDeleteRenderbuffers(1, &m_RBO);
 	}
 
 	void Framebuffer::Resize(int x, int y) {
@@ -89,5 +90,7 @@ namespace FSY {
 	}
 
 	unsigned int Framebuffer::GetTexture() { return m_texture; }
+
+	unsigned int Framebuffer::GetVAO() { return m_VAO; }
 
 }
