@@ -587,7 +587,7 @@ namespace FSY {
 			scc->inSceneWin = false;
 		ImGui::Image((void*)FBOTexture, size, ImVec2{ 0, 1 }, ImVec2{ 1, 0 });
 
-		static int op;
+		static int op  = - 1;
 
 		if (selectedObject != nullptr && m_activeScene->state == SceneState::Edit) {
 

@@ -105,6 +105,10 @@ namespace FSY {
 		z = Z;
 	}
 
+	Vector3f::Vector3(const Quaternion& q) {
+		*this = Quaternion::ToEulerAngles(q);
+	}
+
 	float Vector3f::Length() {
 		return sqrtf(x * x + y * y + z * z);
 	}
@@ -151,21 +155,28 @@ namespace FSY {
 		return res;
 	}
 
-	Vector3f& Vector3f::operator+=(Vector3& vec) {
+	Vector3f Vector3f::up = {0, 1, 0};
+	Vector3f Vector3f::forward = {0, 0, 1};
+	Vector3f Vector3f::right = {1, 0, 0};
+	Vector3f Vector3f::down = {0, -1, 0};
+	Vector3f Vector3f::back = { 0, 0, -1 };
+	Vector3f Vector3f::left = {-1, 0, 0};
+
+	Vector3f& Vector3f::operator+=(Vector3 vec) {
 		this->x += vec.x;
 		this->y += vec.y;
 		this->z += vec.z;
 		return *this;
 	}
 
-	Vector3f& Vector3f::operator*=(Vector3& vec) {
+	Vector3f& Vector3f::operator*=(Vector3 vec) {
 		this->x *= vec.x;
 		this->y *= vec.y;
 		this->z *= vec.z;
 		return *this;
 	}
 
-	Vector3f& Vector3f::operator+(Vector3& vec) {
+	Vector3f& Vector3f::operator+(Vector3 vec) {
 		Vector3f res;
 		res.x = this->x + vec.x;
 		res.y = this->y + vec.y;
@@ -173,7 +184,7 @@ namespace FSY {
 		return res;
 	}
 
-	Vector3f& Vector3f::operator-(Vector3& vec) {
+	Vector3f& Vector3f::operator-(Vector3 vec) {
 		Vector3f res;
 		res.x = this->x - vec.x;
 		res.y = this->y - vec.y;
@@ -181,7 +192,7 @@ namespace FSY {
 		return res;
 	}
 
-	Vector3f& Vector3f::operator*(Vector3& vec) {
+	Vector3f& Vector3f::operator*(Vector3 vec) {
 		Vector3f res;
 		res.x = this->x * vec.x;
 		res.y = this->y * vec.y;
@@ -205,17 +216,29 @@ namespace FSY {
 		return res;
 	}
 
-	bool Vector3f::operator!=(Vector3& other) {
+	bool Vector3f::operator!=(Vector3 other) {
 		return this->x != other.x || this->y != other.y || this->z != other.z;
 	}
 
-	bool Vector3f::operator==(Vector3& other) {
+	bool Vector3f::operator==(Vector3 other) {
 		return this->x == other.x && this->y == other.y && this->z == other.z;
 	}
 #pragma endregion
 
 #pragma region Quaternions
-	Quaternion Quaternion::ToQuaternion(Vector3f& vec) {
+
+	Quaternion::Quaternion() {
+
+	}
+
+	Quaternion::Quaternion(double x, double y, double z, double w) {
+		this->x = x;
+		this->y = y;
+		this->z = z;
+		this->w = w;
+	}
+
+	Quaternion Quaternion::ToQuaternion(Vector3f vec) {
 
 		double yaw = DegreesToRadians((double)vec.y);
 		double pitch = DegreesToRadians((double)vec.x);
@@ -237,6 +260,105 @@ namespace FSY {
 
 		return q;
 
+	}
+	
+	Quaternion Quaternion::LookAt(Vector3f direction, Vector3f forward, Vector3f up) {
+
+		Quaternion rot1 = RotationBetweenVectors(forward, direction);
+		Vector3f right = Vector3f::CrossProduct(direction, up);
+		up = Vector3f::CrossProduct(right, direction);
+		Vector3f realUp(0, 1, 0);
+		Vector3f newUp = rot1 * realUp;
+		Quaternion rot2 = RotationBetweenVectors(newUp, up);
+		Quaternion res = rot2 * rot1;
+
+		return Quaternion(res.x, res.y, res.z, res.w);
+
+	}
+
+	Vector3f Quaternion::EulerAngles(glm::quat q) {
+		glm::vec3 res = glm::eulerAngles(q);
+		return Vector3f(RadiansToDegrees(res.x), RadiansToDegrees(res.y), RadiansToDegrees(res.z));
+	}
+
+	Quaternion Quaternion::RotationBetweenVectors(Vector3f forward, Vector3f direction) {
+		forward = Vector3f::Normalize(forward);
+		direction = Vector3f::Normalize(direction);
+
+		float cosTheta = Vector3f::DotProduct(forward, direction);
+		Vector3f axis;
+
+		if (cosTheta < -1 + 0.001f) {
+			// special case when vectors in opposite directions:
+			// there is no "ideal" rotation axis
+			// So guess one; any will do as long as it's perpendicular to start
+			axis = Vector3f::CrossProduct(Vector3f(0.0f, 0.0f, 1.0f), forward);
+
+			if (axis.Length() * axis.Length() < 0.01)
+				axis = Vector3f::CrossProduct(Vector3f(1.0f, 0.0f, 0.0f), forward);
+
+			axis = Vector3f::Normalize(axis);
+			return Quaternion(axis.x, axis.y, axis.z, DegreesToRadians(180));
+		}
+
+		axis = Vector3f::CrossProduct(forward, direction);
+		float s = sqrt((1 + cosTheta) * 2);
+		float invs = 1 / s;
+
+		return Quaternion(
+			axis.x * invs,
+			axis.y * invs,
+			axis.z * invs,
+			s * 0.5f
+		);
+	}
+
+	Vector3f Quaternion::ToEulerAngles(Quaternion q) {
+		Vector3f angles;
+
+		// roll (x-axis rotation)
+		double sinr_cosp = 2 * (q.w * q.x + q.y * q.z);
+		double cosr_cosp = 1 - 2 * (q.x * q.x + q.y * q.y);
+		angles.x = RadiansToDegrees(std::atan2(sinr_cosp, cosr_cosp));
+
+		// pitch (y-axis rotation)
+		double sinp = 2 * (q.w * q.y - q.z * q.x);
+		if (std::abs(sinp) >= 1)
+			angles.y = RadiansToDegrees(std::copysign(PI / 2, sinp)); // use 90 degrees if out of range
+		else
+			angles.y = RadiansToDegrees(std::asin(sinp));
+
+		// yaw (z-axis rotation)
+		double siny_cosp = 2 * (q.w * q.z + q.x * q.y);
+		double cosy_cosp = 1 - 2 * (q.y * q.y + q.z * q.z);
+		angles.z = RadiansToDegrees(std::atan2(siny_cosp, cosy_cosp));
+
+		return angles;
+	}
+
+	Quaternion& Quaternion::operator*(Quaternion& q) {
+		Quaternion res;
+
+		glm::quat q1(this->w, this->x, this->y, this->z);
+		glm::quat q2(q.w, q.x, q.y, q.z);
+
+		glm::quat r = q1 * q2;
+
+		res = Quaternion(r.x, r.y, r.z, r.w);
+
+		/*res.x = this->x * q.w + this->y * q.z - this->z * q.y + this->w * q.x;
+		res.y = -this->x * q.z + this->y * q.w + this->z * q.x + this->w * q.y;
+		res.z = this->x * q.y - this->y * q.x + this->z * q.w + this->w * q.z;
+		res.w = -this->x * q.x - this->y * q.y - this->z * q.z + this->w * q.w;*/
+
+		return res;
+	}
+
+	Vector3f& Quaternion::operator*(Vector3f& vec) {
+		Vector3f res;
+		glm::vec3 v = glm::quat(this->w, this->x, this->y, this->z) * glm::vec3(vec.x, vec.y, vec.z);
+		res = Vector3f(v.x, v.y, v.z);
+		return res;
 	}
 #pragma endregion
 

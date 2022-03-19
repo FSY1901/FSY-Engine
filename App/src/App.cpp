@@ -150,18 +150,6 @@ public:
 
 };
 
-Vector3f LookAt(Vector3f direction) {
-	Vector3f result;
-	/*if(direction.z >= 0)
-		result.x = RadiansToDegrees(-atan2f(direction.y, direction.z + cos(direction.z)));
-	else
-		result.x = RadiansToDegrees(-atan2f(direction.y, -direction.z + cos(direction.z)));*/
-
-	result.y = RadiansToDegrees(atan2f(direction.x, direction.z));
-
-	return result;
-}
-
 class App : public FSY::Application {
 
 public:
@@ -206,14 +194,14 @@ public:
 		t1 = { "./src/Data/Textures/awesomeface.png" };
 		colored = { "./src/Data/Shaders/colored.vert", "./src/Data/Shaders/colored.frag" };
 		colored.diffuse = { 0.9f, 0.2f, 0.2f };
-		colored.specular = { .5f, .5f, .5f };
+		colored.specular = { 1.0f, 1.0f, 1.0f };
+		//snd.LoadSource("./src/Data/Audio/breakout.mp3");
 #else
 		s = { "Data/Shaders/textured.vert", "Data/Shaders/textured.frag" };
 		//t = { "Data/Textures/Dirt.png" };
 		colored = { "Data/Shaders/colored.vert", "Data/Shaders/colored.frag" };
 		sound->Path("Data/Audio/breakout.mp3");
 #endif
-		snd.LoadSource("./src/Data/Audio/breakout.mp3");
 		//snd.Play();
 		//Meshes & Scene
 		m = { Mesh::s_verticesForCube, Mesh::s_cubeMeshSize, &s, "Dirt Block" };
@@ -240,8 +228,6 @@ public:
 		if (Input::GetKey(Keys::Key_ESCAPE)) {
 			Close();
 		}
-		//scene.GetLight()->position = m_sceneCamera.position;
-		//g.rotation = LookAt(Vector3f::Normalize((myObject.position - g.position)));
 		/*if (Input::GetMouse(0)) {
 			for (auto m : scene._GetMeshes()) {
 				float* vertices = m->GetVertices();
@@ -261,6 +247,9 @@ public:
 				}
 			}
 		}*/
+		Vector3f rot = Quaternion::LookAt(g.position - myObject.position);
+		myObject.rotation = rot;
+
 	}
 
 	void OnClose() override {
@@ -270,5 +259,5 @@ public:
 };
 
 FSY::Application* FSY::CreateApplication() {
-	return new App(1000, 800, "My App", false);
+	return new App(1000, 800, "My App", true);
 }

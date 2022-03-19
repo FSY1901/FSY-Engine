@@ -17,6 +17,8 @@ namespace FSY {
 
 	extern class GameObject;
 
+	struct FSY_API Quaternion;
+
 	const double PI = 3.1415926;
 
 	double FSY_API RadiansToDegrees(double radians);
@@ -33,6 +35,7 @@ namespace FSY {
 	public:
 		Vector3();
 		Vector3(T X, T Y, T Z);
+		Vector3(const Quaternion& q);
 
 		T x, y, z;
 
@@ -41,7 +44,7 @@ namespace FSY {
 		//Multiplies 2 Vectors and returns the dot product (a scalar result).
 		static T DotProduct(Vector3 v1, Vector3 v2);
 
-		//Calculates the angle between to Vector3s and returns the result in radians.
+		//Calculates the angle between to Vector3s and returns the result in RADIANS.
 		static T AngleBetween(Vector3 v1, Vector3 v2);
 
 		static T Distance(Vector3 v1, Vector3 v2);
@@ -53,24 +56,32 @@ namespace FSY {
 		static Vector3 Normalize(Vector3 v);
 
 #pragma region Operators
-		Vector3& operator*=(Vector3& vec);
 
-		Vector3& operator+=(Vector3& vec);
+		Vector3& operator*=(Vector3 vec);
 
-		Vector3& operator+(Vector3& vec);
+		Vector3& operator+=(Vector3 vec);
 
-		Vector3& operator-(Vector3& vec);
+		Vector3& operator+(Vector3 vec);
 
-		Vector3& operator*(Vector3& vec);
+		Vector3& operator-(Vector3 vec);
+
+		Vector3& operator*(Vector3 vec);
 
 		Vector3& operator*(float f);
 
 		Vector3& operator/(float f);
 
-		bool operator!=(Vector3& other);
+		bool operator!=(Vector3 other);
 
-		bool operator==(Vector3& other);
+		bool operator==(Vector3 other);
 #pragma endregion
+
+		static Vector3 up;
+		static Vector3 forward;
+		static Vector3 right;
+		static Vector3 down;
+		static Vector3 back;
+		static Vector3 left;
 
 	};
 
@@ -79,7 +90,19 @@ namespace FSY {
 	struct FSY_API Quaternion {
 		double w = 1, x = 0, y = 0, z = 0;
 
-		static Quaternion ToQuaternion(Vector3f& vec);
+		Quaternion();
+		Quaternion(double x, double y, double z, double w);
+
+		static Quaternion ToQuaternion(Vector3f vec);
+		static Quaternion LookAt(Vector3f direction, Vector3f forward = Vector3f::forward, Vector3f up = Vector3f::up);
+		static Quaternion RotationBetweenVectors(Vector3f forward, Vector3f direction);
+
+		static Vector3f ToEulerAngles(Quaternion q);
+		static Vector3f EulerAngles(glm::quat q);
+
+		Quaternion& operator*(Quaternion& q);
+
+		Vector3f& operator*(Vector3f& vec);
 	};
 
 }
