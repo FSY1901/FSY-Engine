@@ -92,6 +92,7 @@ namespace FSY {
 
 		Quaternion();
 		Quaternion(double x, double y, double z, double w);
+		Quaternion(const Vector3f& vec);
 
 		static Quaternion ToQuaternion(Vector3f vec);
 		static Quaternion LookAt(Vector3f direction, Vector3f forward = Vector3f::forward, Vector3f up = Vector3f::up);
@@ -101,6 +102,12 @@ namespace FSY {
 		static Vector3f EulerAngles(glm::quat q);
 
 		Quaternion& operator*(Quaternion& q);
+
+		Quaternion& operator+(Quaternion& q);
+
+		bool operator!=(Quaternion& other);
+
+		bool operator==(Quaternion& other);
 
 		Vector3f& operator*(Vector3f& vec);
 	};

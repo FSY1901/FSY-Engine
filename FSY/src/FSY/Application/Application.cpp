@@ -69,8 +69,7 @@ namespace FSY {
 			if (!g->CompareLast() || firstFrame) {
 				glm::mat4 transform = glm::mat4(1.0f);
 				glm::mat4 transMat = glm::translate(transform, glm::vec3(g->position.x, g->position.y, g->position.z));
-				glm::vec3 rot(DegreesToRadians(g->rotation.x), DegreesToRadians(g->rotation.y), DegreesToRadians(g->rotation.z));
-				glm::quat _rot = glm::quat(rot);
+				glm::quat _rot = glm::quat(g->rotation.w, g->rotation.x, g->rotation.y, g->rotation.z);
 				glm::mat4 rotMat = glm::mat4_cast(_rot);
 				glm::mat4 scaleMat = glm::scale(transform, glm::vec3(g->scale.x, g->scale.y, g->scale.z));
 				transform = transMat * rotMat * scaleMat;
@@ -288,6 +287,7 @@ namespace FSY {
 		Shader fboShader = Shader(Settings::s_fboVertShaderPath.c_str(), Settings::s_fboFragShaderPath.c_str());
 		fboShader.Use();
 		glUniform1i(glGetUniformLocation(fboShader.ID, "screenTexture"), 0);
+		m_sceneCamera.rotation = Vector3f(0, 0, 0);
 
 		while (!glfwWindowShouldClose(m_window.m_win))
 		{
@@ -324,11 +324,21 @@ namespace FSY {
 						scc->Update();
 				}
 
-				glm::vec3 direction;
-				direction.x = cos(glm::radians(Camera::GetMain()->rotation.y)) * cos(glm::radians(Camera::GetMain()->rotation.x));
-				direction.y = sin(glm::radians(Camera::GetMain()->rotation.x));
-				direction.z = sin(glm::radians(Camera::GetMain()->rotation.y)) * cos(glm::radians(Camera::GetMain()->rotation.x));
+				Vector3f rotation = Camera::GetMain()->rotation;
+				Quaternion q = Camera::GetMain()->rotation;
+				glm::vec3 direction(0, 0, -1);
+				glm::quat quat = glm::quat(q.w, q.x, q.y, q.z);
+				/*
+				V[0] = 2 * (x * z - w * y)
+				V[1] = 2 * (y * z + w * x)
+				V[2] = 1 - 2 * (x * x + y * y)
+				*/
+				//direction.x = cos(glm::radians(rotation.y)) * cos(glm::radians(rotation.x));
+				//direction.y = sin(glm::radians(rotation.x));
+				//direction.z = sin(glm::radians(rotation.y)) * cos(glm::radians(rotation.x));
+				direction = quat * direction;
 				glm::vec3 cameraFront = glm::normalize(direction);
+				Console::Log(std::to_string(cameraFront.x) + ", " + std::to_string(cameraFront.y) + ", " + std::to_string(cameraFront.z));
 				Camera::GetMain()->front = { cameraFront.x, cameraFront.y, cameraFront.z };
 				Camera::GetMain()->right = Vector3f::Normalize(Vector3f::CrossProduct(Camera::GetMain()->front, Vector3f(0, 1, 0)));
 				Camera::GetMain()->up = Vector3f::Normalize(Vector3f::CrossProduct(Camera::GetMain()->right, Camera::GetMain()->front));
@@ -618,8 +628,13 @@ namespace FSY {
 					glm::vec3 pos, rot, scale;
 					DecomposeTransform(transform, pos, rot, scale);
 					selectedObject->position = Vector3f(pos.x, pos.y, pos.z);
+					/*Vector3f deltaRotation = Vector3f(RadiansToDegrees(rot.x), RadiansToDegrees(rot.y), RadiansToDegrees(rot.z)) - selectedObject->rotation;
+					selectedObject->rotation += deltaRotation;*/
 					Vector3f deltaRotation = Vector3f(RadiansToDegrees(rot.x), RadiansToDegrees(rot.y), RadiansToDegrees(rot.z)) - selectedObject->rotation;
-					selectedObject->rotation += deltaRotation;
+					Vector3f vec = (Quaternion::ToEulerAngles(selectedObject->rotation) + deltaRotation);
+					selectedObject->rotation = vec;
+					//Vector3f rot = selectedObject->rotation;
+					//Console::Log(std::to_string(vec.x) + ", " + std::to_string(vec.y) + ", " + std::to_string(vec.z));
 					selectedObject->scale = Vector3f(scale.x, scale.y, scale.z);
 				}
 			}

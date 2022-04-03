@@ -40,9 +40,11 @@ namespace FSY {
 				}
 			}
 			if (m_lastRotation != rotation) {
-				Vector3f offset = rotation - m_lastRotation;
+				Vector3f offset = Quaternion::ToEulerAngles(rotation) - Quaternion::ToEulerAngles(m_lastRotation);
 				for (auto g : m_children) {
-					g->rotation += offset;
+					Vector3f rot = Quaternion::ToEulerAngles(g->rotation);
+					rot += offset;
+					g->rotation = Quaternion::ToQuaternion(rot);
 				}
 			}
 			if (m_lastScale != scale) {

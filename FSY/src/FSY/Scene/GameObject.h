@@ -22,7 +22,7 @@ namespace FSY {
 
 	public:
 		Vector3f position;
-		Vector3f rotation;
+		Quaternion rotation;
 		Vector3f scale;
 		std::string name = "";
 
@@ -137,7 +137,7 @@ namespace FSY {
 		bool CompareLast();
 
 		Vector3f m_LastPosition;
-		Vector3f m_lastRotation;
+		Quaternion m_lastRotation;
 		Vector3f m_lastScale;
 
 		std::vector<Component*> m_components;

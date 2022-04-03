@@ -247,9 +247,10 @@ public:
 				}
 			}
 		}*/
-		Vector3f rot = Quaternion::LookAt(g.position - myObject.position);
-		myObject.rotation = rot;
-
+		myObject.rotation = Quaternion::LookAt(Camera::GetMain()->position - myObject.position);
+		scene.GetCamera()->rotation = Quaternion::LookAt(g.position - scene.GetCamera()->position, Vector3f(0, 0, -1));
+		Vector3f rot = Camera::GetMain()->rotation;
+		//Console::Log(std::to_string(rot.x) + ", " + std::to_string(rot.y) + ", " + std::to_string(rot.z));
 	}
 
 	void OnClose() override {

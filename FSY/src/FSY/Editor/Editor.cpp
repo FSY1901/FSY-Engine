@@ -81,31 +81,35 @@ namespace FSY {
 					ImGui::TreePop();
 				}
 				if (ImGui::TreeNodeEx("Rotation", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
+					Vector3f rotation = selectedObject->rotation;
 					ImGui::AlignTextToFramePadding();
 					ImGui::TextColored(ImVec4(1.0f, 0.2f, 0.2f, 1.0f), "X");
 					ImGui::SameLine();
 					ImGui::PushItemWidth(50);
 					ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(255, 0, 0, 255));
-					std::string x = std::to_string(selectedObject->rotation.x);
-					ImGui::InputFloat(" ", &selectedObject->rotation.x, 0, 360, x.c_str());
+					//std::string x = std::to_string(selectedObject->rotation.x);
+					//ImGui::InputFloat(" ", &selectedObject->rotation.x, 0, 360, x.c_str());
+					std::string x = std::to_string(rotation.x);
+					ImGui::InputFloat(" ", &rotation.x, 0, 360, x.c_str());
 					ImGui::PopStyleColor();
 					ImGui::AlignTextToFramePadding();
 					ImGui::TextColored(ImVec4(0.2f, 1.0f, 0.2f, 1.0f), "Y");
 					ImGui::SameLine();
 					ImGui::PushItemWidth(50);
 					ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(0, 255, 0, 255));
-					std::string y = std::to_string(selectedObject->rotation.y);
-					ImGui::InputFloat("  ", &selectedObject->rotation.y, 0, 360, y.c_str());
+					std::string y = std::to_string(rotation.y);
+					ImGui::InputFloat("  ", &rotation.y, 0, 360, y.c_str());
 					ImGui::PopStyleColor();
 					ImGui::AlignTextToFramePadding();
 					ImGui::TextColored(ImVec4(0.2f, 0.2f, 1.0f, 1.0f), "Z");
 					ImGui::SameLine();
 					ImGui::PushItemWidth(50);
 					ImGui::PushStyleColor(ImGuiCol_FrameBg, IM_COL32(0, 0, 255, 255));
-					std::string z = std::to_string(selectedObject->rotation.z);
-					ImGui::InputFloat("   ", &selectedObject->rotation.z, -1000000.0f, 1000000.0f, z.c_str());
+					std::string z = std::to_string(rotation.z);
+					ImGui::InputFloat("   ", &rotation.z, -1000000.0f, 1000000.0f, z.c_str());
 					ImGui::PopStyleColor();
 					ImGui::TreePop();
+					selectedObject->rotation = rotation;
 				}
 				if (ImGui::TreeNodeEx("Scale", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
 					ImGui::AlignTextToFramePadding();

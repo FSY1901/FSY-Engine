@@ -238,6 +238,11 @@ namespace FSY {
 		this->w = w;
 	}
 
+	Quaternion::Quaternion(const Vector3f& vec) {
+		Quaternion q = Quaternion::ToQuaternion(vec);
+		*this = q;
+	}
+
 	Quaternion Quaternion::ToQuaternion(Vector3f vec) {
 
 		double yaw = DegreesToRadians((double)vec.y);
@@ -298,6 +303,7 @@ namespace FSY {
 				axis = Vector3f::CrossProduct(Vector3f(1.0f, 0.0f, 0.0f), forward);
 
 			axis = Vector3f::Normalize(axis);
+			Console::Log(std::to_string(axis.x) + ", " + std::to_string(axis.y) + ", " + std::to_string(axis.z));
 			return Quaternion(axis.x, axis.y, axis.z, DegreesToRadians(180));
 		}
 
@@ -354,11 +360,30 @@ namespace FSY {
 		return res;
 	}
 
+	Quaternion& Quaternion::operator+(Quaternion& q) {
+		Quaternion res;
+
+		res.x = this->x + q.x;
+		res.y = this->y + q.y;
+		res.z = this->z + q.z;
+		res.w = this->w + q.w;
+
+		return res;
+	}
+
 	Vector3f& Quaternion::operator*(Vector3f& vec) {
 		Vector3f res;
 		glm::vec3 v = glm::quat(this->w, this->x, this->y, this->z) * glm::vec3(vec.x, vec.y, vec.z);
 		res = Vector3f(v.x, v.y, v.z);
 		return res;
+	}
+
+	bool Quaternion::operator!=(Quaternion& other) {
+		return this->x != other.x || this->y != other.y || this->z != other.z || this->w != other.w;
+	}
+
+	bool Quaternion::operator==(Quaternion& other) {
+		return this->x == other.x && this->y == other.y && this->z == other.z && this->w == other.w;
 	}
 #pragma endregion
 

@@ -5,6 +5,7 @@ namespace FSY {
 	Scene::Scene() {
 		m_objects.reserve(100000);
 		m_meshes.reserve(10000);
+		m_camera.rotation = Vector3f(0, 0, 0);
 		this->AddObject(&m_camera);
 		this->AddObject(&m_light);
 	}

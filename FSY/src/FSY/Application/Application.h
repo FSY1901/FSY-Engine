@@ -112,7 +112,7 @@ namespace FSY {
         void CreateNewGameObject(bool asChild = false, GameObject* parent = nullptr);
 
     protected:
-        Camera m_sceneCamera = Camera(Vector3f(), Vector3f(0, -90.0f, 0), Vector3f(1, 1, 1));
+        Camera m_sceneCamera = Camera(Vector3f(), Vector3f(0, 0.0f, 0), Vector3f(1, 1, 1));
         GameObject* selectedObject = nullptr;
 
 	};

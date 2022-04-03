@@ -11,6 +11,7 @@ namespace FSY {
 
 	public:
 		static float deltaTime();
+		static float currentTime();
 
 	private:
 		static float s_lastframe;
