@@ -23,12 +23,17 @@ namespace FSY {
 
 	}
 
-	Application::Application(int width, int height, const char* title, bool inEditor)
+	Application::Application(int width, int height, const char* title)
 	{
 		m_window.m_width = width;
 		m_window.m_height = height;
-		this->inEditor = inEditor;
-		if (inEditor)
+#ifdef FSY_DEBUG
+		this->inEditor = true;
+#else
+		this->inEditor = false;
+#endif
+
+		if (this->inEditor)
 			m_window.m_title = "FSY Engine";
 		else
 			m_window.m_title = title;
@@ -246,19 +251,22 @@ namespace FSY {
 
 		OnStart();
 
-		if (inEditor)
+		if (inEditor) {
+
 			Camera::SetAsMain(&m_sceneCamera);
 
-		ImGui::CreateContext();
-		ImGuiIO& io = ImGui::GetIO(); (void)io;
-		io.ConfigFlags = ImGuiConfigFlags_DockingEnable;
-		ImGui::StyleColorsDark();
-		ImGui_ImplGlfw_InitForOpenGL(m_window.m_win, true);
-		ImGui_ImplOpenGL3_Init("#version 330");
-		if (Settings::s_editorFontPath != "")
-			io.FontDefault = io.Fonts->AddFontFromFileTTF(Settings::s_editorFontPath.c_str(), 16.0f);
+			ImGui::CreateContext();
+			ImGuiIO& io = ImGui::GetIO(); (void)io;
+			io.ConfigFlags = ImGuiConfigFlags_DockingEnable;
+			ImGui::StyleColorsDark();
+			ImGui_ImplGlfw_InitForOpenGL(m_window.m_win, true);
+			ImGui_ImplOpenGL3_Init("#version 330");
+			if (Settings::s_editorFontPath != "")
+				io.FontDefault = io.Fonts->AddFontFromFileTTF(Settings::s_editorFontPath.c_str(), 16.0f);
 
-		SetStylingEditScene();
+			SetStylingEditScene();
+
+		}
 
 		vao->Generate();
 		vao->Bind();
@@ -274,7 +282,7 @@ namespace FSY {
 		else {
 			m_activeScene->state = SceneState::Play;
 			for (GameObject* g : m_activeScene->_GetObjects()) {
-				for (Component* c : g->__GetComponents()) {
+				for (auto& c : g->__GetComponents()) {
 					c->Start();
 				}
 			}
@@ -291,6 +299,10 @@ namespace FSY {
 
 		while (!glfwWindowShouldClose(m_window.m_win))
 		{
+
+			float currentFrame = glfwGetTime();
+			Time::s_deltaTime = currentFrame - Time::s_lastframe;
+			Time::s_lastframe = currentFrame;
 
 			bool firstFrame = true;
 
@@ -324,37 +336,30 @@ namespace FSY {
 						scc->Update();
 				}
 
-				Vector3f rotation = Camera::GetMain()->rotation;
-				Quaternion q = Camera::GetMain()->rotation;
+				Camera* cam = Camera::GetMain();
+
+				Vector3f rotation = cam->rotation;
+				Quaternion q = cam->rotation;
 				glm::vec3 direction(0, 0, -1);
 				glm::quat quat = glm::quat(q.w, q.x, q.y, q.z);
-				/*
-				V[0] = 2 * (x * z - w * y)
-				V[1] = 2 * (y * z + w * x)
-				V[2] = 1 - 2 * (x * x + y * y)
-				*/
-				//direction.x = cos(glm::radians(rotation.y)) * cos(glm::radians(rotation.x));
-				//direction.y = sin(glm::radians(rotation.x));
-				//direction.z = sin(glm::radians(rotation.y)) * cos(glm::radians(rotation.x));
 				direction = quat * direction;
 				glm::vec3 cameraFront = glm::normalize(direction);
-				Console::Log(std::to_string(cameraFront.x) + ", " + std::to_string(cameraFront.y) + ", " + std::to_string(cameraFront.z));
-				Camera::GetMain()->front = { cameraFront.x, cameraFront.y, cameraFront.z };
-				Camera::GetMain()->right = Vector3f::Normalize(Vector3f::CrossProduct(Camera::GetMain()->front, Vector3f(0, 1, 0)));
-				Camera::GetMain()->up = Vector3f::Normalize(Vector3f::CrossProduct(Camera::GetMain()->right, Camera::GetMain()->front));
+				cam->front = { cameraFront.x, cameraFront.y, cameraFront.z };
+				cam->right = Vector3f::Normalize(Vector3f::CrossProduct(cam->front, Vector3f(0, 1, 0)));
+				cam->up = Vector3f::Normalize(Vector3f::CrossProduct(cam->right, cam->front));
 				glm::vec3 cameraPos;
-				cameraPos.x = Camera::GetMain()->position.x;
-				cameraPos.y = Camera::GetMain()->position.y;
-				cameraPos.z = Camera::GetMain()->position.z;
+				cameraPos.x = cam->position.x;
+				cameraPos.y = cam->position.y;
+				cameraPos.z = cam->position.z;
 				glm::vec3 Up = { 0.0f, 1.0f, 0.0f };
 				view = glm::lookAt(cameraPos, cameraPos + cameraFront, Up);
-				Camera::GetMain()->__SetViewMatrix(view);
-				if(inEditor)
-					projection = glm::perspective(glm::radians(Camera::GetMain()->fov), (float)m_PanelSize.x / (float)m_PanelSize.y, Camera::GetMain()->zNear, Camera::GetMain()->zFar);
+				cam->__SetViewMatrix(view);
+				if (inEditor)
+					projection = glm::perspective(glm::radians(cam->fov), (float)m_PanelSize.x / (float)m_PanelSize.y, cam->zNear, cam->zFar);
 				else
-					projection = glm::perspective(glm::radians(Camera::GetMain()->fov), (float)m_window.m_width / (float)m_window.m_height, Camera::GetMain()->zNear, Camera::GetMain()->zFar);
+					projection = glm::perspective(glm::radians(cam->fov), (float)m_window.m_width / (float)m_window.m_height, cam->zNear, cam->zFar);
 
-				Camera::GetMain()->__SetProjectionMatrix(projection);
+				cam->__SetProjectionMatrix(projection);
 
 				fbo.Bind();
 
@@ -373,11 +378,11 @@ namespace FSY {
 				//Render active Scene
 				if (m_activeScene != nullptr) {
 
-					const Frustum camFrustum = CreateFrustum(glm::vec3(Camera::GetMain()->front.x, Camera::GetMain()->front.y, Camera::GetMain()->front.z),
-						glm::vec3(Camera::GetMain()->up.x, Camera::GetMain()->up.y, Camera::GetMain()->up.z),
-						glm::vec3(Camera::GetMain()->right.x, Camera::GetMain()->right.y, Camera::GetMain()->right.z),
-						glm::vec3(Camera::GetMain()->position.x, Camera::GetMain()->position.y, Camera::GetMain()->position.z),
-						(float)m_window.m_width / (float)m_window.m_height, Camera::GetMain()->fov, Camera::GetMain()->zNear, Camera::GetMain()->zFar);
+					const Frustum camFrustum = CreateFrustum(glm::vec3(cam->front.x, cam->front.y, cam->front.z),
+						glm::vec3(cam->up.x, cam->up.y, cam->up.z),
+						glm::vec3(cam->right.x, cam->right.y, cam->right.z),
+						glm::vec3(cam->position.x, cam->position.y, cam->position.z),
+						(float)m_window.m_width / (float)m_window.m_height, cam->fov, cam->zNear, cam->zFar);
 
 					for (auto mesh : m_activeScene->_GetMeshes()) {
 						if (mesh->renderMode == RENDER_FRONT) {
@@ -390,20 +395,24 @@ namespace FSY {
 						vao->Link(&vbo, 0, 1);
 						vbo.Unbind();
 						Shader* s = mesh->GetShader();
-						s->Use();
+						if(s != nullptr)
+							s->Use();
 						if (mesh->HasTexture())
 							mesh->GetTexture()->Bind();
-						s->setMat4("view", view);
-						s->setMat4("projection", projection);
-						s->setVec3("viewPos", Camera::GetMain()->position.x, Camera::GetMain()->position.y, Camera::GetMain()->position.z);
-						s->setVec3("material.diffuse", s->diffuse.x, s->diffuse.y, s->diffuse.z);
-						s->setVec3("material.specular", s->specular.x, s->specular.y, s->specular.z);
-						s->setFloat("material.shininess", s->shininess);
-						s->setVec3("lightPos", m_activeScene->GetLight()->position.x, m_activeScene->GetLight()->position.y, m_activeScene->GetLight()->position.z);
-						s->setVec3("light.ambient", m_activeScene->GetLight()->ambient.x, m_activeScene->GetLight()->ambient.y, m_activeScene->GetLight()->ambient.z);
-						s->setVec3("light.diffuse", m_activeScene->GetLight()->color.x, m_activeScene->GetLight()->color.y,
-							m_activeScene->GetLight()->color.z);
-						s->setVec3("light.specular", m_activeScene->GetLight()->specular.x, m_activeScene->GetLight()->specular.y, m_activeScene->GetLight()->specular.z);
+						
+						if (s != nullptr) {
+							s->setMat4("view", view);
+							s->setMat4("projection", projection);
+							s->setVec3("viewPos", cam->position.x, cam->position.y, cam->position.z);
+							s->setVec3("material.diffuse", s->diffuse.x, s->diffuse.y, s->diffuse.z);
+							s->setVec3("material.specular", s->specular.x, s->specular.y, s->specular.z);
+							s->setFloat("material.shininess", s->shininess);
+							s->setVec3("lightPos", m_activeScene->GetLight()->position.x, m_activeScene->GetLight()->position.y, m_activeScene->GetLight()->position.z);
+							s->setVec3("light.ambient", m_activeScene->GetLight()->ambient.x, m_activeScene->GetLight()->ambient.y, m_activeScene->GetLight()->ambient.z);
+							s->setVec3("light.diffuse", m_activeScene->GetLight()->color.x, m_activeScene->GetLight()->color.y,
+								m_activeScene->GetLight()->color.z);
+							s->setVec3("light.specular", m_activeScene->GetLight()->specular.x, m_activeScene->GetLight()->specular.y, m_activeScene->GetLight()->specular.z);
+						}
 
 						if (mesh->isTransparent) {
 							glEnable(GL_BLEND);
@@ -430,7 +439,7 @@ namespace FSY {
 								g->__UpdateChildren();
 								RenderObject(g, mesh, firstFrame, camFrustum);
 								if (!inEditor || m_activeScene->state == SceneState::Play) {
-									for (Component* c : g->__GetComponents()) {
+									for (auto& c : g->__GetComponents()) {
 										c->Update();
 									}
 								}
@@ -442,7 +451,7 @@ namespace FSY {
 								g->__UpdateChildren();
 								RenderObject(g, mesh, firstFrame, camFrustum);
 								if (!inEditor || m_activeScene->state == SceneState::Play) {
-									for (Component* c : g->__GetComponents()) {
+									for (auto& c : g->__GetComponents()) {
 										c->Update();
 									}
 								}
@@ -457,7 +466,7 @@ namespace FSY {
 						for (auto g : m_activeScene->_GetObjects()) {
 							if (!g->HasMesh()) {
 								g->__UpdateChildren();
-								for (Component* c : g->__GetComponents()) {
+								for (auto& c : g->__GetComponents()) {
 									c->Update();
 								}
 								RenderObject(g, nullptr, firstFrame, camFrustum, true);
@@ -479,7 +488,7 @@ namespace FSY {
 					glClear(GL_COLOR_BUFFER_BIT);
 
 					//Update Sound Listener
-					Sound::SetListener(Vector3f::Normalize(Camera::GetMain()->rotation), Camera::GetMain()->position);
+					Sound::SetListener(Vector3f::Normalize(cam->rotation), cam->position);
 
 					if (!inEditor) {
 						fboShader.Use();
@@ -501,10 +510,6 @@ namespace FSY {
 
 			glfwSwapBuffers(m_window.m_win);
 			glfwPollEvents();
-
-			float currentFrame = glfwGetTime();
-			Time::s_deltaTime = currentFrame - Time::s_lastframe;
-			Time::s_lastframe = currentFrame;
 
 			firstFrame = false;
 

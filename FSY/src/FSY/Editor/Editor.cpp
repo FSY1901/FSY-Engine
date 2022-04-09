@@ -141,7 +141,7 @@ namespace FSY {
 				ImGui::TreePop();
 			}
 			if (ImGui::TreeNodeEx("Components", ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
-				for (auto c : selectedObject->__GetComponents()) {
+				for (auto& c : selectedObject->__GetComponents()) {
 					if (ImGui::TreeNodeEx(c->getName(), ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Framed)) {
 						c->DrawUI();
 						ImGui::TreePop();

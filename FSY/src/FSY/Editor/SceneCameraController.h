@@ -18,7 +18,7 @@ namespace FSY {
 	public:
 
 		float cameraSpeed = 10.0f;
-		float sensitivity = 20.0f;
+		float sensitivity = 0.05f;
 
 		bool inSceneWin = false;
 
@@ -72,8 +72,8 @@ namespace FSY {
 				float xoffset = Input::MouseX() - lastX;
 				float yoffset = lastY - Input::MouseY();
 
-				xoffset *= sensitivity * Time::deltaTime();
-				yoffset *= sensitivity * Time::deltaTime();
+				xoffset *= sensitivity; //* Time::deltaTime();
+				yoffset *= sensitivity; //* Time::deltaTime();
 
 				yaw -= xoffset;
 				//Camera::GetMain()->rotation.y = yaw;
@@ -101,10 +101,6 @@ namespace FSY {
 
 			Input::SetCursorMode(CursorMode::Shown);
 
-		}
-
-		const char* getName() {
-			return "SceneCameraController";
 		}
 
 		glm::mat4 viewMatrix() {

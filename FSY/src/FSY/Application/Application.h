@@ -31,7 +31,7 @@ namespace FSY {
 	{
 	public:
 		Application();
-        Application(int width, int height, const char* title, bool inEditor);
+        Application(int width, int height, const char* title);
 		virtual ~Application();
 
         static Application* GetInstance();

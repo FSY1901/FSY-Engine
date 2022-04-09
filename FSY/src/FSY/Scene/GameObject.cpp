@@ -14,6 +14,10 @@ namespace FSY {
 		m_children.reserve(1000);
 	}
 
+	GameObject::~GameObject() {
+		
+	}
+
 	void GameObject::AddChild(GameObject* g) {
 		g->m_isChild = true;
 		g->parent = this;
@@ -102,4 +106,7 @@ namespace FSY {
 		this->gameObject = g;
 	}
 
+	const char* Component::getName() {
+		return typeid(*this).name();
+	}
 }

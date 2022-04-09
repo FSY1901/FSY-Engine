@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include "../../vendor/OpenGL/include/glad.h"
+#include "../Editor/Console.h"
 
 namespace FSY {
 
@@ -39,7 +40,7 @@ namespace FSY {
         }
         catch (std::ifstream::failure e)
         {
-            std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
+            Console::Error("[SHADER::FILE_NOT_SUCCESFULLY_READ]: " + std::string("--> Check locations: ") + std::string(vertexPath) + " or " + std::string(fragmentPath) );
         }
 
         //convert to C-Strings (OpenGL needs it, because it's written in C)
@@ -63,7 +64,7 @@ namespace FSY {
         if (!success)
         {
             glGetShaderInfoLog(vertex, 512, NULL, infoLog);
-            std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+            Console::Error("[SHADER::VERTEX::COMPILATION_FAILED]:\n" + std::string(infoLog));
             return;
         };
 
@@ -79,7 +80,7 @@ namespace FSY {
         if (!success_)
         {
             glGetShaderInfoLog(fragment, 512, NULL, infoLog_);
-            std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog_ << std::endl;
+            Console::Error("[SHADER::FRAGMENT::COMPILATION_FAILED]:\n" + std::string(infoLog_));
         }
 
         // shader Program & Linking
@@ -92,7 +93,7 @@ namespace FSY {
         if (!success)
         {
             glGetProgramInfoLog(ID, 512, NULL, infoLog);
-            std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+            Console::Error("[SHADER::PROGRAM::LINKING_FAILED]:\n" + std::string(infoLog));
         }
 
         // delete the shaders as they're linked into our program now and no longer necessary

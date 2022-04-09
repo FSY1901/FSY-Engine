@@ -29,6 +29,8 @@ namespace FSY {
 		GameObject();
 		GameObject(Vector3f pos, Vector3f rot, Vector3f scale, const char* Name);
 
+		~GameObject();
+
 		void AddChild(GameObject* g);
 		void RemoveChild(GameObject* g);
 		//ENGINE ONLY --> DONT USE
@@ -170,10 +172,9 @@ namespace FSY {
 		virtual void Update() {}
 
 		void SetGameObject(GameObject* g);
-		//Should return the way the Component is displayed in the Inspector.
-		virtual const char* getName() = 0;
+		const char* getName();
 		//Should use ImGui for an easy way to change values
-		virtual void DrawUI() = 0;
+		virtual void DrawUI() {};
 
 	protected:
 		GameObject* gameObject;

@@ -3,7 +3,6 @@
 #include <string>
 
 using namespace FSY;
-#define DEBUG 1
 
 bool rayTriangleIntersect(Vector3f orig, Vector3f dir,
 	Vector3f v0, Vector3f v1, Vector3f v2,
@@ -139,15 +138,23 @@ public:
 		}
 	}
 
-	const char* getName() {
-		return "Control";
-	}
-
 	void DrawUI() {
 		EditorUI::Text("Controller for the Object");
 		EditorUI::SliderFloat("Speed", &speed, 1, 15);
 	}
 
+};
+
+class Comp : public Component {
+
+public:
+	Comp() {
+
+	}
+
+	void Update() override {
+		Console::Log("Update");
+	}
 };
 
 class App : public FSY::Application {
@@ -171,7 +178,7 @@ public:
 
 	}
 
-	App(int width, int height, const char* title, bool inEditor) : FSY::Application(width, height, title, inEditor) {
+	App(int width, int height, const char* title) : FSY::Application(width, height, title) {
 		
 	}
 
@@ -186,22 +193,15 @@ public:
 		g2 = { Vector3f(2, 0, -5.0f), Vector3f(0, 0, 0), Vector3f(1, 1, 1), "Object" };
 		g = { Vector3f(5, 0, -5.0f), Vector3f(0, 0, 0), Vector3f(0.5f, 0.5f, 0.5f), "Object" };
 		//Dirs
-#if DEBUG == 1
-		s = { "./src/Data/Shaders/textured.vert", "./src/Data/Shaders/textured.frag" };
+		s = { "src/Data/Shaders/textured.vert", "src/Data/Shaders/textured.frag" };
 		s.diffuse = { 1,1,1 };
 		s.specular = { 0.2f, 0.2f, 0.2f };
-		t = { "./src/Data/Textures/Dirt.png" };
-		t1 = { "./src/Data/Textures/awesomeface.png" };
-		colored = { "./src/Data/Shaders/colored.vert", "./src/Data/Shaders/colored.frag" };
+		t = { "src/Data/Textures/Dirt.png" };
+		t1 = { "src/Data/Textures/awesomeface.png" };
+		colored = { "src/Data/Shaders/colored.vert", "src/Data/Shaders/colored.frag" };
 		colored.diffuse = { 0.9f, 0.2f, 0.2f };
 		colored.specular = { 1.0f, 1.0f, 1.0f };
-		//snd.LoadSource("./src/Data/Audio/breakout.mp3");
-#else
-		s = { "Data/Shaders/textured.vert", "Data/Shaders/textured.frag" };
-		//t = { "Data/Textures/Dirt.png" };
-		colored = { "Data/Shaders/colored.vert", "Data/Shaders/colored.frag" };
-		sound->Path("Data/Audio/breakout.mp3");
-#endif
+		//snd.LoadSource("src/Data/Audio/breakout.mp3");
 		//snd.Play();
 		//Meshes & Scene
 		m = { Mesh::s_verticesForCube, Mesh::s_cubeMeshSize, &s, "Dirt Block" };
@@ -247,9 +247,9 @@ public:
 				}
 			}
 		}*/
-		myObject.rotation = Quaternion::LookAt(Camera::GetMain()->position - myObject.position);
-		scene.GetCamera()->rotation = Quaternion::LookAt(g.position - scene.GetCamera()->position, Vector3f(0, 0, -1));
-		Vector3f rot = Camera::GetMain()->rotation;
+		//myObject.rotation = Quaternion::LookAt(Camera::GetMain()->position - myObject.position);
+		//scene.GetCamera()->rotation = Quaternion::LookAt(g.position - scene.GetCamera()->position, Vector3f(0, 0, -1));
+		//Vector3f rot = Camera::GetMain()->rotation;
 		//Console::Log(std::to_string(rot.x) + ", " + std::to_string(rot.y) + ", " + std::to_string(rot.z));
 	}
 
@@ -260,5 +260,5 @@ public:
 };
 
 FSY::Application* FSY::CreateApplication() {
-	return new App(1000, 800, "My App", true);
+	return new App(1000, 800, "My App");
 }

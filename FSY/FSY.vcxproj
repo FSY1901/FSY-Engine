@@ -435,7 +435,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>FSY_PLATFORM_WINDOWS;FSY_BUILD_DLL;</PreprocessorDefinitions>
+      <PreprocessorDefinitions>FSY_PLATFORM_WINDOWS;FSY_BUILD_DLL;FSY_DEBUG</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>D:\VS_Projects\FSY\FSY\src\vendor\imguizmo;$(SolutionDir)FSY\src\vendor\SDL\sdl\include;$(SolutionDir)FSY\src\vendor\SDL\sdl_mixer\include;$(SolutionDir)FSY\src\vendor\OpenGL\include;$(SolutionDir)FSY\src\vendor\imgui;$(SolutionDir)FSY\src\FSY\Headers;$(SolutionDir)FSY\src\vendor\glm\gtx;$(SolutionDir)FSY\src\vendor\glm\gtc;$(SolutionDir)FSY\src\vendor\glm;$(SolutionDir)FSY\src\vendor\Audeo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
