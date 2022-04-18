@@ -9,11 +9,11 @@ void main(){
 
 
 	//no effect
-	FragColor = texture(screenTexture, texCoords);
+	//FragColor = texture(screenTexture, texCoords);
 
 
 	//inverse effect
-	//FragColor = vec4(vec3(1.0 - texture(screenTexture, texCoords)), 1.0);
+	FragColor = vec4(vec3(1.0 - texture(screenTexture, texCoords)), 1.0);
 
 	//Grayscale
 	//FragColor = texture(screenTexture, texCoords);

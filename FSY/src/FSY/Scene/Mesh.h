@@ -3,6 +3,8 @@
 
 #include "../Rendering/Shader.h"
 #include "../Rendering/Texture.h"
+#include "../Rendering/VAO.h"
+#include "../Rendering/VBO.h"
 
 #include <vector>
 
@@ -17,11 +19,18 @@ namespace FSY {
 
 	extern class GameObject;
 
+	struct FSY_API MeshData {
+		MeshData();
+		MeshData(float* vertices, int size);
+		float* vertices;
+		int size;
+	};
+
 	class FSY_API Mesh {
 
 	public:
 		Mesh();
-		Mesh(float* Vertices, int size, Shader* Shader, std::string name);
+		Mesh(MeshData data, Shader* Shader, std::string name);
 		Shader* GetShader();
 		Texture* GetTexture();
 		//Change the shader with which the object is rendered
@@ -49,6 +58,8 @@ namespace FSY {
 		std::vector<GameObject*> _GetGameObjects();
 		std::vector<GameObject*>* _GetObjectList();
 
+		VAO vao;
+
 #pragma region MESHES
 		static float s_verticesForCube[288];
 		static float s_verticesForPlane[48];
@@ -62,11 +73,12 @@ namespace FSY {
 	private:
 		int m_size;
 		float* m_vertices;
+		MeshData m_data;
 		Shader* m_shader = nullptr;
 		Texture* m_texture = nullptr;
 		bool m_hasTexture = false;
 		std::string m_name;
-
+		
 		std::vector<GameObject*> m_objects = {};
 
 	};

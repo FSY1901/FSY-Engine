@@ -13,6 +13,7 @@ namespace FSY {
 		void SetData(float* vertices, GLsizeiptr size);
 		unsigned int getID();
 
+		void Generate();
 		void Bind();
 		void Unbind();
 		void Delete();

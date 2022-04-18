@@ -103,6 +103,11 @@ namespace FSY {
 
 		}
 
+		void SetYawAndPitch(float yaw, float pitch) {
+			this->yaw = yaw;
+			this->pitch = pitch;
+		}
+
 		glm::mat4 viewMatrix() {
 			return glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 		}

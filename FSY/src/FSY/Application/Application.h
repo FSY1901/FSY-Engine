@@ -72,7 +72,7 @@ namespace FSY {
 #pragma endregion
 
 #pragma region Render Vars
-        VAO* vao = new VAO();
+        //VAO* vao = new VAO();
         glm::mat4 view = glm::mat4(1.0);
         glm::mat4 projection;
 #pragma endregion
@@ -82,7 +82,7 @@ namespace FSY {
         Scene* m_activeScene = nullptr;
         float m_clearColor[3] = { 0.2f, 0.2f, 0.2f };
 
-        void RenderObject(GameObject* g, Mesh* mesh, bool firstFrame, Frustum camFrustum, bool isEmpty = false);
+        void RenderObject(GameObject* g, Mesh* mesh, Frustum camFrustum, bool isEmpty);
 #pragma endregion
 
 #pragma region Scene View
@@ -99,6 +99,7 @@ namespace FSY {
 
         ContentBrowser cb;
         uint32_t FBOTexture;
+        Shader fboShader;
         ImVec2 m_PanelSize = {1, 1};
         ImVec2 m_texSize = { 0,0 };
         bool isHovered = false;

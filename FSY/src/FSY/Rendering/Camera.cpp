@@ -31,6 +31,14 @@ namespace FSY {
 		projectionMatrix = projection;
 	}
 
+	void Camera::__SetFrustum(Frustum frustum) {
+		this->m_frustum = frustum;
+	}
+
+	Frustum Camera::GetFrustum() {
+		return m_frustum;
+	}
+
 	glm::mat4 Camera::_GetProjectionMatrix() { return projectionMatrix; }
 
 }

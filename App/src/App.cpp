@@ -2,6 +2,8 @@
 #include <iostream>
 #include <string>
 
+#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+
 using namespace FSY;
 
 bool rayTriangleIntersect(Vector3f orig, Vector3f dir,
@@ -153,7 +155,7 @@ public:
 	}
 
 	void Update() override {
-		Console::Log("Update");
+		//Console::Log("Update");
 	}
 };
 
@@ -204,17 +206,18 @@ public:
 		//snd.LoadSource("src/Data/Audio/breakout.mp3");
 		//snd.Play();
 		//Meshes & Scene
-		m = { Mesh::s_verticesForCube, Mesh::s_cubeMeshSize, &s, "Dirt Block" };
-		m1 = { Mesh::s_verticesForCube, Mesh::s_cubeMeshSize, &colored, "Red Cube" };
+		MeshData data(Mesh::s_verticesForCube, Mesh::s_cubeMeshSize);
+		//m = { data, &s, "Dirt Block" };
+		//m1 = { data, &colored, "Red Cube" };
 		m.SetTexture(&t);
 		g2.AddComponent<Control>();
-		g2.AddChild(&myObject);
-		g2.AddChild(&g);
-		m.AddGameObject(&g);
-		m1.AddGameObject(&myObject);
-		m1.AddGameObject(&g2);
-		scene.AddInstanceMesh(&m);
-		scene.AddInstanceMesh(&m1);
+		//g2.AddChild(&myObject);
+		//g2.AddChild(&g);
+		//m.AddGameObject(&g);
+		//m1.AddGameObject(&myObject);
+		//m1.AddGameObject(&g2);
+		//scene.AddInstanceMesh(&m);
+		//scene.AddInstanceMesh(&m1);
 		ChangeScene(&scene);
 	}
 

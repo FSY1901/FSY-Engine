@@ -66,12 +66,27 @@ namespace FSY {
     int Mesh::s_triangleMeshSize = 24;
 #pragma endregion
 
+    MeshData::MeshData() {
+
+    }
+
+    MeshData::MeshData(float* vertices, int size) {
+        this->vertices = vertices;
+        this->size = size;
+    }
+
     Mesh::Mesh() {
 
     }
 
-    Mesh::Mesh(float* Vertices, int size, Shader* Shader, std::string name) : m_vertices(Vertices), m_size(size), m_shader(Shader), m_name(name) {
+    Mesh::Mesh(MeshData data, Shader* Shader, std::string name) : m_data(data), m_shader(Shader), m_name(name) {
         m_objects.reserve(10000);
+        VBO vbo;
+        vao.Generate();
+        vbo.Generate();
+        vbo.SetData(data.vertices, data.size * sizeof(float));
+        vao.Bind();
+        vao.Link(&vbo, 0, 1);
     }
 
     Shader* Mesh::GetShader() {
@@ -118,12 +133,12 @@ namespace FSY {
     }
 
     float* Mesh::GetVertices() {
-        return m_vertices;
+        return m_data.vertices;
     }
 
     int Mesh::GetVertexSize()
     {
-        return m_size;
+        return m_data.size;
     }
 
     std::string Mesh::GetName() {

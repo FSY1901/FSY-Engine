@@ -3,6 +3,10 @@
 namespace FSY {
 
 	VBO::VBO() {
+		
+	}
+
+	void VBO::Generate() {
 		glGenBuffers(1, &m_ID);
 		glBindBuffer(GL_ARRAY_BUFFER, m_ID);
 	}

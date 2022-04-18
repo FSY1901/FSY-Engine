@@ -67,28 +67,27 @@ namespace FSY {
 		stbi_image_free(images[0].pixels);
 	}
 
-	void Application::RenderObject(GameObject* g, Mesh* mesh, bool firstFrame, Frustum camFrustum, bool IsEmpty) {
+	void Application::RenderObject(GameObject* g, Mesh* mesh, Frustum camFrustum, bool IsEmpty) {
 		if (g->GetBoundingSphere().isOnFrustum(camFrustum,
 			glm::vec3(g->position.x, g->position.y, g->position.z),
 			glm::vec3(g->scale.x, g->scale.y, g->scale.z))) {
-			if (!g->CompareLast() || firstFrame) {
-				glm::mat4 transform = glm::mat4(1.0f);
-				glm::mat4 transMat = glm::translate(transform, glm::vec3(g->position.x, g->position.y, g->position.z));
-				glm::quat _rot = glm::quat(g->rotation.w, g->rotation.x, g->rotation.y, g->rotation.z);
-				glm::mat4 rotMat = glm::mat4_cast(_rot);
-				glm::mat4 scaleMat = glm::scale(transform, glm::vec3(g->scale.x, g->scale.y, g->scale.z));
-				transform = transMat * rotMat * scaleMat;
-				g->m_transform = transform;
-				if (!IsEmpty) {
-					glm::mat4 inverse = glm::inverse(transform);
-					glm::mat4 transpose = glm::transpose(inverse);
-					g->m_fixedNormal = transpose;
-					mesh->GetShader()->setMat4("fixedNormal", g->m_fixedNormal);
-					mesh->GetShader()->setMat4("transform", g->m_transform);
-				}
+			glm::mat4 transform = glm::mat4(1.0f);
+			glm::mat4 transMat = glm::translate(transform, glm::vec3(g->position.x, g->position.y, g->position.z));
+			glm::quat _rot = glm::quat(g->rotation.w, g->rotation.x, g->rotation.y, g->rotation.z);
+			glm::mat4 rotMat = glm::mat4_cast(_rot);
+			glm::mat4 scaleMat = glm::scale(transform, glm::vec3(g->scale.x, g->scale.y, g->scale.z));
+			transform = transMat * rotMat * scaleMat;
+			g->m_transform = transform;
+			if (!IsEmpty) {
+				glm::mat4 inverse = glm::inverse(transform);
+				glm::mat4 transpose = glm::transpose(inverse);
+				g->m_fixedNormal = transpose;
+				mesh->GetShader()->setMat4("fixedNormal", g->m_fixedNormal);
+				mesh->GetShader()->setMat4("transform", g->m_transform);
 			}
-			if(!IsEmpty)
+			if (!IsEmpty) {
 				glDrawArrays(GL_TRIANGLES, 0, sizeof(float) * mesh->GetVertexSize());
+			}
 		}
 	}
 
@@ -268,11 +267,6 @@ namespace FSY {
 
 		}
 
-		vao->Generate();
-		vao->Bind();
-		VBO vbo;
-		vbo.Bind();
-
 		if (inEditor) {
 			m_activeScene->state = SceneState::Edit;
 			m_sceneCamera.AddComponent<SceneCameraController>();
@@ -292,7 +286,7 @@ namespace FSY {
 
 		fbo.Generate(m_window.m_width, m_window.m_height);
 
-		Shader fboShader = Shader(Settings::s_fboVertShaderPath.c_str(), Settings::s_fboFragShaderPath.c_str());
+		fboShader = Shader(Settings::s_fboVertShaderPath.c_str(), Settings::s_fboFragShaderPath.c_str());
 		fboShader.Use();
 		glUniform1i(glGetUniformLocation(fboShader.ID, "screenTexture"), 0);
 		m_sceneCamera.rotation = Vector3f(0, 0, 0);
@@ -337,8 +331,12 @@ namespace FSY {
 				}
 
 				Camera* cam = Camera::GetMain();
-
-				Vector3f rotation = cam->rotation;
+				if(inEditor)
+					if (Input::GetKey(Key_F)) {
+						cam->rotation = Quaternion::LookAt(selectedObject->position - cam->position, Vector3f::back);
+						Vector3f rot = cam->rotation;
+						scc->SetYawAndPitch(rot.y, rot.x);
+					}
 				Quaternion q = cam->rotation;
 				glm::vec3 direction(0, 0, -1);
 				glm::quat quat = glm::quat(q.w, q.x, q.y, q.z);
@@ -354,10 +352,16 @@ namespace FSY {
 				glm::vec3 Up = { 0.0f, 1.0f, 0.0f };
 				view = glm::lookAt(cameraPos, cameraPos + cameraFront, Up);
 				cam->__SetViewMatrix(view);
-				if (inEditor)
-					projection = glm::perspective(glm::radians(cam->fov), (float)m_PanelSize.x / (float)m_PanelSize.y, cam->zNear, cam->zFar);
-				else
-					projection = glm::perspective(glm::radians(cam->fov), (float)m_window.m_width / (float)m_window.m_height, cam->zNear, cam->zFar);
+				if (inEditor) {
+					float aspect = (float)m_PanelSize.x / m_PanelSize.y;
+					projection = cam->mode == CameraMode::Perspective ? glm::perspective(glm::radians(cam->fov), (float)m_PanelSize.x / (float)m_PanelSize.y, cam->zNear, cam->zFar) 
+						: glm::ortho(-aspect, aspect, -1.0f, 1.0f, cam->zNear, cam->zFar);
+				}
+				else {
+					float aspect = (float)m_window.m_width / m_window.m_height;
+					projection = cam->mode == CameraMode::Perspective ? glm::perspective(glm::radians(cam->fov), (float)m_window.m_width / (float)m_window.m_height, cam->zNear, cam->zFar) 
+						: glm::ortho(-aspect, aspect, -1.0f, 1.0f, cam->zNear, cam->zFar);
+				}
 
 				cam->__SetProjectionMatrix(projection);
 
@@ -384,16 +388,14 @@ namespace FSY {
 						glm::vec3(cam->position.x, cam->position.y, cam->position.z),
 						(float)m_window.m_width / (float)m_window.m_height, cam->fov, cam->zNear, cam->zFar);
 
+					Camera::GetMain()->__SetFrustum(camFrustum);
+
 					for (auto mesh : m_activeScene->_GetMeshes()) {
 						if (mesh->renderMode == RENDER_FRONT) {
 							glEnable(GL_CULL_FACE);
 							glCullFace(GL_BACK);
 						}
-						vbo.Bind();
-						vbo.SetData(mesh->GetVertices(), sizeof(float) * mesh->GetVertexSize());
-						vao->Bind();
-						vao->Link(&vbo, 0, 1);
-						vbo.Unbind();
+
 						Shader* s = mesh->GetShader();
 						if(s != nullptr)
 							s->Use();
@@ -413,6 +415,8 @@ namespace FSY {
 								m_activeScene->GetLight()->color.z);
 							s->setVec3("light.specular", m_activeScene->GetLight()->specular.x, m_activeScene->GetLight()->specular.y, m_activeScene->GetLight()->specular.z);
 						}
+
+						mesh->vao.Bind();
 
 						if (mesh->isTransparent) {
 							glEnable(GL_BLEND);
@@ -436,25 +440,26 @@ namespace FSY {
 							for (std::map<float, glm::vec3>::reverse_iterator it = sorted.rbegin(); it != sorted.rend(); ++it)
 							{
 								GameObject* g = sorted1[it->first];
-								g->__UpdateChildren();
-								RenderObject(g, mesh, firstFrame, camFrustum);
+								RenderObject(g, mesh, cam->GetFrustum(), false);
 								if (!inEditor || m_activeScene->state == SceneState::Play) {
 									for (auto& c : g->__GetComponents()) {
 										c->Update();
 									}
 								}
+								g->__UpdateChildren();
 							}
 							glDisable(GL_BLEND);
 						}
 						else {
-							for (auto g : mesh->_GetGameObjects()) {
-								g->__UpdateChildren();
-								RenderObject(g, mesh, firstFrame, camFrustum);
+							for (int i = 0; i < mesh->_GetGameObjects().size(); i++) { //auto g : m_activeScene->_GetObjects()
+								auto g = mesh->_GetGameObjects()[i];
+								RenderObject(g, mesh, cam->GetFrustum(), false);
 								if (!inEditor || m_activeScene->state == SceneState::Play) {
 									for (auto& c : g->__GetComponents()) {
 										c->Update();
 									}
 								}
+								g->__UpdateChildren();
 							}
 						}
 						glDisable(GL_CULL_FACE);
@@ -463,13 +468,14 @@ namespace FSY {
 					}
 					//update all none mesh objects
 					if (!inEditor || m_activeScene->state == SceneState::Play) {
-						for (auto g : m_activeScene->_GetObjects()) {
+						for (int i = 0; i < m_activeScene->_GetObjects().size(); i++) { //auto g : m_activeScene->_GetObjects()
+							auto g = m_activeScene->_GetObjects()[i];
 							if (!g->HasMesh()) {
-								g->__UpdateChildren();
 								for (auto& c : g->__GetComponents()) {
 									c->Update();
 								}
-								RenderObject(g, nullptr, firstFrame, camFrustum, true);
+								RenderObject(g, nullptr, cam->GetFrustum(), true);
+								g->__UpdateChildren();
 							}
 						}
 					}
@@ -477,8 +483,8 @@ namespace FSY {
 						for (auto g : m_activeScene->_GetObjects()) {
 							if (!g->HasMesh()) {
 								//Gizmos need the right Transformation Matrix, which is calculated with this:
+								RenderObject(g, nullptr, cam->GetFrustum(), true);
 								g->__UpdateChildren();
-								RenderObject(g, nullptr, firstFrame, camFrustum, true);
 							}
 						}
 
@@ -499,6 +505,7 @@ namespace FSY {
 						glDisable(GL_CULL_FACE);
 						glDrawArrays(GL_TRIANGLES, 0, 6);
 					}
+
 				}
 
 				if (inEditor) {
@@ -518,8 +525,8 @@ namespace FSY {
 		m_window.m_windowOpen = false;
 
 		delete scc;
-		delete vao;
-		vbo.Delete();
+		//delete vao;
+		//vbo.Delete();
 		fbo.Delete();
 		//Delete Sound
 		//Sound::Quit();

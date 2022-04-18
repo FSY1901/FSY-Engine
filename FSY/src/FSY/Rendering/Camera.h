@@ -6,6 +6,11 @@
 
 namespace FSY {
 
+	FSY_API enum class CameraMode {
+		Perspective,
+		Orthographic
+	};
+
 	class FSY_API Camera : public GameObject {
 
 	public:
@@ -29,10 +34,16 @@ namespace FSY {
 		Vector3f up;
 		Vector3f right;
 
+		CameraMode mode = CameraMode::Perspective;
+
+		void __SetFrustum(Frustum frustum);
+		Frustum GetFrustum();
+
 	private:
 		static Camera* main;
 		glm::mat4 viewMatrix;
 		glm::mat4 projectionMatrix;
+		Frustum m_frustum;
 
 	};
 

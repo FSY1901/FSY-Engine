@@ -4,7 +4,7 @@
 namespace FSY {
 
 	Framebuffer::Framebuffer() {
-
+		
 	}
 
 	void Framebuffer::Generate(int x, int y) {
