@@ -303,8 +303,7 @@ namespace FSY {
 				axis = Vector3f::CrossProduct(Vector3f(1.0f, 0.0f, 0.0f), forward);
 
 			axis = Vector3f::Normalize(axis);
-			Console::Log(std::to_string(axis.x) + ", " + std::to_string(axis.y) + ", " + std::to_string(axis.z));
-			return Quaternion(axis.x, axis.y, axis.z, DegreesToRadians(180));
+			return Quaternion(axis.x, axis.y, axis.z, DegreesToRadians(0));
 		}
 
 		axis = Vector3f::CrossProduct(forward, direction);
