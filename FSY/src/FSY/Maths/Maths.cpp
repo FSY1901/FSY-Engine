@@ -155,6 +155,18 @@ namespace FSY {
 		return res;
 	}
 
+	Vector3f Vector3f::Lerp(Vector3 v1, Vector3 v2, float t) {
+		t = Clamp(0.0f, 1.0f, t);
+
+		Vector3f res;
+
+		res.x = v1.x + (v2.x - v1.x) * t;
+		res.y = v1.y + (v2.y - v1.y) * t;
+		res.z = v1.z + (v2.z - v1.z) * t;
+
+		return res;
+	}
+
 	Vector3f Vector3f::up = {0, 1, 0};
 	Vector3f Vector3f::forward = {0, 0, 1};
 	Vector3f Vector3f::right = {1, 0, 0};
@@ -318,6 +330,21 @@ namespace FSY {
 		);
 	}
 
+	float Quaternion::Dot(Quaternion q1, Quaternion q2) {
+		float x = q1.x * q2.x;
+		float y = q1.y * q2.y;
+		float z = q1.z * q2.z;
+		float w = q1.w + q2.w;
+		float total = x + y + z + w;
+		return total;
+	}
+
+	Quaternion Quaternion::Slerp(Quaternion q1, Quaternion q2, float delta) {
+		delta = Clamp(0.0f, 1.0f, delta);
+		glm::quat res = glm::slerp(glm::quat(q1.w, q1.x, q1.y, q1.z), glm::quat(q2.w, q2.x, q2.y, q2.z), delta);
+		return Quaternion(res.x, res.y, res.z, res.w);
+	}
+
 	Vector3f Quaternion::ToEulerAngles(Quaternion q) {
 		Vector3f angles;
 
@@ -356,6 +383,15 @@ namespace FSY {
 		res.z = this->x * q.y - this->y * q.x + this->z * q.w + this->w * q.z;
 		res.w = -this->x * q.x - this->y * q.y - this->z * q.z + this->w * q.w;*/
 
+		return res;
+	}
+
+	Quaternion& Quaternion::operator*(float f) {
+		Quaternion res;
+		res.x = f * this->x;
+		res.y = f * this->y;
+		res.z = f * this->z;
+		res.w = f * this->w;
 		return res;
 	}
 

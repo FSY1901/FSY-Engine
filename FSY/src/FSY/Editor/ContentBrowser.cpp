@@ -9,7 +9,6 @@ namespace FSY {
 	ContentBrowser::ContentBrowser() { m_CurrentPath = m_AssetPath; }
 
 	void ContentBrowser::LoadTextures() {
-		m_buggyTexture = { Settings::s_folderIconPath.c_str(), false };
 		m_FolderIcon = { Settings::s_folderIconPath.c_str(), false };
 		m_FontIcon = { Settings::s_ttfIcon.c_str(), false };
 		m_PNGIcon = { Settings::s_pngIcon.c_str(), false };

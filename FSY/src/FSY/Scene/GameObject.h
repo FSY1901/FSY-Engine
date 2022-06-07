@@ -35,6 +35,8 @@ namespace FSY {
 		void RemoveChild(GameObject* g);
 		//ENGINE ONLY --> DONT USE
 		void __UpdateChildren();
+		void __SetFixedNormal(glm::mat4 fn);
+		glm::mat4 __GetFixedNormal();
 
 		/// <summary>
 		/// Returns true if the GameObject has a Mesh.
@@ -105,13 +107,15 @@ namespace FSY {
 		/// <typeparam name="T">The Component to receive.</typeparam>
 		template<class T> T* GetComponent() {
 			Component* c = new T();
+			auto name = c->getName();
+			delete c;
 			for (auto comp : m_components) {
-				if (c->getName() == comp->getName()) {
+				if (name == comp->getName()) {
 					return (T*)comp;
 				}
 			}
-			Console::Warn(name + " doesn't have a Component of type " + "\'" + c->getName() + "\'" + " attached!");
-			delete c;
+			//Console::Warn(name + " doesn't have a Component of type " + "\'" + c->getName() + "\'" + " attached!");
+			return nullptr;
 		}
 
 		template<class T> bool HasComponent() {

@@ -158,24 +158,6 @@ namespace FSY {
 					activeScene->DeleteObject(selectedObject);
 					Application::GetInstance()->__SetSelectedObject(nullptr);
 				}
-
-				if (selectedObject->HasMesh()) {
-					if (ImGui::Button("Remove Mesh")) {
-						selectedObject->GetMesh()->RemoveGameObject(selectedObject);
-					}
-				}
-				else {
-					if (ImGui::Button("Add Mesh"))
-						ImGui::OpenPopup("Meshes");
-					if (ImGui::BeginPopup("Meshes")) {
-						for (auto m : activeScene->_GetMeshes()) {
-							if (ImGui::MenuItem(m->GetName().c_str())) {
-								m->AddGameObject(selectedObject);
-							}
-						}
-						ImGui::EndPopup();
-					}
-				}
 				ImGui::EndPopup();
 			}
 		}

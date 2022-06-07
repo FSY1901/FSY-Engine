@@ -33,6 +33,8 @@ namespace FSY {
 
 		SceneState state;
 
+		static Scene* activeScene;
+
 	private:
 		const int c_maxObjects = 100000;
 		Camera m_camera{ Vector3f(0, 0, 0), Vector3f(0, 0.0f, 0), Vector3f(1, 1, 1)};

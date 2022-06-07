@@ -10,7 +10,7 @@ namespace FSY {
     Texture::Texture() {
 
     }
-
+    
     Texture::Texture(const char* filename, bool flipped) {
         this->m_filename = filename;
         glGenTextures(1, &m_texture);

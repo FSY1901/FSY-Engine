@@ -55,6 +55,8 @@ namespace FSY {
 		//Returns a Vector that has the same direction, but a length of one.
 		static Vector3 Normalize(Vector3 v);
 
+		static Vector3 Lerp(Vector3 v1, Vector3 v2, float t);
+
 #pragma region Operators
 
 		Vector3& operator*=(Vector3 vec);
@@ -96,12 +98,15 @@ namespace FSY {
 
 		static Quaternion ToQuaternion(Vector3f vec);
 		static Quaternion LookAt(Vector3f direction, Vector3f forward = Vector3f::forward, Vector3f up = Vector3f::up);
-		static Quaternion RotationBetweenVectors(Vector3f forward, Vector3f direction);
+		static Quaternion Slerp(Quaternion q1, Quaternion q2, float delta);
+		static float Dot(Quaternion q1, Quaternion q2);
 
 		static Vector3f ToEulerAngles(Quaternion q);
 		static Vector3f EulerAngles(glm::quat q);
 
 		Quaternion& operator*(Quaternion& q);
+
+		Quaternion& operator*(float f);
 
 		Quaternion& operator+(Quaternion& q);
 
@@ -110,6 +115,9 @@ namespace FSY {
 		bool operator==(Quaternion& other);
 
 		Vector3f& operator*(Vector3f& vec);
+
+	private:
+		static Quaternion RotationBetweenVectors(Vector3f forward, Vector3f direction);
 	};
 
 }

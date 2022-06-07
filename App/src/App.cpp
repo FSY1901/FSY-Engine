@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 
-#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+//#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 
 using namespace FSY;
 
@@ -159,10 +159,11 @@ public:
 	}
 };
 
+typedef void(__stdcall *f_funci)();
+
 class App : public FSY::Application {
 
 public:
-	GameObject* objs;
 	GameObject myObject;
 	GameObject g2;
 	GameObject g;
@@ -209,7 +210,7 @@ public:
 		MeshData data(Mesh::s_verticesForCube, Mesh::s_cubeMeshSize);
 		//m = { data, &s, "Dirt Block" };
 		//m1 = { data, &colored, "Red Cube" };
-		m.SetTexture(&t);
+		//m.SetTexture(&t);
 		g2.AddComponent<Control>();
 		//g2.AddChild(&myObject);
 		//g2.AddChild(&g);
@@ -218,6 +219,14 @@ public:
 		//m1.AddGameObject(&g2);
 		//scene.AddInstanceMesh(&m);
 		//scene.AddInstanceMesh(&m1);
+		g2.AddComponent<MeshRenderer>();
+		g2.GetComponent<MeshRenderer>()->SetMeshData(data, &colored);
+		myObject.AddComponent<MeshRenderer>()->SetMeshData(data, &colored);
+		g.AddComponent<MeshRenderer>()->SetMeshData(data, &s);
+		g.GetComponent<MeshRenderer>()->SetTexture(&t);
+		scene.AddObject(&g);
+		scene.AddObject(&g2);
+		scene.AddObject(&myObject);
 		ChangeScene(&scene);
 	}
 
@@ -250,14 +259,16 @@ public:
 				}
 			}
 		}*/
-		//myObject.rotation = Quaternion::LookAt(Camera::GetMain()->position - myObject.position);
+		/*static float amount = 0.0f;
+		myObject.rotation = Quaternion::Slerp(Vector3f(), Vector3f(0, 180, 0), amount);//Quaternion::LookAt(Camera::GetMain()->position - myObject.position);
+		amount += Time::deltaTime();*/
 		//scene.GetCamera()->rotation = Quaternion::LookAt(g.position - scene.GetCamera()->position, Vector3f(0, 0, -1));
 		//Vector3f rot = Camera::GetMain()->rotation;
 		//Console::Log(std::to_string(rot.x) + ", " + std::to_string(rot.y) + ", " + std::to_string(rot.z));
 	}
 
 	void OnClose() override {
-		delete[] objs;
+
 	}
 
 };

@@ -21,6 +21,7 @@ namespace FSY {
 		void Resize(int x, int y);
 		unsigned int GetVAO();
 		unsigned int GetTexture();
+		int ReadPixel(int index, int x, int y);
 
 	private:
 		unsigned int m_ID = 0;

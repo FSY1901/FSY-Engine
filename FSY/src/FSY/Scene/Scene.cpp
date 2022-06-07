@@ -2,6 +2,8 @@
 
 namespace FSY {
 
+	Scene* Scene::activeScene = nullptr;
+
 	Scene::Scene() {
 		m_objects.reserve(100000);
 		m_meshes.reserve(10000);

@@ -23,6 +23,7 @@
     <ClInclude Include="src\FSY\Application\EntryPoint.h" />
     <ClInclude Include="src\FSY\Rendering\Framebuffer.h" />
     <ClInclude Include="src\FSY\Rendering\FrustumCulling.h" />
+    <ClInclude Include="src\FSY\Rendering\MeshRenderer.h" />
     <ClInclude Include="src\FSY\Scene\GameObject.h" />
     <ClInclude Include="src\FSY\Input\Input.h" />
     <ClInclude Include="src\FSY\Scene\Light.h" />

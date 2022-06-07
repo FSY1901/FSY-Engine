@@ -63,6 +63,14 @@ namespace FSY {
 		m_lastScale = scale;
 	}
 
+	void GameObject::__SetFixedNormal(glm::mat4 fn) {
+		m_fixedNormal = fn;
+	}
+
+	glm::mat4 GameObject::__GetFixedNormal() {
+		return m_fixedNormal;
+	}
+
 	bool GameObject::HasMesh(){ return m_hasMesh; }
 
 	Mesh* GameObject::GetMesh() { return m_mesh; }

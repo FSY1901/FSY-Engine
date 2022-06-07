@@ -82,7 +82,7 @@ namespace FSY {
         Scene* m_activeScene = nullptr;
         float m_clearColor[3] = { 0.2f, 0.2f, 0.2f };
 
-        void RenderObject(GameObject* g, Mesh* mesh, Frustum camFrustum, bool isEmpty);
+        void ObjectTransform(GameObject* g);
 #pragma endregion
 
 #pragma region Scene View
@@ -98,6 +98,8 @@ namespace FSY {
         Texture m_stopTexture;
 
         ContentBrowser cb;
+        Framebuffer fbo;
+        Framebuffer editorFBO;
         uint32_t FBOTexture;
         Shader fboShader;
         ImVec2 m_PanelSize = {1, 1};

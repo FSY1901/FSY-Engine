@@ -4,6 +4,7 @@
 #include "../Sound/Sound.h"
 #include "Settings.h"
 #include "../Editor/Editor.h"
+#include "../Rendering/MeshRenderer.h"
 
 #include "../../vendor/stb_image/stb_image.h"
 #include <../imgui/imgui.h>
@@ -28,10 +29,12 @@ namespace FSY {
 		m_window.m_width = width;
 		m_window.m_height = height;
 #ifdef FSY_DEBUG
-		this->inEditor = true;
+		inEditor = true;
 #else
-		this->inEditor = false;
+		inEditor = false;
 #endif
+
+		inEditor = true;
 
 		if (this->inEditor)
 			m_window.m_title = "FSY Engine";
@@ -58,6 +61,7 @@ namespace FSY {
 
 	void Application::ChangeScene(Scene* scene) {
 		m_activeScene = scene;
+		Scene::activeScene = m_activeScene;
 	}
 
 	void Application::SetIcon(const char* filename) {
@@ -67,28 +71,14 @@ namespace FSY {
 		stbi_image_free(images[0].pixels);
 	}
 
-	void Application::RenderObject(GameObject* g, Mesh* mesh, Frustum camFrustum, bool IsEmpty) {
-		if (g->GetBoundingSphere().isOnFrustum(camFrustum,
-			glm::vec3(g->position.x, g->position.y, g->position.z),
-			glm::vec3(g->scale.x, g->scale.y, g->scale.z))) {
-			glm::mat4 transform = glm::mat4(1.0f);
-			glm::mat4 transMat = glm::translate(transform, glm::vec3(g->position.x, g->position.y, g->position.z));
-			glm::quat _rot = glm::quat(g->rotation.w, g->rotation.x, g->rotation.y, g->rotation.z);
-			glm::mat4 rotMat = glm::mat4_cast(_rot);
-			glm::mat4 scaleMat = glm::scale(transform, glm::vec3(g->scale.x, g->scale.y, g->scale.z));
-			transform = transMat * rotMat * scaleMat;
-			g->m_transform = transform;
-			if (!IsEmpty) {
-				glm::mat4 inverse = glm::inverse(transform);
-				glm::mat4 transpose = glm::transpose(inverse);
-				g->m_fixedNormal = transpose;
-				mesh->GetShader()->setMat4("fixedNormal", g->m_fixedNormal);
-				mesh->GetShader()->setMat4("transform", g->m_transform);
-			}
-			if (!IsEmpty) {
-				glDrawArrays(GL_TRIANGLES, 0, sizeof(float) * mesh->GetVertexSize());
-			}
-		}
+	void Application::ObjectTransform(GameObject* g) {
+		glm::mat4 transform = glm::mat4(1.0f);
+		glm::mat4 transMat = glm::translate(transform, glm::vec3(g->position.x, g->position.y, g->position.z));
+		glm::quat _rot = glm::quat(g->rotation.w, g->rotation.x, g->rotation.y, g->rotation.z);
+		glm::mat4 rotMat = glm::mat4_cast(_rot);
+		glm::mat4 scaleMat = glm::scale(transform, glm::vec3(g->scale.x, g->scale.y, g->scale.z));
+		transform = transMat * rotMat * scaleMat;
+		g->m_transform = transform;
 	}
 
 	void Application::CreateNewGameObject(bool asChild, GameObject* parent) {
@@ -236,9 +226,13 @@ namespace FSY {
 
 		m_sceneCamera.__SetViewMatrix(view);
 
-		cb.LoadTextures();
-		m_playButtonTexture = Texture(Settings::s_playButtonPath.c_str());
-		m_stopTexture = Texture("./src/Data/Assets/Icons/Pause.png");
+		fbo.Generate(m_window.m_width, m_window.m_height);
+		if (inEditor) {
+			editorFBO.Generate(m_window.m_width, m_window.m_height);
+			cb.LoadTextures();
+			m_playButtonTexture = Texture(Settings::s_playButtonPath.c_str());
+			m_stopTexture = Texture("./src/Data/Assets/Icons/Pause.png");
+		}
 
 		//Sound Setup
 		Sound::Init();
@@ -282,10 +276,6 @@ namespace FSY {
 			}
 		}
 
-		Framebuffer fbo;
-
-		fbo.Generate(m_window.m_width, m_window.m_height);
-
 		fboShader = Shader(Settings::s_fboVertShaderPath.c_str(), Settings::s_fboFragShaderPath.c_str());
 		fboShader.Use();
 		glUniform1i(glGetUniformLocation(fboShader.ID, "screenTexture"), 0);
@@ -298,12 +288,10 @@ namespace FSY {
 			Time::s_deltaTime = currentFrame - Time::s_lastframe;
 			Time::s_lastframe = currentFrame;
 
-			bool firstFrame = true;
-
-			//TODO: Make this a function
 			if (inEditor) {
 				if ((m_PanelSize.x != m_texSize.x || m_PanelSize.y != m_texSize.y)) {
 					fbo.Resize(m_PanelSize.x, m_PanelSize.y);
+					editorFBO.Resize(m_PanelSize.x, m_PanelSize.y);
 
 					m_texSize = m_PanelSize;
 					glViewport(0, 0, m_PanelSize.x, m_PanelSize.y);
@@ -331,12 +319,6 @@ namespace FSY {
 				}
 
 				Camera* cam = Camera::GetMain();
-				if(inEditor)
-					if (Input::GetKey(Key_F)) {
-						cam->rotation = Quaternion::LookAt(selectedObject->position - cam->position, Vector3f::back);
-						Vector3f rot = cam->rotation;
-						scc->SetYawAndPitch(rot.y, rot.x);
-					}
 				Quaternion q = cam->rotation;
 				glm::vec3 direction(0, 0, -1);
 				glm::quat quat = glm::quat(q.w, q.x, q.y, q.z);
@@ -367,6 +349,9 @@ namespace FSY {
 
 				fbo.Bind();
 
+				//GLenum attachments[2] = {GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1};
+				//glDrawBuffers(2, attachments);
+
 				glClearColor(m_clearColor[0], m_clearColor[1], m_clearColor[2], 1.0f);
 				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -379,6 +364,9 @@ namespace FSY {
 				else
 					OnEditorUpdate();
 
+
+				glEnable(GL_CULL_FACE);
+				glCullFace(GL_BACK);
 				//Render active Scene
 				if (m_activeScene != nullptr) {
 
@@ -390,120 +378,41 @@ namespace FSY {
 
 					Camera::GetMain()->__SetFrustum(camFrustum);
 
-					for (auto mesh : m_activeScene->_GetMeshes()) {
-						if (mesh->renderMode == RENDER_FRONT) {
-							glEnable(GL_CULL_FACE);
-							glCullFace(GL_BACK);
-						}
-
-						Shader* s = mesh->GetShader();
-						if(s != nullptr)
-							s->Use();
-						if (mesh->HasTexture())
-							mesh->GetTexture()->Bind();
-						
-						if (s != nullptr) {
-							s->setMat4("view", view);
-							s->setMat4("projection", projection);
-							s->setVec3("viewPos", cam->position.x, cam->position.y, cam->position.z);
-							s->setVec3("material.diffuse", s->diffuse.x, s->diffuse.y, s->diffuse.z);
-							s->setVec3("material.specular", s->specular.x, s->specular.y, s->specular.z);
-							s->setFloat("material.shininess", s->shininess);
-							s->setVec3("lightPos", m_activeScene->GetLight()->position.x, m_activeScene->GetLight()->position.y, m_activeScene->GetLight()->position.z);
-							s->setVec3("light.ambient", m_activeScene->GetLight()->ambient.x, m_activeScene->GetLight()->ambient.y, m_activeScene->GetLight()->ambient.z);
-							s->setVec3("light.diffuse", m_activeScene->GetLight()->color.x, m_activeScene->GetLight()->color.y,
-								m_activeScene->GetLight()->color.z);
-							s->setVec3("light.specular", m_activeScene->GetLight()->specular.x, m_activeScene->GetLight()->specular.y, m_activeScene->GetLight()->specular.z);
-						}
-
-						mesh->vao.Bind();
-
-						if (mesh->isTransparent) {
-							glEnable(GL_BLEND);
-							std::map<float, glm::vec3> sorted;
-							std::map<float, GameObject*> sorted1;
-							for (unsigned int i = 0; i < mesh->_GetGameObjects().size(); i++)
-							{
-								glm::vec3 pos(mesh->_GetGameObjects()[i]->position.x, mesh->_GetGameObjects()[i]->position.y, mesh->_GetGameObjects()[i]->position.z);
-								float distance = glm::length(cameraPos - pos);
-								if (sorted1[distance] == nullptr) {
-									sorted[distance] = pos;
-									sorted1[distance] = mesh->_GetGameObjects()[i];
-								}
-								else {
-									//This step is required because otherwise Meshes that have the same position won't be rendered
-									distance += 0.00001f;
-									sorted[distance] = pos;
-									sorted1[distance] = mesh->_GetGameObjects()[i];
-								}
-							}
-							for (std::map<float, glm::vec3>::reverse_iterator it = sorted.rbegin(); it != sorted.rend(); ++it)
-							{
-								GameObject* g = sorted1[it->first];
-								RenderObject(g, mesh, cam->GetFrustum(), false);
-								if (!inEditor || m_activeScene->state == SceneState::Play) {
-									for (auto& c : g->__GetComponents()) {
-										c->Update();
-									}
-								}
-								g->__UpdateChildren();
-							}
-							glDisable(GL_BLEND);
-						}
-						else {
-							for (int i = 0; i < mesh->_GetGameObjects().size(); i++) { //auto g : m_activeScene->_GetObjects()
-								auto g = mesh->_GetGameObjects()[i];
-								RenderObject(g, mesh, cam->GetFrustum(), false);
-								if (!inEditor || m_activeScene->state == SceneState::Play) {
-									for (auto& c : g->__GetComponents()) {
-										c->Update();
-									}
-								}
-								g->__UpdateChildren();
-							}
-						}
-						glDisable(GL_CULL_FACE);
-						if (mesh->HasTexture())
-							mesh->GetTexture()->Unbind();
-					}
-					//update all none mesh objects
 					if (!inEditor || m_activeScene->state == SceneState::Play) {
-						for (int i = 0; i < m_activeScene->_GetObjects().size(); i++) { //auto g : m_activeScene->_GetObjects()
-							auto g = m_activeScene->_GetObjects()[i];
-							if (!g->HasMesh()) {
-								for (auto& c : g->__GetComponents()) {
-									c->Update();
-								}
-								RenderObject(g, nullptr, cam->GetFrustum(), true);
-								g->__UpdateChildren();
+						for (auto g : m_activeScene->_GetObjects()) {
+							ObjectTransform(g);
+							for (auto& c : g->__GetComponents()) {
+								c->Update();
 							}
+							g->__UpdateChildren();
 						}
 					}
 					else {
 						for (auto g : m_activeScene->_GetObjects()) {
-							if (!g->HasMesh()) {
-								//Gizmos need the right Transformation Matrix, which is calculated with this:
-								RenderObject(g, nullptr, cam->GetFrustum(), true);
-								g->__UpdateChildren();
+							ObjectTransform(g);
+							auto renderer = g->GetComponent<MeshRenderer>();
+							if (renderer != nullptr) {
+								renderer->Update();
 							}
 						}
-
 					}
+
 					glBindFramebuffer(GL_FRAMEBUFFER, 0);
-					FBOTexture = fbo.GetTexture();
 					glClear(GL_COLOR_BUFFER_BIT);
 
 					//Update Sound Listener
-					Sound::SetListener(Vector3f::Normalize(cam->rotation), cam->position);
+					Sound::SetListener(cam->front, cam->position);
 
-					if (!inEditor) {
-						fboShader.Use();
-						glBindVertexArray(fbo.GetVAO());
-						glDisable(GL_DEPTH_TEST);
-						glBindTexture(GL_TEXTURE_2D, fbo.GetTexture());
-						FBOTexture = fbo.GetTexture();
-						glDisable(GL_CULL_FACE);
-						glDrawArrays(GL_TRIANGLES, 0, 6);
+					if(inEditor)
+						editorFBO.Bind();
+					
+					fboShader.Use();
+					fbo.Draw();
+					
+					if (inEditor) {
+						glBindFramebuffer(GL_FRAMEBUFFER, 0);
+						glClear(GL_COLOR_BUFFER_BIT);
+						FBOTexture = editorFBO.GetTexture();
 					}
 
 				}
@@ -517,8 +426,6 @@ namespace FSY {
 
 			glfwSwapBuffers(m_window.m_win);
 			glfwPollEvents();
-
-			firstFrame = false;
 
 		}
 
@@ -601,6 +508,7 @@ namespace FSY {
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0,0 });
 		ImGui::Begin("Scene");
 		ImGui::PopStyleVar();
+
 		ImVec2 size = ImGui::GetContentRegionAvail();
 		m_PanelSize = size;
 		if (ImGui::IsWindowHovered())

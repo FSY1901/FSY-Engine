@@ -93,4 +93,14 @@ namespace FSY {
 
 	unsigned int Framebuffer::GetVAO() { return m_VAO; }
 
+	int Framebuffer::ReadPixel(int index, int x, int y) {
+		Bind();
+
+		glReadBuffer(GL_COLOR_ATTACHMENT0 + index);
+		int data;
+		glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &data);
+		Unbind();
+		return data;
+	}
+
 }

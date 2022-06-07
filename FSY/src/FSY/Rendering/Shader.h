@@ -5,6 +5,11 @@
 
 namespace FSY {
 	
+    enum class ShaderType {
+        Base,
+        Lit
+    };
+
     class FSY_API Shader
     {
     public:

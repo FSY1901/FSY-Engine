@@ -26,8 +26,6 @@ namespace FSY {
 		Texture m_PNGIcon;
 		Texture m_TXTIcon;
 
-		Texture m_buggyTexture; //For some reason the first texture that is loaded isn't loaded properly, so an unused texture is assigned
-
 		//Creating Folders
 		bool __creatingNewFolder = false;
 		std::string __newFolderName = "New Folder";
