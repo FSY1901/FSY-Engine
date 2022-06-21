@@ -14,7 +14,7 @@ namespace FSY {
 		std::tm now;
 		localtime_s(&now, &t);
 		std::string time = std::to_string(now.tm_hour) + ":" + std::to_string(now.tm_min) + ":" + std::to_string(now.tm_sec);
-		std::string msg;
+		std::string msg = time + " [LOG]: " + message;
 		Item item = Item(msg, MessageType::LOG);
 		m_Console->m_items.push_back(item);
 		m_logged = true;

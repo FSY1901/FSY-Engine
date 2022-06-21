@@ -1,8 +1,36 @@
 #include "FSY.h"
 #include <iostream>
 #include <string>
+#include "windows.h"
 
 //#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+typedef void(*FUNC)();
+
+void LoadDLL() {
+	HINSTANCE hDLL;
+
+	hDLL = LoadLibrary("D:\\VS_Projects\\ScriptModule\\x64\\Release\\ScriptModule.dll");
+
+	if (hDLL != NULL)
+	{
+
+		std::cout << "It worked! \n";
+
+		FUNC func = (FUNC)GetProcAddress(hDLL, "PrintSomething");
+
+		if (!func) {
+			std::cout << "could not locate the function \n";
+		}
+		else {
+			func();
+		}
+
+		FreeLibrary(hDLL);
+	}
+	else {
+		std::cout << "It didn't work! \n";
+	}
+}
 
 using namespace FSY;
 
@@ -159,8 +187,6 @@ public:
 	}
 };
 
-typedef void(__stdcall *f_funci)();
-
 class App : public FSY::Application {
 
 public:
@@ -235,10 +261,17 @@ public:
 			Close();
 		}
 	}
-
+	bool pressed = false;
 	void OnEditorUpdate() override {
 		if (Input::GetKey(Keys::Key_ESCAPE)) {
 			Close();
+		}
+		if (Input::GetKey(Keys::Key_F5) && !pressed) {
+			LoadDLL();
+			pressed = true;
+		}
+		else if (Input::OnReleaseKey(Keys::Key_F5) && pressed) {
+			pressed = false;
 		}
 		/*if (Input::GetMouse(0)) {
 			for (auto m : scene._GetMeshes()) {

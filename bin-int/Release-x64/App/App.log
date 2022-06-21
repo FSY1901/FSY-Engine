@@ -88,9 +88,11 @@ D:\VS_Projects\FSY\FSY\src\FSY\Maths\PerlinNoise.h(16,21): warning C4251: 'FSY::
 D:\VS_Projects\FSY\FSY\src\FSY\Maths\PerlinNoise.h(16): message : see declaration of 'std::vector<int,std::allocator<int>>'
 D:\VS_Projects\FSY\FSY\src\FSY\Rendering\MeshRenderer.h(74,10): warning C4251: 'FSY::MeshRenderer::vao': class 'FSY::VAO' needs to have dll-interface to be used by clients of class 'FSY::MeshRenderer'
 D:\VS_Projects\FSY\FSY\src\FSY\Rendering\VAO.h(10): message : see declaration of 'FSY::VAO'
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
+D:\VS_Projects\FSY\FSY\src\vendor\OpenGL\include\glad.h(32): message : see previous definition of 'APIENTRY'
   Generating code
-  1 of 133 functions ( 0.8%) were compiled, the rest were copied from previous compilation.
+  4 of 143 functions ( 2.8%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    2 functions had inline decision re-evaluated but remain unchanged
+    4 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   App.vcxproj -> D:\VS_Projects\FSY\bin\Release-x64\App\App.exe
