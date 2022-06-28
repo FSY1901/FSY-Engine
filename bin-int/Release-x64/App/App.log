@@ -63,11 +63,6 @@ D:\VS_Projects\FSY\FSY\src\FSY\Editor\SceneCameraController.h(118,25): warning C
 D:\VS_Projects\FSY\FSY\src\vendor\glm\detail\type_vec.hpp(243): message : see declaration of 'glm::tvec3<float,glm::packed_highp>'
 D:\VS_Projects\FSY\FSY\src\FSY\Editor\SceneCameraController.h(119,22): warning C4251: 'FSY::SceneCameraController::cameraUp': struct 'glm::tvec3<float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'FSY::SceneCameraController'
 D:\VS_Projects\FSY\FSY\src\vendor\glm\detail\type_vec.hpp(243): message : see declaration of 'glm::tvec3<float,glm::packed_highp>'
-D:\VS_Projects\FSY\FSY\src\FSY\Sound\Sound.h(13,25): warning C4091: 'extern ': ignored on left of 'Application' when no variable is declared
-D:\VS_Projects\FSY\FSY\src\FSY\Sound\Sound.h(32,25): warning C4251: 'FSY::Sound::src': class 'audeo::SoundSource' needs to have dll-interface to be used by clients of class 'FSY::Sound'
-D:\VS_Projects\FSY\FSY\src\vendor\Audeo\SoundSource.hpp(15): message : see declaration of 'audeo::SoundSource'
-D:\VS_Projects\FSY\FSY\src\FSY\Sound\Sound.h(33,19): warning C4251: 'FSY::Sound::snd': class 'audeo::Sound' needs to have dll-interface to be used by clients of class 'FSY::Sound'
-D:\VS_Projects\FSY\FSY\src\vendor\Audeo\Sound.hpp(10): message : see declaration of 'audeo::Sound'
 D:\VS_Projects\FSY\FSY\src\FSY\Application\Settings.h(19,38): warning C4251: 'FSY::Settings::s_editorFontPath': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'FSY::Settings'
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\xstring(4648): message : see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
 D:\VS_Projects\FSY\FSY\src\FSY\Application\Settings.h(20,38): warning C4251: 'FSY::Settings::s_playButtonPath': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'FSY::Settings'
@@ -91,8 +86,8 @@ D:\VS_Projects\FSY\FSY\src\FSY\Rendering\VAO.h(10): message : see declaration of
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\shared\minwindef.h(130,1): warning C4005: 'APIENTRY': macro redefinition
 D:\VS_Projects\FSY\FSY\src\vendor\OpenGL\include\glad.h(32): message : see previous definition of 'APIENTRY'
   Generating code
-  4 of 143 functions ( 2.8%) were compiled, the rest were copied from previous compilation.
+  0 of 149 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    4 functions had inline decision re-evaluated but remain unchanged
+    0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   App.vcxproj -> D:\VS_Projects\FSY\bin\Release-x64\App\App.exe

@@ -61,11 +61,6 @@ D:\VS_Projects\FSY\FSY\src\FSY\Editor\SceneCameraController.h(118,25): warning C
 D:\VS_Projects\FSY\FSY\src\vendor\glm\detail\type_vec.hpp(243): message : see declaration of 'glm::tvec3<float,glm::packed_highp>'
 D:\VS_Projects\FSY\FSY\src\FSY\Editor\SceneCameraController.h(119,22): warning C4251: 'FSY::SceneCameraController::cameraUp': struct 'glm::tvec3<float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'FSY::SceneCameraController'
 D:\VS_Projects\FSY\FSY\src\vendor\glm\detail\type_vec.hpp(243): message : see declaration of 'glm::tvec3<float,glm::packed_highp>'
-D:\VS_Projects\FSY\FSY\src\FSY\Sound\Sound.h(13,25): warning C4091: 'extern ': ignored on left of 'Application' when no variable is declared
-D:\VS_Projects\FSY\FSY\src\FSY\Sound\Sound.h(32,25): warning C4251: 'FSY::Sound::src': class 'audeo::SoundSource' needs to have dll-interface to be used by clients of class 'FSY::Sound'
-D:\VS_Projects\FSY\FSY\src\vendor\Audeo\SoundSource.hpp(15): message : see declaration of 'audeo::SoundSource'
-D:\VS_Projects\FSY\FSY\src\FSY\Sound\Sound.h(33,19): warning C4251: 'FSY::Sound::snd': class 'audeo::Sound' needs to have dll-interface to be used by clients of class 'FSY::Sound'
-D:\VS_Projects\FSY\FSY\src\vendor\Audeo\Sound.hpp(10): message : see declaration of 'audeo::Sound'
 D:\VS_Projects\FSY\FSY\src\FSY\Application\Settings.h(19,38): warning C4251: 'FSY::Settings::s_editorFontPath': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'FSY::Settings'
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\xstring(4648): message : see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
 D:\VS_Projects\FSY\FSY\src\FSY\Application\Settings.h(20,38): warning C4251: 'FSY::Settings::s_playButtonPath': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'FSY::Settings'
@@ -84,75 +79,75 @@ D:\VS_Projects\FSY\FSY\src\FSY\Application\Settings.h(26,41): warning C4251: 'FS
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\xstring(4648): message : see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
 D:\VS_Projects\FSY\FSY\src\FSY\Rendering\MeshRenderer.h(74,10): warning C4251: 'FSY::MeshRenderer::vao': class 'FSY::VAO' needs to have dll-interface to be used by clients of class 'FSY::MeshRenderer'
 D:\VS_Projects\FSY\FSY\src\FSY\Rendering\VAO.h(10): message : see declaration of 'FSY::VAO'
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(77,86): warning C4244: 'argument': conversion from 'double' to 'const T', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(76,86): warning C4244: 'argument': conversion from 'double' to 'const T', possible loss of data
           with
           [
               T=float
           ]
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(77,71): warning C4244: 'argument': conversion from 'double' to 'const T', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(76,71): warning C4244: 'argument': conversion from 'double' to 'const T', possible loss of data
           with
           [
               T=float
           ]
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(77,56): warning C4244: 'argument': conversion from 'double' to 'const T', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(76,56): warning C4244: 'argument': conversion from 'double' to 'const T', possible loss of data
           with
           [
               T=float
           ]
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(77,41): warning C4244: 'argument': conversion from 'double' to 'const T', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(76,41): warning C4244: 'argument': conversion from 'double' to 'const T', possible loss of data
           with
           [
               T=float
           ]
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(162,55): warning C4244: 'return': conversion from 'const int' to 'float', possible loss of data
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(163,56): warning C4244: 'return': conversion from 'const int' to 'float', possible loss of data
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(287,23): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(293,43): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(293,28): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(294,49): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(294,34): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(297,49): warning C4244: 'argument': conversion from 'float' to 'GLsizei', possible loss of data
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(297,34): warning C4244: 'argument': conversion from 'float' to 'GLsizei', possible loss of data
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(304,51): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(304,33): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(324,48): warning C4244: 'argument': conversion from 'double' to 'const T', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(161,55): warning C4244: 'return': conversion from 'const int' to 'float', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(162,56): warning C4244: 'return': conversion from 'const int' to 'float', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(282,23): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(288,43): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(288,28): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(289,49): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(289,34): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(292,49): warning C4244: 'argument': conversion from 'float' to 'GLsizei', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(292,34): warning C4244: 'argument': conversion from 'float' to 'GLsizei', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(299,51): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(299,33): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(319,48): warning C4244: 'argument': conversion from 'double' to 'const T', possible loss of data
           with
           [
               T=float
           ]
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(324,43): warning C4244: 'argument': conversion from 'double' to 'const T', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(319,43): warning C4244: 'argument': conversion from 'double' to 'const T', possible loss of data
           with
           [
               T=float
           ]
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(324,38): warning C4244: 'argument': conversion from 'double' to 'const T', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(319,38): warning C4244: 'argument': conversion from 'double' to 'const T', possible loss of data
           with
           [
               T=float
           ]
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(324,33): warning C4244: 'argument': conversion from 'double' to 'const T', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(319,33): warning C4244: 'argument': conversion from 'double' to 'const T', possible loss of data
           with
           [
               T=float
           ]
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(518,33): warning C4312: 'type cast': conversion from 'uint32_t' to 'void *' of greater size
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(553,106): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(510,33): warning C4312: 'type cast': conversion from 'uint32_t' to 'void *' of greater size
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(545,106): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
           with
           [
               T=float
           ]
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(553,81): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(545,81): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
           with
           [
               T=float
           ]
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(553,56): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(545,56): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
           with
           [
               T=float
           ]
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(599,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(600,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(591,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(592,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   Editor.cpp
 D:\VS_Projects\FSY\FSY\src\FSY\Maths\Maths.h(18,25): warning C4091: 'extern ': ignored on left of 'FSY::GameObject' when no variable is declared
 D:\VS_Projects\FSY\FSY\src\FSY\Scene\Mesh.h(17,3): warning C4091: '__declspec(dllexport)': ignored on left of 'FSY::RenderModes' when no variable is declared
@@ -685,37 +680,6 @@ D:\VS_Projects\FSY\FSY\src\FSY\Editor\Console.h(17,26): warning C4091: 'extern '
 D:\VS_Projects\FSY\FSY\src\FSY\Editor\Console.h(43,28): warning C4251: 'FSY::Console::m_items': class 'std::vector<FSY::Item,std::allocator<FSY::Item>>' needs to have dll-interface to be used by clients of class 'FSY::Console'
 D:\VS_Projects\FSY\FSY\src\FSY\Editor\Console.h(43): message : see declaration of 'std::vector<FSY::Item,std::allocator<FSY::Item>>'
   Sound.cpp
-D:\VS_Projects\FSY\FSY\src\FSY\Maths\Maths.h(18,25): warning C4091: 'extern ': ignored on left of 'FSY::GameObject' when no variable is declared
-D:\VS_Projects\FSY\FSY\src\FSY\Scene\Mesh.h(17,3): warning C4091: '__declspec(dllexport)': ignored on left of 'FSY::RenderModes' when no variable is declared
-D:\VS_Projects\FSY\FSY\src\FSY\Scene\Mesh.h(20,25): warning C4091: 'extern ': ignored on left of 'FSY::GameObject' when no variable is declared
-D:\VS_Projects\FSY\FSY\src\FSY\Scene\Mesh.h(61,10): warning C4251: 'FSY::Mesh::vao': class 'FSY::VAO' needs to have dll-interface to be used by clients of class 'FSY::Mesh'
-D:\VS_Projects\FSY\FSY\src\FSY\Rendering\VAO.h(10): message : see declaration of 'FSY::VAO'
-D:\VS_Projects\FSY\FSY\src\FSY\Scene\Mesh.h(80,21): warning C4251: 'FSY::Mesh::m_name': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'FSY::Mesh'
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\xstring(4648): message : see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
-D:\VS_Projects\FSY\FSY\src\FSY\Scene\Mesh.h(82,38): warning C4251: 'FSY::Mesh::m_objects': class 'std::vector<FSY::GameObject *,std::allocator<FSY::GameObject *>>' needs to have dll-interface to be used by clients of class 'FSY::Mesh'
-D:\VS_Projects\FSY\FSY\src\FSY\Scene\Mesh.h(58): message : see declaration of 'std::vector<FSY::GameObject *,std::allocator<FSY::GameObject *>>'
-D:\VS_Projects\FSY\FSY\src\FSY\Editor\Console.h(17,26): warning C4091: 'extern ': ignored on left of 'FSY::Application' when no variable is declared
-D:\VS_Projects\FSY\FSY\src\FSY\Editor\Console.h(43,28): warning C4251: 'FSY::Console::m_items': class 'std::vector<FSY::Item,std::allocator<FSY::Item>>' needs to have dll-interface to be used by clients of class 'FSY::Console'
-D:\VS_Projects\FSY\FSY\src\FSY\Editor\Console.h(43): message : see declaration of 'std::vector<FSY::Item,std::allocator<FSY::Item>>'
-D:\VS_Projects\FSY\FSY\src\FSY\Scene\GameObject.h(18,26): warning C4091: 'extern ': ignored on left of 'FSY::Application' when no variable is declared
-D:\VS_Projects\FSY\FSY\src\FSY\Scene\GameObject.h(19,20): warning C4091: 'extern ': ignored on left of 'FSY::Scene' when no variable is declared
-D:\VS_Projects\FSY\FSY\src\FSY\Scene\GameObject.h(27,20): warning C4251: 'FSY::GameObject::name': class 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>' needs to have dll-interface to be used by clients of class 'FSY::GameObject'
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\xstring(4648): message : see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
-D:\VS_Projects\FSY\FSY\src\FSY\Scene\GameObject.h(149,39): warning C4251: 'FSY::GameObject::m_components': class 'std::vector<FSY::Component *,std::allocator<FSY::Component *>>' needs to have dll-interface to be used by clients of class 'FSY::GameObject'
-D:\VS_Projects\FSY\FSY\src\FSY\Scene\GameObject.h(64): message : see declaration of 'std::vector<FSY::Component *,std::allocator<FSY::Component *>>'
-D:\VS_Projects\FSY\FSY\src\FSY\Scene\GameObject.h(152,38): warning C4251: 'FSY::GameObject::m_children': class 'std::vector<FSY::GameObject *,std::allocator<FSY::GameObject *>>' needs to have dll-interface to be used by clients of class 'FSY::GameObject'
-D:\VS_Projects\FSY\FSY\src\FSY\Scene\Mesh.h(58): message : see declaration of 'std::vector<FSY::GameObject *,std::allocator<FSY::GameObject *>>'
-D:\VS_Projects\FSY\FSY\src\FSY\Scene\GameObject.h(154,26): warning C4251: 'FSY::GameObject::m_fixedNormal': struct 'glm::tmat4x4<float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'FSY::GameObject'
-D:\VS_Projects\FSY\FSY\src\vendor\glm\detail\type_mat.hpp(304): message : see declaration of 'glm::tmat4x4<float,glm::packed_highp>'
-D:\VS_Projects\FSY\FSY\src\FSY\Scene\GameObject.h(155,24): warning C4251: 'FSY::GameObject::m_transform': struct 'glm::tmat4x4<float,glm::packed_highp>' needs to have dll-interface to be used by clients of class 'FSY::GameObject'
-D:\VS_Projects\FSY\FSY\src\vendor\glm\detail\type_mat.hpp(304): message : see declaration of 'glm::tmat4x4<float,glm::packed_highp>'
-D:\VS_Projects\FSY\FSY\src\FSY\Scene\GameObject.h(157,26): warning C4251: 'FSY::GameObject::m_boundingSphere': struct 'FSY::Sphere' needs to have dll-interface to be used by clients of class 'FSY::GameObject'
-D:\VS_Projects\FSY\FSY\src\FSY\Rendering\FrustumCulling.h(40): message : see declaration of 'FSY::Sphere'
-D:\VS_Projects\FSY\FSY\src\FSY\Sound\Sound.h(13,25): warning C4091: 'extern ': ignored on left of 'Application' when no variable is declared
-D:\VS_Projects\FSY\FSY\src\FSY\Sound\Sound.h(32,25): warning C4251: 'FSY::Sound::src': class 'audeo::SoundSource' needs to have dll-interface to be used by clients of class 'FSY::Sound'
-D:\VS_Projects\FSY\FSY\src\vendor\Audeo\SoundSource.hpp(15): message : see declaration of 'audeo::SoundSource'
-D:\VS_Projects\FSY\FSY\src\FSY\Sound\Sound.h(33,19): warning C4251: 'FSY::Sound::snd': class 'audeo::Sound' needs to have dll-interface to be used by clients of class 'FSY::Sound'
-D:\VS_Projects\FSY\FSY\src\vendor\Audeo\Sound.hpp(10): message : see declaration of 'audeo::Sound'
   Texture.cpp
 D:\VS_Projects\FSY\FSY\src\FSY\Editor\Console.h(17,26): warning C4091: 'extern ': ignored on left of 'FSY::Application' when no variable is declared
 D:\VS_Projects\FSY\FSY\src\FSY\Editor\Console.h(43,28): warning C4251: 'FSY::Console::m_items': class 'std::vector<FSY::Item,std::allocator<FSY::Item>>' needs to have dll-interface to be used by clients of class 'FSY::Console'
@@ -727,9 +691,6 @@ D:\VS_Projects\FSY\FSY\src\FSY\Application\FSY_Time.h(8,26): warning C4091: 'ext
 D:\VS_Projects\FSY\FSY\src\FSY\Application\FSY_Time.cpp(13,48): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
   VAO.cpp
   VBO.cpp
-  effects.cpp
-  SoundEngine.cpp
-  vec3.cpp
   dummy.cpp
   glm.cpp
   ImGuizmo.cpp
@@ -749,13 +710,14 @@ LINK : warning LNK4098: defaultlib 'MSVCRTD' conflicts with use of other libs; u
   Previous IPDB not found, fall back to full compilation.
 D:\VS_Projects\FSY\FSY\src\FSY\Maths\Maths.cpp(406): warning C4172: returning address of local variable or temporary: res
 D:\VS_Projects\FSY\FSY\src\FSY\Maths\Maths.cpp(395): warning C4172: returning address of local variable or temporary: res
-D:\VS_Projects\FSY\FSY\src\FSY\Maths\Maths.cpp(220): warning C4172: returning address of local variable or temporary: res
 D:\VS_Projects\FSY\FSY\src\FSY\Maths\Maths.cpp(196): warning C4172: returning address of local variable or temporary: res
 D:\VS_Projects\FSY\FSY\src\FSY\Maths\Maths.cpp(228): warning C4172: returning address of local variable or temporary: res
+D:\VS_Projects\FSY\FSY\src\FSY\Maths\Maths.cpp(220): warning C4172: returning address of local variable or temporary: res
 D:\VS_Projects\FSY\FSY\src\FSY\Maths\Maths.cpp(212): warning C4172: returning address of local variable or temporary: res
 D:\VS_Projects\FSY\FSY\src\FSY\Maths\Maths.cpp(204): warning C4172: returning address of local variable or temporary: res
 D:\VS_Projects\FSY\FSY\src\FSY\Maths\Maths.cpp(386): warning C4172: returning address of local variable or temporary: res
 D:\VS_Projects\FSY\FSY\src\FSY\Maths\Maths.cpp(413): warning C4172: returning address of local variable or temporary: res
-  All 4358 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+D:\VS_Projects\FSY\FSY\src\FSY\Rendering\Shader.cpp(15): warning C4715: 'FSY::TypeFromString': not all control paths return a value
+  All 3913 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finished generating code
   FSY.vcxproj -> D:\VS_Projects\FSY\bin\Release-x64\FSY\FSY.dll

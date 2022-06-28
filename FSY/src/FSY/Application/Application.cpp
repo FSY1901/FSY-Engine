@@ -1,7 +1,6 @@
 #include "Application.h"
 #include "../Editor/SceneCameraController.h"
 #include "../Editor/Console.h"
-#include "../Sound/Sound.h"
 #include "Settings.h"
 #include "../Editor/Editor.h"
 #include "../Rendering/MeshRenderer.h"
@@ -234,9 +233,6 @@ namespace FSY {
 			m_stopTexture = Texture("./src/Data/Assets/Icons/Pause.png");
 		}
 
-		//Sound Setup
-		Sound::Init();
-
 		MainLoop();
 	}
 
@@ -280,7 +276,6 @@ namespace FSY {
 		fboShader.Use();
 		glUniform1i(glGetUniformLocation(fboShader.ID, "screenTexture"), 0);
 		m_sceneCamera.rotation = Vector3f(0, 0, 0);
-
 		while (!glfwWindowShouldClose(m_window.m_win))
 		{
 
@@ -336,12 +331,12 @@ namespace FSY {
 				cam->__SetViewMatrix(view);
 				if (inEditor) {
 					float aspect = (float)m_PanelSize.x / m_PanelSize.y;
-					projection = cam->mode == CameraMode::Perspective ? glm::perspective(glm::radians(cam->fov), (float)m_PanelSize.x / (float)m_PanelSize.y, cam->zNear, cam->zFar) 
+					projection = cam->mode == CameraMode::Perspective ? glm::perspective(glm::radians(cam->fov), aspect, cam->zNear, cam->zFar) 
 						: glm::ortho(-aspect, aspect, -1.0f, 1.0f, cam->zNear, cam->zFar);
 				}
 				else {
 					float aspect = (float)m_window.m_width / m_window.m_height;
-					projection = cam->mode == CameraMode::Perspective ? glm::perspective(glm::radians(cam->fov), (float)m_window.m_width / (float)m_window.m_height, cam->zNear, cam->zFar) 
+					projection = cam->mode == CameraMode::Perspective ? glm::perspective(glm::radians(cam->fov), aspect, cam->zNear, cam->zFar)
 						: glm::ortho(-aspect, aspect, -1.0f, 1.0f, cam->zNear, cam->zFar);
 				}
 
@@ -399,9 +394,6 @@ namespace FSY {
 
 					glBindFramebuffer(GL_FRAMEBUFFER, 0);
 					glClear(GL_COLOR_BUFFER_BIT);
-
-					//Update Sound Listener
-					Sound::SetListener(cam->front, cam->position);
 
 					if(inEditor)
 						editorFBO.Bind();

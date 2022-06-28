@@ -16,6 +16,7 @@ namespace FSY {
         // the program ID
         unsigned int ID;
         Shader(const char* vertexPath, const char* fragmentPath);
+        Shader(std::string path);
         Shader();
         ~Shader();
 

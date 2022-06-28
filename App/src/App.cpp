@@ -201,7 +201,6 @@ public:
 	Mesh m;
 	Mesh m1;
 	Control* control;
-	Sound snd;
 
 	App() {
 
@@ -227,7 +226,8 @@ public:
 		s.specular = { 0.2f, 0.2f, 0.2f };
 		t = { "src/Data/Textures/Dirt.png" };
 		t1 = { "src/Data/Textures/awesomeface.png" };
-		colored = { "src/Data/Shaders/colored.vert", "src/Data/Shaders/colored.frag" };
+		//colored = { "src/Data/Shaders/colored.vert", "src/Data/Shaders/colored.frag" };
+		colored = {"src/Data/Shaders/colored.glsl"}; //All in one file
 		colored.diffuse = { 0.9f, 0.2f, 0.2f };
 		colored.specular = { 1.0f, 1.0f, 1.0f };
 		//snd.LoadSource("src/Data/Audio/breakout.mp3");
@@ -244,7 +244,7 @@ public:
 		//m1.AddGameObject(&myObject);
 		//m1.AddGameObject(&g2);
 		//scene.AddInstanceMesh(&m);
-		//scene.AddInstanceMesh(&m1);
+		//scene.AddInstanceMesh(&m1);r
 		g2.AddComponent<MeshRenderer>();
 		g2.GetComponent<MeshRenderer>()->SetMeshData(data, &colored);
 		myObject.AddComponent<MeshRenderer>()->SetMeshData(data, &colored);
