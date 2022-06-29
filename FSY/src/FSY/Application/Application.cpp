@@ -4,6 +4,7 @@
 #include "Settings.h"
 #include "../Editor/Editor.h"
 #include "../Rendering/MeshRenderer.h"
+#include "../Sound/Sound.h"
 
 #include "../../vendor/stb_image/stb_image.h"
 #include <../imgui/imgui.h>
@@ -233,6 +234,10 @@ namespace FSY {
 			m_stopTexture = Texture("./src/Data/Assets/Icons/Pause.png");
 		}
 
+		//SOUND SETUP
+		Device::Setup();
+		Context::Create();
+
 		MainLoop();
 	}
 
@@ -276,6 +281,9 @@ namespace FSY {
 		fboShader.Use();
 		glUniform1i(glGetUniformLocation(fboShader.ID, "screenTexture"), 0);
 		m_sceneCamera.rotation = Vector3f(0, 0, 0);
+
+		Listener listener;
+
 		while (!glfwWindowShouldClose(m_window.m_win))
 		{
 
@@ -322,6 +330,9 @@ namespace FSY {
 				cam->front = { cameraFront.x, cameraFront.y, cameraFront.z };
 				cam->right = Vector3f::Normalize(Vector3f::CrossProduct(cam->front, Vector3f(0, 1, 0)));
 				cam->up = Vector3f::Normalize(Vector3f::CrossProduct(cam->right, cam->front));
+
+				listener.Update(cam->position, cam->front, cam->up);
+
 				glm::vec3 cameraPos;
 				cameraPos.x = cam->position.x;
 				cameraPos.y = cam->position.y;
@@ -427,8 +438,9 @@ namespace FSY {
 		//delete vao;
 		//vbo.Delete();
 		fbo.Delete();
-		//Delete Sound
-		//Sound::Quit();
+		//SOUND CLEANUP
+		Context::Delete();
+		Device::Delete();
 
 		glfwDestroyWindow(m_window.m_win);
 

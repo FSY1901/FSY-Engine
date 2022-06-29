@@ -13,3 +13,4 @@
 #include "FSY/Application/Settings.h"
 #include "FSY/Maths/PerlinNoise.h"
 #include "FSY/Rendering/MeshRenderer.h"
+#include "FSY/Sound/Sound.h"

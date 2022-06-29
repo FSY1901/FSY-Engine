@@ -79,75 +79,75 @@ D:\VS_Projects\FSY\FSY\src\FSY\Application\Settings.h(26,41): warning C4251: 'FS
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include\xstring(4648): message : see declaration of 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>'
 D:\VS_Projects\FSY\FSY\src\FSY\Rendering\MeshRenderer.h(74,10): warning C4251: 'FSY::MeshRenderer::vao': class 'FSY::VAO' needs to have dll-interface to be used by clients of class 'FSY::MeshRenderer'
 D:\VS_Projects\FSY\FSY\src\FSY\Rendering\VAO.h(10): message : see declaration of 'FSY::VAO'
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(76,86): warning C4244: 'argument': conversion from 'double' to 'const T', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(77,86): warning C4244: 'argument': conversion from 'double' to 'const T', possible loss of data
           with
           [
               T=float
           ]
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(76,71): warning C4244: 'argument': conversion from 'double' to 'const T', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(77,71): warning C4244: 'argument': conversion from 'double' to 'const T', possible loss of data
           with
           [
               T=float
           ]
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(76,56): warning C4244: 'argument': conversion from 'double' to 'const T', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(77,56): warning C4244: 'argument': conversion from 'double' to 'const T', possible loss of data
           with
           [
               T=float
           ]
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(76,41): warning C4244: 'argument': conversion from 'double' to 'const T', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(77,41): warning C4244: 'argument': conversion from 'double' to 'const T', possible loss of data
           with
           [
               T=float
           ]
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(161,55): warning C4244: 'return': conversion from 'const int' to 'float', possible loss of data
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(162,56): warning C4244: 'return': conversion from 'const int' to 'float', possible loss of data
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(282,23): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(288,43): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(288,28): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(289,49): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(289,34): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(292,49): warning C4244: 'argument': conversion from 'float' to 'GLsizei', possible loss of data
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(292,34): warning C4244: 'argument': conversion from 'float' to 'GLsizei', possible loss of data
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(299,51): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(299,33): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(319,48): warning C4244: 'argument': conversion from 'double' to 'const T', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(162,55): warning C4244: 'return': conversion from 'const int' to 'float', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(163,56): warning C4244: 'return': conversion from 'const int' to 'float', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(290,23): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(296,43): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(296,28): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(297,49): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(297,34): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(300,49): warning C4244: 'argument': conversion from 'float' to 'GLsizei', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(300,34): warning C4244: 'argument': conversion from 'float' to 'GLsizei', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(307,51): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(307,33): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(327,48): warning C4244: 'argument': conversion from 'double' to 'const T', possible loss of data
           with
           [
               T=float
           ]
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(319,43): warning C4244: 'argument': conversion from 'double' to 'const T', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(327,43): warning C4244: 'argument': conversion from 'double' to 'const T', possible loss of data
           with
           [
               T=float
           ]
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(319,38): warning C4244: 'argument': conversion from 'double' to 'const T', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(327,38): warning C4244: 'argument': conversion from 'double' to 'const T', possible loss of data
           with
           [
               T=float
           ]
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(319,33): warning C4244: 'argument': conversion from 'double' to 'const T', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(327,33): warning C4244: 'argument': conversion from 'double' to 'const T', possible loss of data
           with
           [
               T=float
           ]
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(510,33): warning C4312: 'type cast': conversion from 'uint32_t' to 'void *' of greater size
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(545,106): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(522,33): warning C4312: 'type cast': conversion from 'uint32_t' to 'void *' of greater size
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(557,106): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
           with
           [
               T=float
           ]
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(545,81): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(557,81): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
           with
           [
               T=float
           ]
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(545,56): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(557,56): warning C4244: 'argument': conversion from 'double' to 'T', possible loss of data
           with
           [
               T=float
           ]
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(591,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(592,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(603,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\VS_Projects\FSY\FSY\src\FSY\Application\Application.cpp(604,17): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   Editor.cpp
 D:\VS_Projects\FSY\FSY\src\FSY\Maths\Maths.h(18,25): warning C4091: 'extern ': ignored on left of 'FSY::GameObject' when no variable is declared
 D:\VS_Projects\FSY\FSY\src\FSY\Scene\Mesh.h(17,3): warning C4091: '__declspec(dllexport)': ignored on left of 'FSY::RenderModes' when no variable is declared
@@ -680,6 +680,11 @@ D:\VS_Projects\FSY\FSY\src\FSY\Editor\Console.h(17,26): warning C4091: 'extern '
 D:\VS_Projects\FSY\FSY\src\FSY\Editor\Console.h(43,28): warning C4251: 'FSY::Console::m_items': class 'std::vector<FSY::Item,std::allocator<FSY::Item>>' needs to have dll-interface to be used by clients of class 'FSY::Console'
 D:\VS_Projects\FSY\FSY\src\FSY\Editor\Console.h(43): message : see declaration of 'std::vector<FSY::Item,std::allocator<FSY::Item>>'
   Sound.cpp
+D:\VS_Projects\FSY\FSY\src\FSY\Maths\Maths.h(18,25): warning C4091: 'extern ': ignored on left of 'FSY::GameObject' when no variable is declared
+D:\VS_Projects\FSY\FSY\src\FSY\Editor\Console.h(17,26): warning C4091: 'extern ': ignored on left of 'FSY::Application' when no variable is declared
+D:\VS_Projects\FSY\FSY\src\FSY\Editor\Console.h(43,28): warning C4251: 'FSY::Console::m_items': class 'std::vector<FSY::Item,std::allocator<FSY::Item>>' needs to have dll-interface to be used by clients of class 'FSY::Console'
+D:\VS_Projects\FSY\FSY\src\FSY\Editor\Console.h(43): message : see declaration of 'std::vector<FSY::Item,std::allocator<FSY::Item>>'
+D:\VS_Projects\FSY\FSY\src\FSY\Sound\Sound.cpp(76,3): warning C4267: 'argument': conversion from 'size_t' to 'ALsizei', possible loss of data
   Texture.cpp
 D:\VS_Projects\FSY\FSY\src\FSY\Editor\Console.h(17,26): warning C4091: 'extern ': ignored on left of 'FSY::Application' when no variable is declared
 D:\VS_Projects\FSY\FSY\src\FSY\Editor\Console.h(43,28): warning C4251: 'FSY::Console::m_items': class 'std::vector<FSY::Item,std::allocator<FSY::Item>>' needs to have dll-interface to be used by clients of class 'FSY::Console'
@@ -691,6 +696,7 @@ D:\VS_Projects\FSY\FSY\src\FSY\Application\FSY_Time.h(8,26): warning C4091: 'ext
 D:\VS_Projects\FSY\FSY\src\FSY\Application\FSY_Time.cpp(13,48): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
   VAO.cpp
   VBO.cpp
+  drwavimpl.cpp
   dummy.cpp
   glm.cpp
   ImGuizmo.cpp
@@ -718,6 +724,6 @@ D:\VS_Projects\FSY\FSY\src\FSY\Maths\Maths.cpp(204): warning C4172: returning ad
 D:\VS_Projects\FSY\FSY\src\FSY\Maths\Maths.cpp(386): warning C4172: returning address of local variable or temporary: res
 D:\VS_Projects\FSY\FSY\src\FSY\Maths\Maths.cpp(413): warning C4172: returning address of local variable or temporary: res
 D:\VS_Projects\FSY\FSY\src\FSY\Rendering\Shader.cpp(15): warning C4715: 'FSY::TypeFromString': not all control paths return a value
-  All 3913 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  All 4114 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finished generating code
   FSY.vcxproj -> D:\VS_Projects\FSY\bin\Release-x64\FSY\FSY.dll

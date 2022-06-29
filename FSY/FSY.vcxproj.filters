@@ -680,6 +680,9 @@
     <ClCompile Include="src\FSY\Editor\Editor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\vendor\drwav\drwavimpl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Library Include="src\vendor\OpenGL\src\glfw3.lib" />

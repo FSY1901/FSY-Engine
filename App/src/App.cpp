@@ -201,6 +201,7 @@ public:
 	Mesh m;
 	Mesh m1;
 	Control* control;
+	Source soundSource;
 
 	App() {
 
@@ -254,6 +255,7 @@ public:
 		scene.AddObject(&g2);
 		scene.AddObject(&myObject);
 		ChangeScene(&scene);
+		soundSource.Load("src/Data/Audio/entropy.wav");
 	}
 
 	void OnUpdate() override {
@@ -263,6 +265,7 @@ public:
 	}
 	bool pressed = false;
 	void OnEditorUpdate() override {
+		soundSource.Play();
 		if (Input::GetKey(Keys::Key_ESCAPE)) {
 			Close();
 		}
